@@ -16,27 +16,27 @@ export default function Footer() {
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isSubmitting) return;
-    
+
     // Basic validation
     if (!email.trim()) {
       setMessage("Please enter your email address");
       setMessageType("error");
       return;
     }
-    
+
     setIsSubmitting(true);
     setMessage("");
     setMessageType("");
 
     try {
       const result = await subscribeToNewsletter(email);
-      
+
       // Handle both success and already subscribed cases as success
       setMessage(result.message);
       setMessageType("success");
-      
+
       // Only clear email on new subscription, not on already subscribed
       if (!result.message.includes("already subscribed")) {
         setEmail("");
@@ -52,7 +52,7 @@ export default function Footer() {
     <footer className="bg-black text-white py-12 border-t border-gray-700">
       {/* Top Section */}
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-        <h1 className="text-3xl font-bold mb-6 md:mb-0">Code Hub</h1>
+        <h1 className="text-3xl font-bold mb-6 md:mb-0">LearnCode AI</h1>
         <div className="flex space-x-5 text-2xl">
           <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
           <FaLinkedinIn className="hover:text-blue-400 cursor-pointer" />
@@ -152,9 +152,13 @@ export default function Footer() {
             Newsletter
           </h3>
           <p className="text-gray-300 text-sm mb-4">
-            Subscribe to get the latest coding tutorials and updates from LearnCode AI!
+            Subscribe to get the latest coding tutorials and updates from
+            LearnCode AI!
           </p>
-          <form onSubmit={handleSubscribe} className="flex flex-col space-y-4 text-white">
+          <form
+            onSubmit={handleSubscribe}
+            className="flex flex-col space-y-4 text-white"
+          >
             <input
               type="email"
               placeholder="Enter your email"
@@ -171,11 +175,11 @@ export default function Footer() {
               {isSubmitting ? "Subscribing..." : "Subscribe"}
             </button>
             {message && (
-              <p className={`text-sm mt-2 ${
-                messageType === "success" 
-                  ? "text-green-400" 
-                  : "text-red-400"
-              }`}>
+              <p
+                className={`text-sm mt-2 ${
+                  messageType === "success" ? "text-green-400" : "text-red-400"
+                }`}
+              >
                 {message}
               </p>
             )}
@@ -185,4 +189,3 @@ export default function Footer() {
     </footer>
   );
 }
-
