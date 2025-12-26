@@ -1,12 +1,458 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* CSS Variables - Coding Theme */
+:root {
+  --color-terminal-bg: #0a0e27;
+  --color-terminal-darker: #060913;
+  --color-terminal-lighter: #1a1f3a;
+  --color-neon-cyan: #00b4d8;
+  --color-neon-purple: #8b5cf6;
+  --color-neon-green: #00e676;
+  --color-neon-pink: #e91e63;
+  --color-neon-blue: #00a8cc;
+  --color-syntax-string: #7cb342;
+  --color-syntax-keyword: #ec407a;
+  --color-syntax-function: #26a69a;
+  --color-syntax-comment: #6272a4;
+  --color-code-line: #282a36;
+}
+
 /* Prevent horizontal scroll globally */
-html, body {
+html,
+body {
   overflow-x: hidden;
   max-width: 100vw;
+  scroll-behavior: smooth;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  background: var(--color-terminal-bg);
 }
 
 #root {
   overflow-x: hidden;
   max-width: 100vw;
+}
+
+/* Performance Optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hardware acceleration for animations */
+.fade-in,
+.fade-in-up,
+.slide-in-left,
+.slide-in-right,
+.neon-border-cyan,
+.neon-border-purple,
+.neon-border-green,
+.terminal-window {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Mobile Optimization - Reduce animations on small screens */
+@media (max-width: 768px) {
+  * {
+    animation-duration: 0.5s !important;
+  }
+
+  .matrix-fall {
+    animation: none !important;
+  }
+
+  /* Reduce blur for performance */
+  .backdrop-blur-xl {
+    backdrop-filter: blur(8px);
+  }
+
+  /* Disable expensive effects on mobile */
+  .mix-blend-screen {
+    mix-blend-mode: normal;
+  }
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* Scroll Animation Classes */
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Matrix Rain Animation */
+@keyframes matrix-fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Optimized Matrix Rain - GPU accelerated with translate3d for better performance */
+@keyframes matrix-fall-optimized {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 100vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes matrix-fade {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Terminal Cursor Animation */
+@keyframes blink-cursor {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Typing Animation */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Neon Glow Animation - Disabled for cleaner look */
+@keyframes neon-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Scanline Effect */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Pulse Glow */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--color-neon-cyan), 0 0 40px var(--color-neon-cyan);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--color-neon-cyan), 0 0 80px var(--color-neon-cyan);
+  }
+}
+
+/* Float Animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+}
+
+/* Gradient Animation */
+@keyframes gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Code Appear Animation */
+@keyframes code-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Utility Classes */
+.terminal-cursor::after {
+  content: "▋";
+  animation: blink-cursor 1s step-end infinite;
+  color: var(--color-neon-green);
+}
+
+.neon-text-cyan {
+  color: var(--color-neon-cyan);
+}
+
+.neon-text-purple {
+  color: var(--color-neon-purple);
+}
+
+.neon-text-green {
+  color: var(--color-neon-green);
+}
+
+.neon-border-cyan {
+  border: 2px solid var(--color-neon-cyan);
+  box-shadow: 0 0 10px var(--color-neon-cyan),
+    inset 0 0 10px rgba(0, 255, 240, 0.2);
+}
+
+.neon-border-purple {
+  border: 2px solid var(--color-neon-purple);
+  box-shadow: 0 0 10px var(--color-neon-purple),
+    inset 0 0 10px rgba(181, 55, 242, 0.2);
+}
+
+.terminal-window {
+  background: var(--color-terminal-darker);
+  border: 1px solid rgba(0, 255, 240, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 255, 240, 0.1),
+    inset 0 0 40px rgba(0, 255, 240, 0.05);
+}
+
+.code-block {
+  background: var(--color-code-line);
+  border-left: 3px solid var(--color-neon-green);
+  padding: 1rem;
+  font-family: "Fira Code", monospace;
+  position: relative;
+}
+
+.scanline-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(transparent, var(--color-neon-cyan), transparent);
+  animation: scanline 3s linear infinite;
+  opacity: 0.5;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float.delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-float.delay-500 {
+  animation-delay: 500ms;
+}
+
+.animate-float.delay-700 {
+  animation-delay: 700ms;
+}
+
+.animate-float.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.animate-neon-glow {
+  animation: neon-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-glitch {
+  animation: glitch 0.3s infinite;
+}
+
+.animate-code-appear {
+  animation: code-appear 0.5s ease-out forwards;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* Circuit Board Pattern */
+.circuit-pattern {
+  background-image: linear-gradient(
+      rgba(0, 255, 240, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(0, 255, 240, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Grid Pattern */
+.grid-pattern {
+  background-image: linear-gradient(
+      rgba(181, 55, 242, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(181, 55, 242, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-terminal-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neon-cyan);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-purple);
+}
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:scale-105:hover {
+    transform: scale(1) !important;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: rgba(0, 255, 240, 0.1);
+  }
 }

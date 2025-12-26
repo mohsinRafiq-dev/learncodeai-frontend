@@ -1,11 +1,4 @@
 import { useState } from "react";
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-  FaYoutube,
-} from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import { subscribeToNewsletter } from "../../services/subscriptionAPI";
 
 export default function Footer() {
@@ -19,7 +12,6 @@ export default function Footer() {
 
     if (isSubmitting) return;
 
-    // Basic validation
     if (!email.trim()) {
       setMessage("Please enter your email address");
       setMessageType("error");
@@ -32,12 +24,9 @@ export default function Footer() {
 
     try {
       const result = await subscribeToNewsletter(email);
-
-      // Handle both success and already subscribed cases as success
       setMessage(result.message);
       setMessageType("success");
 
-      // Only clear email on new subscription, not on already subscribed
       if (!result.message.includes("already subscribed")) {
         setEmail("");
       }
@@ -48,135 +37,65 @@ export default function Footer() {
       setIsSubmitting(false);
     }
   };
+
   return (
-    <footer className="bg-black text-white py-12 border-t border-gray-700">
-      {/* Top Section */}
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-        <h1 className="text-3xl font-bold mb-6 md:mb-0">LearnCode AI</h1>
-        <div className="flex space-x-5 text-2xl">
-          <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
-          <FaLinkedinIn className="hover:text-blue-400 cursor-pointer" />
-          <FaInstagram className="hover:text-pink-500 cursor-pointer" />
-          <FaXTwitter className="hover:text-sky-400 cursor-pointer" />
-          <FaYoutube className="hover:text-red-600 cursor-pointer" />
-        </div>
-      </div>
+    <footer className="bg-[#060913] text-white relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 circuit-pattern opacity-10"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00b4d8] rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
 
-      <hr className="border-gray-700 my-8" />
-
-      {/* Bottom Section */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-gray-300">
-        <div>
-          <h3 className="text-xl font-semibold mb-4 border-b-2 border-white inline-block">
-            Company
-          </h3>
-          <ul className="space-y-3">
-            <li>
-              <a href="#" className="hover:text-white">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Contact us
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                About us
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Get Started
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-4 border-b-2 border-white inline-block">
-            Account
-          </h3>
-          <ul className="space-y-3">
-            <li>
-              <a href="#" className="hover:text-white">
-                Profile
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                My Account
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Preferences
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Purchase
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-4 border-b-2 border-white inline-block">
-            Courses
-          </h3>
-          <ul className="space-y-3">
-            <li>
-              <a href="#" className="hover:text-white">
-                Html & CSS
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Javascript
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                React JS
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">
-                Node JS
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-4 border-b-2 border-white inline-block">
-            Newsletter
-          </h3>
-          <p className="text-gray-300 text-sm mb-4">
-            Subscribe to get the latest coding tutorials and updates from
-            LearnCode AI!
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
+        {/* Newsletter Section */}
+        <div className="mb-16 text-center">
+          <div className="mb-4">
+            <span className="text-[#6272a4] font-mono text-sm">{"// "}</span>
+            <span className="text-[#00e676] font-mono text-sm">
+              Stay Connected
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-mono mb-3 md:mb-4 px-4">
+            <span className="text-[#6272a4]">{"function "}</span>
+            <span className="neon-text-cyan">subscribe</span>
+            <span className="text-white">(</span>
+            <span className="neon-text-green">email</span>
+            <span className="text-white">)</span>
+          </h2>
+          <p className="text-[#6272a4] font-mono text-sm md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto px-4">
+            {"// Get exclusive tutorials & updates"}
           </p>
-          <form
-            onSubmit={handleSubscribe}
-            className="flex flex-col space-y-4 text-white"
-          >
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isSubmitting}
-              className="px-4 py-3 rounded-md border-gray-700 focus:border-white border-1 focus:outline-none text-black disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-gray-100 text-black font-semibold py-3 rounded-md hover:bg-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? "Subscribing..." : "Subscribe"}
-            </button>
+          <form onSubmit={handleSubscribe} className="max-w-md mx-auto">
+            <div className="terminal-window backdrop-blur-xl p-3 md:p-4">
+              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[#00b4d8]/20">
+                <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#e91e63]"></div>
+                <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#00e676]"></div>
+                <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#00b4d8]"></div>
+                <span className="text-[#6272a4] font-mono text-xs">
+                  newsletter.sh
+                </span>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-[#00e676] font-mono">$</span>
+                <input
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-transparent border-none focus:outline-none text-white placeholder-[#6272a4] font-mono disabled:opacity-50"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 py-2 neon-border-cyan bg-[#0a0e27] rounded font-mono font-semibold hover:bg-[#1a1f3a] transition-all disabled:opacity-50 neon-text-cyan"
+                >
+                  {isSubmitting ? "..." : "→"}
+                </button>
+              </div>
+            </div>
             {message && (
               <p
-                className={`text-sm mt-2 ${
+                className={`text-sm mt-4 font-medium ${
                   messageType === "success" ? "text-green-400" : "text-red-400"
                 }`}
               >
@@ -184,6 +103,212 @@ export default function Footer() {
               </p>
             )}
           </form>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl">&lt;/&gt;</div>
+              <h3 className="text-2xl font-bold font-mono neon-text-cyan">
+                LearnCode AI
+              </h3>
+            </div>
+            <p className="text-[#6272a4] font-mono text-sm leading-relaxed">
+              {
+                "// Empowering developers worldwide with AI-powered coding education"
+              }
+            </p>
+            <div className="flex gap-3">
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors font-mono"
+              >
+                fb
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors font-mono"
+              >
+                in
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors font-mono"
+              >
+                ig
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors font-mono"
+              >
+                tw
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors font-mono"
+              >
+                yt
+              </a>
+            </div>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 font-mono neon-text-purple">
+              {"{ company }"}
+            </h3>
+            <ul className="space-y-3 font-mono text-sm">
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; contact_us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; about_us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; get_started
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Account Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 font-mono neon-text-green">
+              {"[ account ]"}
+            </h3>
+            <ul className="space-y-3 font-mono text-sm">
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; profile
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; my_account
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; preferences
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; certificates
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Courses Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6 font-mono text-[#e91e63]">
+              {"<courses />"}
+            </h3>
+            <ul className="space-y-3 font-mono text-sm">
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; html_css
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; javascript
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; react_js
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
+                >
+                  &gt; node_js
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-[#00b4d8]/20">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-[#6272a4] font-mono text-sm">
+              <span className="text-[#00e676]">©</span>{" "}
+              {new Date().getFullYear()} LearnCode AI{" "}
+              <span className="text-[#6272a4]">{"// Made with "}</span>
+              <span className="text-[#e91e63]">&lt;3</span>
+              <span className="text-[#6272a4]">{" by devs"}</span>
+            </p>
+            <div className="flex gap-6 text-sm font-mono">
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors"
+              >
+                privacy.md
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors"
+              >
+                terms.md
+              </a>
+              <a
+                href="#"
+                className="text-[#6272a4] hover:text-[#00b4d8] transition-colors"
+              >
+                cookies.md
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
