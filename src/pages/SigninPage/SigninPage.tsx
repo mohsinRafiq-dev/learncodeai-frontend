@@ -25,17 +25,19 @@ export default function SigninPage() {
     }
 
     // Check for suspension message from sessionStorage (set by API interceptor)
-    const suspensionMsg = sessionStorage.getItem('accountSuspendedMessage');
+    const suspensionMsg = sessionStorage.getItem("accountSuspendedMessage");
     if (suspensionMsg) {
       setSuspendedMessage(suspensionMsg);
       setShowSuspendedModal(true);
-      sessionStorage.removeItem('accountSuspendedMessage');
+      sessionStorage.removeItem("accountSuspendedMessage");
     }
 
     // Handle error params from URL
     const errorParam = searchParams.get("error");
     if (errorParam === "account_suspended") {
-      setSuspendedMessage("Your account has been suspended. Please contact support for more information.");
+      setSuspendedMessage(
+        "Your account has been suspended. Please contact support for more information."
+      );
       setShowSuspendedModal(true);
       searchParams.delete("error");
       setSearchParams(searchParams, { replace: true });
@@ -71,18 +73,28 @@ export default function SigninPage() {
       setIsSubmitting(false);
     }
   };
+
   const handleOAuthSignin = (provider: "google" | "github") => {
     handleOAuthLogin(provider, searchParams);
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center p-4 font-mono relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-[#00b4d8] rounded-full mix-blend-screen filter blur-[100px] opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-screen filter blur-[100px] opacity-10 animate-pulse delay-1000"></div>
+      </div>
+
+      {/* Circuit Pattern */}
+      <div className="absolute inset-0 circuit-pattern opacity-30"></div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#1a1f3a] neon-border-cyan rounded-2xl mb-4">
             <svg
-              className="w-8 h-8 text-white"
+              className="w-8 h-8 text-[#00b4d8]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -95,21 +107,33 @@ export default function SigninPage() {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome Back
+          <h1 className="text-3xl font-bold mb-2">
+            <span className="text-[#6272a4]">{"// "}</span>
+            <span className="neon-text-cyan">Welcome</span>
+            <span className="text-white"> Back</span>
           </h1>
-          <p className="text-gray-600">
-            Sign in to continue your learning journey
+          <p className="text-[#6272a4]">
+            <span className="text-[#00b4d8]">{"/* "}</span>
+            Sign in to continue your journey
+            <span className="text-[#00b4d8]">{" */"}</span>
           </p>
         </div>
 
         {/* Sign In Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+        <div className="terminal-window backdrop-blur-xl p-8">
+          {/* Terminal Header */}
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[#2a2f4a]">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27ca3f]"></div>
+            <span className="ml-2 text-[#6272a4] text-sm">auth.login()</span>
+          </div>
+
           {/* OAuth Buttons */}
           <div className="space-y-3 mb-6">
             <button
               onClick={() => handleOAuthSignin("google")}
-              className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 font-medium py-3 px-4 rounded-lg transition-all duration-200 border-2 border-gray-300 hover:border-gray-400"
+              className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-cyan group cursor-pointer"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -129,12 +153,14 @@ export default function SigninPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Continue with Google
+              <span className="group-hover:text-[#00b4d8] transition-colors">
+                Continue with Google
+              </span>
             </button>
 
             <button
               onClick={() => handleOAuthSignin("github")}
-              className="w-full flex items-center justify-center gap-3 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-purple group cursor-pointer"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -143,83 +169,92 @@ export default function SigninPage() {
                   d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
                 />
               </svg>
-              Continue with GitHub
+              <span className="group-hover:text-[#8b5cf6] transition-colors">
+                Continue with GitHub
+              </span>
             </button>
           </div>
 
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+              <div className="w-full border-t border-[#2a2f4a]"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
-                Or continue with email
+              <span className="px-4 bg-[#1a1f3a] text-[#6272a4]">
+                {"// or continue with email"}
               </span>
             </div>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mb-4 p-3 bg-[#e91e63]/10 border border-[#e91e63]/30 rounded-lg">
+              <p className="text-sm text-[#e91e63] font-mono">
+                <span className="text-[#6272a4]">{"// Error: "}</span>
+                {error}
+              </p>
             </div>
           )}
 
-          {/* Email/Password Inputs - No Form */}
+          {/* Email/Password Inputs */}
           <div className="space-y-4">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-[#6272a4] mb-2"
               >
-                Email Address
+                <span className="text-[#8b5cf6]">const</span> email{" "}
+                <span className="text-[#6272a4]">=</span>
               </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="you@example.com"
+                className="w-full px-4 py-3 bg-[#0a0e27] border border-[#2a2f4a] rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono"
+                placeholder='"you@example.com"'
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-[#6272a4] mb-2"
               >
-                Password
+                <span className="text-[#8b5cf6]">const</span> password{" "}
+                <span className="text-[#6272a4]">=</span>
               </label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-[#0a0e27] border border-[#2a2f4a] rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono"
+                placeholder='"••••••••"'
               />
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-gray-700 cursor-pointer">
+              <label className="flex items-center gap-2 text-[#6272a4] cursor-pointer group">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                  className="w-4 h-4 rounded border-[#2a2f4a] bg-[#0a0e27] text-[#00b4d8] focus:ring-[#00b4d8] focus:ring-offset-0"
                 />
-                <span>Remember me</span>
+                <span className="group-hover:text-[#00b4d8] transition-colors">
+                  Remember me
+                </span>
               </label>
               <Link
                 to={ROUTES.FORGOT_PASSWORD}
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                className="text-[#8b5cf6] hover:text-[#00e676] font-medium transition-colors"
               >
                 Forgot password?
               </Link>
             </div>
           </div>
 
-          {/* Submit Button - Outside Form */}
+          {/* Submit Button */}
           <button
             type="button"
             onClick={(e) => {
@@ -229,58 +264,67 @@ export default function SigninPage() {
               return false;
             }}
             disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 disabled:from-blue-400 disabled:to-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-lg mt-4"
+            className="group relative w-full mt-6 cursor-pointer"
           >
-            {isSubmitting ? (
-              <div className="flex items-center justify-center gap-2">
-                <svg
-                  className="animate-spin h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Signing In...
-              </div>
-            ) : (
-              "Sign In"
-            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00b4d8] to-[#8b5cf6] rounded-lg blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative w-full bg-gradient-to-r from-[#00b4d8] to-[#8b5cf6] hover:from-[#00e676] hover:to-[#00b4d8] disabled:from-[#2a2f4a] disabled:to-[#2a2f4a] disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <span>Authenticating...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-[#0a0e27]">$</span>
+                  <span>signin()</span>
+                </>
+              )}
+            </div>
           </button>
 
           {/* Sign Up Link */}
-          <p className="text-center text-gray-600 text-sm mt-6">
+          <p className="text-center text-[#6272a4] text-sm mt-6">
+            <span className="text-[#00b4d8]">{"// "}</span>
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+              className="text-[#00e676] hover:text-[#8b5cf6] font-semibold transition-colors"
             >
-              Sign up for free
+              signup()
             </Link>
           </p>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-gray-500 text-xs mt-6">
+        <p className="text-center text-[#6272a4] text-xs mt-6">
+          <span className="text-[#00b4d8]">{"/* "}</span>
           By signing in, you agree to our{" "}
-          <button className="text-gray-600 hover:text-gray-700 underline">
+          <button className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer">
             Terms
           </button>{" "}
           and{" "}
-          <button className="text-gray-600 hover:text-gray-700 underline">
+          <button className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer">
             Privacy Policy
           </button>
+          <span className="text-[#00b4d8]">{" */"}</span>
         </p>
       </div>
 
@@ -293,4 +337,3 @@ export default function SigninPage() {
     </div>
   );
 }
-

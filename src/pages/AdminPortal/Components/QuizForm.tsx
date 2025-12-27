@@ -225,17 +225,17 @@ export default function QuizForm({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#0d1230] border border-[#2a3050] rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        <div className="px-6 py-4 border-b border-[#2a3050] flex items-center justify-between">
+          <h2 className="text-xl font-bold text-gray-100">
             {editingQuiz ? "Edit Quiz" : "Create Quiz"} - {section.title}
           </h2>
           <button
             onClick={onCancel}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-[#1a1f3e] rounded-full transition-colors"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-400" />
           </button>
         </div>
 
@@ -244,7 +244,7 @@ export default function QuizForm({
             {/* Basic Quiz Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Quiz Title *
                 </label>
                 <input
@@ -253,13 +253,13 @@ export default function QuizForm({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="Enter quiz title"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Passing Score (%)
                 </label>
                 <input
@@ -273,12 +273,12 @@ export default function QuizForm({
                       passingScore: Number(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Time Limit (minutes)
                 </label>
                 <input
@@ -291,12 +291,12 @@ export default function QuizForm({
                       timeLimit: Number(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Max Retakes
                 </label>
                 <input
@@ -309,13 +309,13 @@ export default function QuizForm({
                       maxRetakes: Number(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 Description
               </label>
               <textarea
@@ -323,7 +323,7 @@ export default function QuizForm({
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 rows={3}
                 placeholder="Enter quiz description"
               />
@@ -341,9 +341,9 @@ export default function QuizForm({
                       shuffleQuestions: e.target.checked,
                     })
                   }
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  className="rounded border-[#2a3050] bg-[#1a1f3e] text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-gray-300">
                   Shuffle Questions
                 </span>
               </label>
@@ -358,9 +358,9 @@ export default function QuizForm({
                       shuffleOptions: e.target.checked,
                     })
                   }
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  className="rounded border-[#2a3050] bg-[#1a1f3e] text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-gray-300">
                   Shuffle Options
                 </span>
               </label>
@@ -375,9 +375,9 @@ export default function QuizForm({
                       showAnswerExplanation: e.target.checked,
                     })
                   }
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  className="rounded border-[#2a3050] bg-[#1a1f3e] text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-gray-300">
                   Show Answer Explanations
                 </span>
               </label>
@@ -392,23 +392,23 @@ export default function QuizForm({
                       retakeAllowed: e.target.checked,
                     })
                   }
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  className="rounded border-[#2a3050] bg-[#1a1f3e] text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-gray-300">
                   Allow Retakes
                 </span>
               </label>
             </div>
 
             {/* Questions Section */}
-            <div className="border-t pt-6">
+            <div className="border-t border-[#2a3050] pt-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-gray-100">
                   Questions ({(formData.questions || []).length})
                 </h3>
                 <button
                   onClick={addQuestion}
-                  className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm font-medium flex items-center gap-2"
+                  className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium flex items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
                   Add Question
@@ -419,15 +419,15 @@ export default function QuizForm({
                 {(formData.questions || []).map((question, questionIndex) => (
                   <div
                     key={questionIndex}
-                    className="border border-gray-200 rounded-lg p-4"
+                    className="border border-[#2a3050] rounded-lg p-4 bg-[#1a1f3e]"
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-md font-medium text-gray-900">
+                      <h4 className="text-md font-medium text-gray-100">
                         Question {questionIndex + 1}
                       </h4>
                       <button
                         onClick={() => deleteQuestion(questionIndex)}
-                        className="p-1 text-red-600 hover:text-red-800"
+                        className="p-1 text-red-400 hover:text-red-300"
                         title="Delete question"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -437,7 +437,7 @@ export default function QuizForm({
                     <div className="space-y-3">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-gray-300 mb-1">
                             Question Type
                           </label>
                           <select
@@ -454,7 +454,7 @@ export default function QuizForm({
                                     : question.options,
                               })
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           >
                             <option value="multiple-choice">
                               Multiple Choice
@@ -464,7 +464,7 @@ export default function QuizForm({
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-gray-300 mb-1">
                             Points
                           </label>
                           <input
@@ -476,13 +476,13 @@ export default function QuizForm({
                                 points: Number(e.target.value),
                               })
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-300 mb-1">
                           Question Text *
                         </label>
                         <textarea
@@ -492,7 +492,7 @@ export default function QuizForm({
                               question: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           rows={2}
                           placeholder="Enter your question"
                         />
@@ -503,13 +503,13 @@ export default function QuizForm({
                         question.type === "true-false") && (
                         <div>
                           <div className="flex items-center justify-between mb-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label className="block text-sm font-medium text-gray-300">
                               Answer Options
                             </label>
                             {question.type === "multiple-choice" && (
                               <button
                                 onClick={() => addOption(questionIndex)}
-                                className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                                className="px-2 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700"
                               >
                                 Add Option
                               </button>
@@ -528,7 +528,7 @@ export default function QuizForm({
                                   onChange={() =>
                                     setCorrectOption(questionIndex, optionIndex)
                                   }
-                                  className="flex-shrink-0"
+                                  className="flex-shrink-0 text-purple-600"
                                 />
                                 <input
                                   type="text"
@@ -540,7 +540,7 @@ export default function QuizForm({
                                       e.target.value
                                     )
                                   }
-                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  className="flex-1 px-3 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                   placeholder={`Option ${optionIndex + 1}`}
                                   readOnly={question.type === "true-false"}
                                 />
@@ -551,7 +551,7 @@ export default function QuizForm({
                                       onClick={() =>
                                         deleteOption(questionIndex, optionIndex)
                                       }
-                                      className="p-1 text-red-600 hover:text-red-800"
+                                      className="p-1 text-red-400 hover:text-red-300"
                                       title="Delete option"
                                     >
                                       <Trash2 className="w-4 h-4" />
@@ -564,7 +564,7 @@ export default function QuizForm({
                       )}
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-300 mb-1">
                           Explanation (optional)
                         </label>
                         <textarea
@@ -574,7 +574,7 @@ export default function QuizForm({
                               explanation: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           rows={2}
                           placeholder="Explain the correct answer"
                         />
@@ -584,7 +584,7 @@ export default function QuizForm({
                 ))}
 
                 {(!formData.questions || formData.questions.length === 0) && (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-gray-400">
                     No questions added yet. Click "Add Question" to get started.
                   </div>
                 )}
@@ -593,17 +593,17 @@ export default function QuizForm({
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+        <div className="px-6 py-4 border-t border-[#2a3050] flex items-center justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium"
+            className="px-4 py-2 text-gray-300 border border-[#2a3050] rounded-md hover:bg-[#1a1f3e] text-sm font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
               ? "Saving..."
@@ -616,4 +616,3 @@ export default function QuizForm({
     </div>
   );
 }
-

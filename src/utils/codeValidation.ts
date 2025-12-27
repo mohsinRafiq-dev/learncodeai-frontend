@@ -358,6 +358,54 @@ export const checkCppSyntax = (code: string): ValidationError[] => {
     braceBalance -= (line.match(/}/g) || []).length;
     parenBalance += (line.match(/\(/g) || []).length;
     parenBalance -= (line.match(/\)/g) || []).length;
+
+    // Check for invalid character sequences (like ;;,, or ,; or ,,)
+    if (trimmed.match(/[,;]{2,}/) && !trimmed.match(/^for\s*\(/)) {
+      // Find the position of the invalid sequence
+      const invalidMatch = trimmed.match(/[,;]{2,}/);
+      if (invalidMatch) {
+        const invalidSeq = invalidMatch[0];
+        // Check for specific invalid patterns
+        if (invalidSeq.includes(',') && invalidSeq.includes(';')) {
+          errors.push({
+            message: `SyntaxError: invalid character sequence '${invalidSeq}' - unexpected comma after semicolon`,
+            line: lineNum,
+            column: line.indexOf(invalidSeq) + 1,
+          });
+        } else if (invalidSeq.includes(',,')) {
+          errors.push({
+            message: `SyntaxError: expected expression before ',' token`,
+            line: lineNum,
+            column: line.indexOf(invalidSeq) + 1,
+          });
+        } else if (invalidSeq.match(/^;{2,}$/)) {
+          // Multiple semicolons like ;; or ;;;
+          errors.push({
+            message: `SyntaxError: extra semicolon - empty statement`,
+            line: lineNum,
+            column: line.indexOf(invalidSeq) + 1,
+          });
+        }
+      }
+    }
+
+    // Check for trailing commas after values (invalid in C++)
+    if (trimmed.match(/=\s*[^,;]+[,]+\s*$/) && !trimmed.includes('{')) {
+      errors.push({
+        message: `SyntaxError: expected ';' before ',' token`,
+        line: lineNum,
+        column: line.lastIndexOf(',') + 1,
+      });
+    }
+
+    // Check for semicolon followed by comma
+    if (trimmed.match(/;+\s*,+/)) {
+      errors.push({
+        message: `SyntaxError: expected expression after ';' but found ','`,
+        line: lineNum,
+        column: line.indexOf(',') + 1,
+      });
+    }
     
     // Check for standalone identifiers (potential undefined variables)
     if (trimmed.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/) && 

@@ -24,6 +24,7 @@ import {
   checkCppSyntax,
   type ValidationError,
 } from "../../../utils/codeValidation";
+import { registerAllCompletions } from "../../../utils/monacoCompletions";
 
 // Local Storage keys for code persistence
 const STORAGE_KEYS = {
@@ -173,7 +174,7 @@ export default function CodeEditor({
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       }
     }, 200);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -352,6 +353,9 @@ export default function CodeEditor({
       strict: false, // Less strict for code playground
     });
 
+    // Register language-specific auto-completion providers
+    registerAllCompletions(monaco);
+
     // Add custom actions and keyboard shortcuts
     addCustomActions(editor, monaco);
 
@@ -372,11 +376,14 @@ export default function CodeEditor({
     const markers: monacoType.editor.IMarkerData[] = [];
     const newProblems: typeof problems = [];
 
+    console.log("Validating code for language:", lang);
+
     try {
       let errors: ValidationError[] = [];
 
       if (lang === "python") {
         errors = checkPythonSyntax(code);
+        console.log("Python errors found:", errors);
         // For Python/C++, we set our own markers
         errors.forEach((error) => {
           markers.push({
@@ -392,9 +399,11 @@ export default function CodeEditor({
       } else if (lang === "javascript") {
         // For JavaScript, get Monaco's built-in validation results
         errors = await checkJavaScriptSyntax(code, editor);
+        console.log("JavaScript errors found:", errors);
         // Don't set markers manually - Monaco handles this automatically
       } else if (lang === "cpp") {
         errors = checkCppSyntax(code);
+        console.log("C++ errors found:", errors);
         // For Python/C++, we set our own markers
         errors.forEach((error) => {
           markers.push({
@@ -475,7 +484,7 @@ export default function CodeEditor({
     const indentSize = 4; // 4 spaces per indent level
     let consecutiveEmptyLines = 0;
     const maxConsecutiveEmptyLines = 2; // Allow max 2 consecutive empty lines
-    
+
     // Track the actual indentation from the original code
     // This preserves the user's intended structure
     const getIndentLevel = (line: string): number => {
@@ -500,7 +509,7 @@ export default function CodeEditor({
 
       // Get the original indent level
       const originalIndent = getIndentLevel(line);
-      
+
       // Apply the original indent (preserving structure)
       const indent = " ".repeat(originalIndent * indentSize);
       formattedLines.push(indent + trimmed);
@@ -785,21 +794,21 @@ export default function CodeEditor({
   };
 
   return (
-    <div 
-      className="flex flex-col h-full w-full" 
+    <div
+      className="flex flex-col h-full w-full"
       style={{ scrollBehavior: "auto" }}
     >
       <div
-        className="flex flex-col flex-1 bg-gray-50 overflow-hidden"
+        className="flex flex-col flex-1 bg-[#0a0e27] overflow-hidden"
         style={{ minHeight: 0 }}
       >
         {/* Editor Header */}
-        <div className="flex items-center justify-between px-4 py-2 bg-white border border-gray-300">
+        <div className="flex items-center justify-between px-4 py-2 bg-[#0d1230] border-b border-[#1a1f3e]">
           {/* Language Selector */}
           <select
             value={language}
             onChange={(e) => changeLanguage(e.target.value)}
-            className="px-3 py-1 rounded bg-white text-gray-900 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-1 rounded bg-[#1a1f3e] text-gray-200 border border-[#2a3050] text-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]"
           >
             {languageOptions.map((lang) => (
               <option key={lang.id} value={lang.id}>
@@ -814,7 +823,7 @@ export default function CodeEditor({
             <button
               onClick={() => setShowOptionsModal(true)}
               title="Editor Options"
-              className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 flex items-center gap-1"
+              className="px-3 py-1 bg-[#1a1f3e] text-gray-200 text-sm rounded border border-[#2a3050] hover:bg-[#2a3050] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] flex items-center gap-1"
             >
               <svg
                 className="w-4 h-4"
@@ -835,7 +844,7 @@ export default function CodeEditor({
             {/* Format Button */}
             <button
               onClick={formatCode}
-              className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1 bg-gradient-to-r from-[#00b4d8] to-[#0096c7] text-white text-sm rounded hover:from-[#0096c7] hover:to-[#0077b6] focus:outline-none focus:ring-2 focus:ring-[#00b4d8] shadow-lg shadow-cyan-500/20"
               title="Format Code (Ctrl+Shift+F)"
             >
               Format
@@ -845,7 +854,7 @@ export default function CodeEditor({
                 <button
                   onClick={() => setShowSnippetsPanel(!showSnippetsPanel)}
                   title="My Saved Code"
-                  className="px-3 py-1 rounded bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 flex items-center gap-1 relative"
+                  className="px-3 py-1 rounded bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white text-sm font-medium hover:from-[#7c3aed] hover:to-[#8b5cf6] flex items-center gap-1 relative shadow-lg shadow-purple-500/20"
                 >
                   <svg
                     className="w-4 h-4"
@@ -865,7 +874,7 @@ export default function CodeEditor({
                 <button
                   onClick={() => setShowSaveModal(true)}
                   title="Save Code"
-                  className="px-3 py-1 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700 flex items-center gap-1"
+                  className="px-3 py-1 rounded bg-gradient-to-r from-[#00e676] to-[#00c853] text-white text-sm font-medium hover:from-[#00c853] hover:to-[#00a844] flex items-center gap-1 shadow-lg shadow-green-500/20"
                 >
                   <svg
                     className="w-4 h-4"
@@ -887,7 +896,7 @@ export default function CodeEditor({
             <button
               onClick={runCode}
               disabled={loading}
-              className="px-3 py-1 rounded bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+              className="px-3 py-1 rounded bg-gradient-to-r from-[#00b4d8] to-[#0096c7] text-white text-sm font-medium hover:from-[#0096c7] hover:to-[#0077b6] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 shadow-lg shadow-cyan-500/20"
             >
               {loading ? (
                 <>
@@ -926,7 +935,7 @@ export default function CodeEditor({
                 showToast("Code reset to default template", "info");
               }}
               title="Reset Code"
-              className="px-3 py-1 rounded bg-gray-200 text-gray-800 text-sm font-medium hover:bg-gray-300"
+              className="px-3 py-1 rounded bg-[#1a1f3e] text-gray-300 text-sm font-medium border border-[#2a3050] hover:bg-[#2a3050] hover:text-white"
             >
               Reset
             </button>
@@ -985,10 +994,10 @@ export default function CodeEditor({
       {!isBottomPanelMinimized && (
         <div
           onMouseDown={handleBottomResizeStart}
-          className="h-1 bg-gray-300 hover:bg-blue-500 cursor-row-resize flex-shrink-0 transition-colors duration-150 relative group"
+          className="h-1 bg-[#1a1f3e] hover:bg-[#00b4d8] cursor-row-resize flex-shrink-0 transition-colors duration-150 relative group"
         >
           <div className="absolute inset-x-0 -top-1 -bottom-1 flex items-center justify-center">
-            <div className="h-1 w-8 bg-gray-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="h-1 w-8 bg-[#8b5cf6] rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
         </div>
       )}
@@ -996,7 +1005,7 @@ export default function CodeEditor({
       {/* Bottom: Output/Input Panel */}
       <div
         ref={bottomPanelRef}
-        className={`flex flex-col bg-gray-50 border-t border-gray-300 transition-all duration-300 ${
+        className={`flex flex-col bg-[#0d1230] border-t border-[#1a1f3e] transition-all duration-300 ${
           isBottomPanelMinimized ? "h-10" : ""
         }`}
         style={{
@@ -1005,7 +1014,7 @@ export default function CodeEditor({
         }}
       >
         {/* Tab Headers with Minimize/Maximize Button */}
-        <div className="flex items-center justify-between px-4 border-b border-gray-300 flex-shrink-0">
+        <div className="flex items-center justify-between px-4 border-b border-[#1a1f3e] flex-shrink-0">
           <div className="flex gap-1">
             {!isBottomPanelMinimized && (
               <>
@@ -1013,8 +1022,8 @@ export default function CodeEditor({
                   onClick={() => setActiveTab("output")}
                   className={`px-4 py-2 text-sm ${
                     activeTab === "output"
-                      ? "text-gray-900 border-b-2 border-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "text-[#00b4d8] border-b-2 border-[#00b4d8]"
+                      : "text-gray-400 hover:text-gray-200"
                   }`}
                 >
                   Output
@@ -1023,8 +1032,8 @@ export default function CodeEditor({
                   onClick={() => setActiveTab("input")}
                   className={`px-4 py-2 text-sm ${
                     activeTab === "input"
-                      ? "text-gray-900 border-b-2 border-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "text-[#00b4d8] border-b-2 border-[#00b4d8]"
+                      : "text-gray-400 hover:text-gray-200"
                   }`}
                 >
                   Input
@@ -1033,13 +1042,13 @@ export default function CodeEditor({
                   onClick={() => setActiveTab("problems")}
                   className={`px-4 py-2 text-sm flex items-center gap-1 ${
                     activeTab === "problems"
-                      ? "text-gray-900 border-b-2 border-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "text-[#00b4d8] border-b-2 border-[#00b4d8]"
+                      : "text-gray-400 hover:text-gray-200"
                   }`}
                 >
                   Problems
                   {problems.length > 0 && (
-                    <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                    <span className="bg-[#e91e63] text-white text-xs rounded-full px-2 py-0.5">
                       {problems.length}
                     </span>
                   )}
@@ -1047,7 +1056,7 @@ export default function CodeEditor({
               </>
             )}
             {isBottomPanelMinimized && (
-              <span className="text-sm text-gray-600 py-2">
+              <span className="text-sm text-gray-400 py-2">
                 Output Panel -{activeTab === "output" && "Output"}
                 {activeTab === "input" && "Input"}
                 {activeTab === "problems" && `Problems (${problems.length})`}
@@ -1059,16 +1068,36 @@ export default function CodeEditor({
             {/* Minimize/Maximize Toggle */}
             <button
               onClick={toggleBottomPanel}
-              className="w-8 h-8 bg-gradient-to-b from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-lg flex items-center justify-center shadow-md transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
+              className="w-8 h-8 bg-gradient-to-b from-[#8b5cf6] to-[#7c3aed] hover:from-[#7c3aed] hover:to-[#6d28d9] text-white rounded-lg flex items-center justify-center shadow-md shadow-purple-500/20 transition-all duration-200 transform hover:scale-105 hover:shadow-purple-500/40"
               title={isBottomPanelMinimized ? "Expand Panel" : "Minimize Panel"}
             >
               {isBottomPanelMinimized ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 15l7-7 7 7"
+                  />
                 </svg>
               ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               )}
             </button>
@@ -1088,7 +1117,7 @@ export default function CodeEditor({
                     }
                   }}
                   title="Copy Output"
-                  className="text-gray-500 hover:text-gray-800 p-1 hover:bg-gray-100 rounded transition-colors"
+                  className="text-gray-400 hover:text-[#00b4d8] p-1 hover:bg-[#1a1f3e] rounded transition-colors"
                 >
                   <svg
                     className="w-5 h-5"
@@ -1110,7 +1139,7 @@ export default function CodeEditor({
                     showToast("Output cleared", "info");
                   }}
                   title="Clear Output"
-                  className="text-gray-500 hover:text-red-600 p-1 hover:bg-red-50 rounded transition-colors"
+                  className="text-gray-400 hover:text-[#e91e63] p-1 hover:bg-[#e91e63]/10 rounded transition-colors"
                 >
                   <svg
                     className="w-5 h-5"
@@ -1132,9 +1161,9 @@ export default function CodeEditor({
         </div>
         {/* Panel Content */}
         {!isBottomPanelMinimized && (
-          <div className="flex-1 p-3 overflow-auto bg-white">
+          <div className="flex-1 p-3 overflow-auto bg-[#0a0e27]">
             {activeTab === "output" ? (
-              <pre className="text-sm whitespace-pre-wrap font-mono text-gray-800">
+              <pre className="text-sm whitespace-pre-wrap font-mono text-gray-200">
                 {output || "Your code's output will be displayed here."}
                 <div ref={outputEndRef} />
               </pre>
@@ -1142,25 +1171,25 @@ export default function CodeEditor({
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="w-full h-full p-2 rounded bg-white text-gray-900 border border-gray-300 resize-none text-sm font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full h-full p-2 rounded bg-[#1a1f3e] text-gray-200 border border-[#2a3050] resize-none text-sm font-mono focus:outline-none focus:ring-1 focus:ring-[#8b5cf6] focus:border-[#8b5cf6]"
                 placeholder="Provide all inputs here (one per line)..."
               />
             ) : (
               <div className="h-full">
                 {/* Header Section */}
-                <div className="mb-4 pb-3 border-b border-gray-200">
+                <div className="mb-4 pb-3 border-b border-[#1a1f3e]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <AlertCircle className="w-5 h-5 text-gray-700" />
-                      <h3 className="text-base font-semibold text-gray-900">
+                      <AlertCircle className="w-5 h-5 text-gray-300" />
+                      <h3 className="text-base font-semibold text-gray-200">
                         Problems
                       </h3>
                     </div>
                     <div
                       className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                         problems.length === 0
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
+                          ? "bg-[#00e676]/20 text-[#00e676]"
+                          : "bg-[#e91e63]/20 text-[#e91e63]"
                       }`}
                     >
                       {problems.length === 0
@@ -1180,10 +1209,10 @@ export default function CodeEditor({
                         key={index}
                         className={`group flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.01] ${
                           problem.severity === "error"
-                            ? "bg-red-50 border-red-200 hover:bg-red-100"
+                            ? "bg-[#e91e63]/10 border-[#e91e63]/30 hover:bg-[#e91e63]/20"
                             : problem.severity === "warning"
-                            ? "bg-amber-50 border-amber-200 hover:bg-amber-100"
-                            : "bg-blue-50 border-blue-200 hover:bg-blue-100"
+                            ? "bg-[#ff9800]/10 border-[#ff9800]/30 hover:bg-[#ff9800]/20"
+                            : "bg-[#00b4d8]/10 border-[#00b4d8]/30 hover:bg-[#00b4d8]/20"
                         }`}
                         onClick={() => {
                           if (editorRef.current) {
@@ -1200,10 +1229,10 @@ export default function CodeEditor({
                         <div
                           className={`flex-shrink-0 mt-0.5 ${
                             problem.severity === "error"
-                              ? "text-red-600"
+                              ? "text-[#e91e63]"
                               : problem.severity === "warning"
-                              ? "text-amber-600"
-                              : "text-blue-600"
+                              ? "text-[#ff9800]"
+                              : "text-[#00b4d8]"
                           }`}
                         >
                           {problem.severity === "error" ? (
@@ -1218,26 +1247,26 @@ export default function CodeEditor({
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <p className="text-sm font-medium text-gray-900 leading-snug">
+                            <p className="text-sm font-medium text-gray-200 leading-snug">
                               {problem.message}
                             </p>
                             <span
                               className={`flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded ${
                                 problem.severity === "error"
-                                  ? "bg-red-200 text-red-800"
+                                  ? "bg-[#e91e63]/20 text-[#e91e63]"
                                   : problem.severity === "warning"
-                                  ? "bg-amber-200 text-amber-800"
-                                  : "bg-blue-200 text-blue-800"
+                                  ? "bg-[#ff9800]/20 text-[#ff9800]"
+                                  : "bg-[#00b4d8]/20 text-[#00b4d8]"
                               }`}
                             >
                               {problem.severity.toUpperCase()}
                             </span>
                           </div>
                           <div className="flex items-center gap-3 mt-1.5">
-                            <span className="text-xs text-gray-600 font-mono">
+                            <span className="text-xs text-gray-400 font-mono">
                               Ln {problem.line}, Col {problem.column}
                             </span>
-                            <span className="text-xs text-gray-400 group-hover:text-gray-600 transition-colors">
+                            <span className="text-xs text-gray-500 group-hover:text-gray-300 transition-colors">
                               Click to jump →
                             </span>
                           </div>
@@ -1247,13 +1276,13 @@ export default function CodeEditor({
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="bg-green-100 rounded-full p-4 mb-4">
-                      <CheckCircle2 className="w-12 h-12 text-green-600" />
+                    <div className="bg-[#00e676]/20 rounded-full p-4 mb-4">
+                      <CheckCircle2 className="w-12 h-12 text-[#00e676]" />
                     </div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-1">
+                    <h4 className="text-base font-semibold text-gray-200 mb-1">
                       No Problems Found
                     </h4>
-                    <p className="text-sm text-gray-500 max-w-xs">
+                    <p className="text-sm text-gray-400 max-w-xs">
                       Your code looks good! No syntax errors detected.
                     </p>
                   </div>
@@ -1266,21 +1295,21 @@ export default function CodeEditor({
 
       {/* More Options Modal */}
       {showOptionsModal && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 w-96">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#0d1230] rounded-xl shadow-2xl p-6 w-96 border border-[#1a1f3e]">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Editor Options
             </h3>
 
             {/* Theme Selector */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Theme
               </label>
               <select
                 value={editorTheme}
                 onChange={(e) => changeTheme(e.target.value)}
-                className="w-full px-3 py-2 rounded bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 rounded bg-[#1a1f3e] text-gray-200 border border-[#2a3050] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]"
               >
                 <option value="vs-light">Light</option>
                 <option value="vs-dark">Dark</option>
@@ -1290,24 +1319,24 @@ export default function CodeEditor({
 
             {/* Font Size Controls */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Font Size
               </label>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => changeFontSize(-2)}
                   title="Decrease Font Size (Ctrl+-)"
-                  className="px-3 py-2 rounded bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 flex items-center"
+                  className="px-3 py-2 rounded bg-[#1a1f3e] text-gray-200 font-medium border border-[#2a3050] hover:bg-[#2a3050] flex items-center"
                 >
                   A-
                 </button>
-                <span className="text-sm text-gray-700 min-w-[3rem] text-center font-medium">
+                <span className="text-sm text-gray-300 min-w-[3rem] text-center font-medium">
                   {fontSize}px
                 </span>
                 <button
                   onClick={() => changeFontSize(2)}
                   title="Increase Font Size (Ctrl+=)"
-                  className="px-3 py-2 rounded bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 flex items-center"
+                  className="px-3 py-2 rounded bg-[#1a1f3e] text-gray-200 font-medium border border-[#2a3050] hover:bg-[#2a3050] flex items-center"
                 >
                   A+
                 </button>
@@ -1316,15 +1345,15 @@ export default function CodeEditor({
 
             {/* Word Wrap Toggle */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Word Wrap
               </label>
               <button
                 onClick={toggleWordWrap}
                 className={`w-full px-4 py-2 rounded font-medium flex items-center justify-center gap-2 ${
                   wordWrap
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    ? "bg-gradient-to-r from-[#00b4d8] to-[#0096c7] text-white"
+                    : "bg-[#1a1f3e] text-gray-300 border border-[#2a3050] hover:bg-[#2a3050]"
                 }`}
               >
                 <svg
@@ -1351,15 +1380,15 @@ export default function CodeEditor({
 
             {/* Minimap Toggle */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Minimap
               </label>
               <button
                 onClick={toggleMinimap}
                 className={`w-full px-4 py-2 rounded font-medium flex items-center justify-center gap-2 ${
                   showMinimap
-                    ? "bg-green-600 text-white hover:bg-green-700"
-                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    ? "bg-gradient-to-r from-[#00e676] to-[#00c853] text-white"
+                    : "bg-[#1a1f3e] text-gray-300 border border-[#2a3050] hover:bg-[#2a3050]"
                 }`}
               >
                 <svg
@@ -1384,8 +1413,8 @@ export default function CodeEditor({
             </div>
 
             {/* Import/Export Section */}
-            <div className="mb-4 border-t border-gray-200 pt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+            <div className="mb-4 border-t border-[#1a1f3e] pt-4">
+              <label className="block text-sm font-medium text-gray-300 mb-3">
                 Code Management
               </label>
               <div className="flex gap-2">
@@ -1394,7 +1423,7 @@ export default function CodeEditor({
                     setShowOptionsModal(false);
                     handleImportCode();
                   }}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-[#00b4d8] to-[#0096c7] text-white rounded-lg hover:from-[#0096c7] hover:to-[#0077b6] transition-colors flex items-center justify-center gap-2"
                 >
                   <svg
                     className="w-4 h-4"
@@ -1416,7 +1445,7 @@ export default function CodeEditor({
                     setShowOptionsModal(false);
                     handleExportCode();
                   }}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-[#00e676] to-[#00c853] text-white rounded-lg hover:from-[#00c853] hover:to-[#00a844] transition-colors flex items-center justify-center gap-2"
                 >
                   <svg
                     className="w-4 h-4"
@@ -1442,7 +1471,7 @@ export default function CodeEditor({
             <div className="flex justify-end">
               <button
                 onClick={() => setShowOptionsModal(false)}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="px-4 py-2 bg-[#1a1f3e] text-gray-200 rounded-lg border border-[#2a3050] hover:bg-[#2a3050] transition-colors"
               >
                 Close
               </button>
@@ -1453,13 +1482,13 @@ export default function CodeEditor({
 
       {/* Save Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 w-96">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#0d1230] rounded-xl shadow-2xl p-6 w-96 border border-[#1a1f3e]">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Save Code Snippet
             </h3>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Title
               </label>
               <input
@@ -1467,7 +1496,7 @@ export default function CodeEditor({
                 value={saveTitle}
                 onChange={(e) => setSaveTitle(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSaveSnippet()}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-[#2a3050] rounded-lg bg-[#1a1f3e] text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#00e676]"
                 placeholder="Enter snippet title"
                 autoFocus
               />
@@ -1481,14 +1510,14 @@ export default function CodeEditor({
                   setShowSaveModal(false);
                   setSaveTitle("");
                 }}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 text-gray-300 bg-[#1a1f3e] border border-[#2a3050] rounded-lg hover:bg-[#2a3050] transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveSnippet}
                 disabled={!saveTitle.trim()}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-[#00e676] to-[#00c853] text-white rounded-lg hover:from-[#00c853] hover:to-[#00a844] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Save
               </button>
@@ -1499,15 +1528,15 @@ export default function CodeEditor({
 
       {/* Saved Snippets Panel */}
       {showSnippetsPanel && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#0d1230] rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col border border-[#1a1f3e]">
+            <div className="flex items-center justify-between p-4 border-b border-[#1a1f3e]">
+              <h3 className="text-lg font-semibold text-white">
                 My Saved Code
               </h3>
               <button
                 onClick={() => setShowSnippetsPanel(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-400 hover:text-white"
               >
                 <svg
                   className="w-6 h-6"
@@ -1527,12 +1556,12 @@ export default function CodeEditor({
             <div className="flex-1 overflow-y-auto p-4">
               {loadingSnippets ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-4 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin"></div>
                 </div>
               ) : snippets.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-400">
                   <svg
-                    className="w-16 h-16 mx-auto mb-4 text-gray-300"
+                    className="w-16 h-16 mx-auto mb-4 text-gray-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -1545,7 +1574,7 @@ export default function CodeEditor({
                     />
                   </svg>
                   <p className="text-lg font-medium">No saved code yet</p>
-                  <p className="text-sm mt-1">
+                  <p className="text-sm mt-1 text-gray-500">
                     Save your code snippets to access them later
                   </p>
                 </div>
@@ -1554,14 +1583,14 @@ export default function CodeEditor({
                   {snippets.map((snippet) => (
                     <div
                       key={snippet._id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                      className="flex items-center justify-between p-4 bg-[#1a1f3e] rounded-lg hover:bg-[#2a3050] transition-colors group border border-[#2a3050]"
                     >
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-gray-900 truncate">
+                        <h4 className="font-medium text-gray-200 truncate">
                           {snippet.title}
                         </h4>
                         <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
-                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">
+                          <span className="px-2 py-0.5 bg-[#00b4d8]/20 text-[#00b4d8] rounded font-medium">
                             {snippet.language.toUpperCase()}
                           </span>
                           <span>
@@ -1572,13 +1601,13 @@ export default function CodeEditor({
                       <div className="flex items-center gap-2 ml-4">
                         <button
                           onClick={() => handleLoadSnippet(snippet)}
-                          className="px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+                          className="px-3 py-1.5 bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white rounded-lg hover:from-[#7c3aed] hover:to-[#8b5cf6] text-sm font-medium"
                         >
                           Load
                         </button>
                         <button
                           onClick={() => confirmDeleteSnippet(snippet._id)}
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="p-1.5 text-[#e91e63] hover:bg-[#e91e63]/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <svg
                             className="w-5 h-5"
@@ -1618,13 +1647,13 @@ export default function CodeEditor({
 
       {/* Export Modal */}
       {showExportModal && (
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-96">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#0d1230] rounded-lg shadow-xl p-6 w-96 border border-[#1a1f3e]">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Export Code
             </h3>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Filename (without extension)
               </label>
               <input
@@ -1632,7 +1661,7 @@ export default function CodeEditor({
                 value={exportFileName}
                 onChange={(e) => setExportFileName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && confirmExport()}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-[#2a3050] rounded-lg bg-[#1a1f3e] text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#00b4d8]"
                 placeholder="Enter filename"
                 autoFocus
               />
@@ -1648,14 +1677,14 @@ export default function CodeEditor({
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowExportModal(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 text-gray-300 bg-[#1a1f3e] border border-[#2a3050] rounded-lg hover:bg-[#2a3050] transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmExport}
                 disabled={!exportFileName.trim()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-[#00b4d8] to-[#0096c7] text-white rounded-lg hover:from-[#0096c7] hover:to-[#0077b6] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Export
               </button>
@@ -1666,4 +1695,3 @@ export default function CodeEditor({
     </div>
   );
 }
-

@@ -11,12 +11,16 @@ interface CourseManagementProps {
   highlightedCourseId?: string;
 }
 
-export default function CourseManagement({ highlightedCourseId }: CourseManagementProps) {
+export default function CourseManagement({
+  highlightedCourseId,
+}: CourseManagementProps) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
-  const [highlightedCourse, setHighlightedCourse] = useState<string | null>(null);
+  const [highlightedCourse, setHighlightedCourse] = useState<string | null>(
+    null
+  );
   const [deleteConfirm, setDeleteConfirm] = useState({
     show: false,
     courseId: null as string | null,
@@ -227,21 +231,21 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0a0e27]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-[#0d1230] border-b border-[#2a3050] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               Admin Panel / Courses
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-100">
               Course Management
             </h1>
           </div>
           <button
             onClick={openAddModal}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add New Course
@@ -250,16 +254,16 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
       </div>
 
       {/* Language Tabs and Filters */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[#0d1230] border-b border-[#2a3050]">
         {/* Tabs */}
-        <div className="px-6 border-b border-gray-200">
+        <div className="px-6 border-b border-[#2a3050]">
           <div className="flex items-center gap-1 overflow-x-auto">
             <button
               onClick={() => setActiveLanguageTab("all")}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeLanguageTab === "all"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-purple-500 text-purple-400"
+                  : "border-transparent text-gray-400 hover:text-gray-200 hover:border-[#2a3050]"
               }`}
             >
               All Languages
@@ -270,8 +274,8 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                 onClick={() => setActiveLanguageTab(lang)}
                 className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeLanguageTab === lang
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    ? "border-purple-500 text-purple-400"
+                    : "border-transparent text-gray-400 hover:text-gray-200 hover:border-[#2a3050]"
                 }`}
               >
                 {lang === "cpp"
@@ -287,10 +291,10 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
         <div className="px-6 py-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
                 placeholder="Search courses..."
                 value={filters.search}
                 onChange={(e) =>
@@ -299,7 +303,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
               />
             </div>
             <select
-              className="px-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="px-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500"
               value={filters.category}
               onChange={(e) =>
                 setFilters({ ...filters, category: e.target.value })
@@ -317,7 +321,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
               <option value="other">Other</option>
             </select>
             <select
-              className="px-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="px-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500"
               value={filters.difficulty}
               onChange={(e) =>
                 setFilters({ ...filters, difficulty: e.target.value })
@@ -334,29 +338,29 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
 
       {/* Course Table */}
       <div className="px-6 py-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-[#0d1230] rounded-lg shadow-sm border border-[#2a3050] overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+              <tr className="bg-[#1a1f3e] border-b border-[#2a3050]">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   TITLE
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   CATEGORY
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   DIFFICULTY
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   LANGUAGE
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   SECTIONS
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   STATUS
                 </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-400">
                   ACTIONS
                 </th>
               </tr>
@@ -366,7 +370,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-gray-500"
+                    className="px-6 py-8 text-center text-gray-400"
                   >
                     Loading courses...
                   </td>
@@ -375,7 +379,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-gray-500"
+                    className="px-6 py-8 text-center text-gray-400"
                   >
                     No courses found
                   </td>
@@ -384,21 +388,21 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                 courses.map((course) => (
                   <tr
                     key={course._id}
-                    className={`border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 ${
-                      highlightedCourse === course._id 
-                        ? 'bg-blue-50 border-l-4 border-l-blue-500 border-r-4 border-r-blue-500 border-t-2 border-t-blue-400 border-b-2 border-b-blue-400 shadow-lg shadow-blue-200/50 animate-pulse' 
-                        : ''
+                    className={`border-b border-[#2a3050] hover:bg-[#1a1f3e] transition-all duration-300 ${
+                      highlightedCourse === course._id
+                        ? "bg-purple-900/30 border-l-4 border-l-purple-500 border-r-4 border-r-purple-500 border-t-2 border-t-purple-400 border-b-2 border-b-purple-400 shadow-lg shadow-purple-500/20 animate-pulse"
+                        : ""
                     }`}
                   >
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900 font-medium">
+                      <div className="text-sm text-gray-100 font-medium">
                         {course.title}
                       </div>
                       <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
                         {course.shortDescription}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {course.category
                         .replace("-", " ")
                         .split(" ")
@@ -411,16 +415,16 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                       <span
                         className={`px-2.5 py-1 rounded text-xs font-medium ${
                           course.difficulty === "beginner"
-                            ? "bg-green-50 text-green-700"
+                            ? "bg-green-900/30 text-green-400"
                             : course.difficulty === "intermediate"
-                            ? "bg-yellow-50 text-yellow-700"
-                            : "bg-red-50 text-red-700"
+                            ? "bg-yellow-900/30 text-yellow-400"
+                            : "bg-red-900/30 text-red-400"
                         }`}
                       >
                         {course.difficulty}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {course.language === "cpp"
                         ? "C++"
                         : course.language === "csharp"
@@ -428,15 +432,15 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                         : course.language.charAt(0).toUpperCase() +
                           course.language.slice(1)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {course.totalSections || 0} sections
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-2.5 py-1 rounded text-xs font-medium ${
                           course.isPublished
-                            ? "bg-green-50 text-green-700"
-                            : "bg-yellow-50 text-yellow-700"
+                            ? "bg-green-900/30 text-green-400"
+                            : "bg-yellow-900/30 text-yellow-400"
                         }`}
                       >
                         {course.isPublished ? "Published" : "Draft"}
@@ -446,7 +450,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => onTogglePublish(course._id)}
-                          className="p-1.5 hover:bg-gray-100 rounded text-gray-600"
+                          className="p-1.5 hover:bg-[#1a1f3e] rounded text-gray-400"
                           title={course.isPublished ? "Unpublish" : "Publish"}
                         >
                           {course.isPublished ? (
@@ -487,13 +491,13 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                         </button>
                         <button
                           onClick={() => openSectionModal(course)}
-                          className="px-2.5 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded"
+                          className="px-2.5 py-1 text-xs font-medium text-purple-400 hover:text-purple-300 hover:bg-purple-900/30 rounded"
                         >
                           Manage
                         </button>
                         <button
                           onClick={() => openEditModal(course)}
-                          className="p-1.5 hover:bg-gray-100 rounded text-blue-600"
+                          className="p-1.5 hover:bg-[#1a1f3e] rounded text-purple-400"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
@@ -504,7 +508,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
                               courseId: course._id,
                             })
                           }
-                          className="p-1.5 hover:bg-gray-100 rounded text-red-600"
+                          className="p-1.5 hover:bg-[#1a1f3e] rounded text-red-400"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -519,7 +523,7 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
 
         {/* Stats */}
         {courses.length > 0 && (
-          <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+          <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
             <div>
               Showing {courses.length} course{courses.length !== 1 ? "s" : ""}
             </div>
@@ -568,4 +572,3 @@ export default function CourseManagement({ highlightedCourseId }: CourseManageme
     </div>
   );
 }
-

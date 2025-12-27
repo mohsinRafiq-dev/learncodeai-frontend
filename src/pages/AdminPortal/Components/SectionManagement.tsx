@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Plus } from "lucide-react";
-import { adminCourseAPI, type Course, type CourseSection, type Quiz } from "../../../services/adminCourseAPI";
+import {
+  adminCourseAPI,
+  type Course,
+  type CourseSection,
+  type Quiz,
+} from "../../../services/adminCourseAPI";
 import { useToast } from "../../../contexts/ToastContext";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal";
 import SectionList from "./SectionList";
@@ -13,10 +18,15 @@ interface SectionManagementProps {
   onClose: () => void;
 }
 
-export default function SectionManagement({ course, onClose }: SectionManagementProps) {
+export default function SectionManagement({
+  course,
+  onClose,
+}: SectionManagementProps) {
   const sectionContainerRef = useRef<HTMLDivElement>(null);
   const [showSectionFormModal, setShowSectionFormModal] = useState(false);
-  const [editingSection, setEditingSection] = useState<CourseSection | null>(null);
+  const [editingSection, setEditingSection] = useState<CourseSection | null>(
+    null
+  );
   const [sectionFormData, setSectionFormData] = useState({
     title: "",
     description: "",
@@ -25,7 +35,9 @@ export default function SectionManagement({ course, onClose }: SectionManagement
   });
   const [courseSections, setCourseSections] = useState<CourseSection[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedSection, setSelectedSection] = useState<CourseSection | null>(null);
+  const [selectedSection, setSelectedSection] = useState<CourseSection | null>(
+    null
+  );
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
@@ -43,7 +55,8 @@ export default function SectionManagement({ course, onClose }: SectionManagement
       const response = await adminCourseAPI.getCourseSections(course._id);
       setCourseSections(Array.isArray(response) ? response : []);
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to fetch sections";
+      const message =
+        error instanceof Error ? error.message : "Failed to fetch sections";
       showToast(message, "error");
       console.error("Error fetching sections:", error);
       setCourseSections([]); // Ensure it's always an array
@@ -61,8 +74,8 @@ export default function SectionManagement({ course, onClose }: SectionManagement
     if (sectionContainerRef.current) {
       setTimeout(() => {
         sectionContainerRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+          behavior: "smooth",
+          block: "start",
         });
       }, 100);
     }
@@ -114,7 +127,8 @@ export default function SectionManagement({ course, onClose }: SectionManagement
       setShowSectionFormModal(false);
       resetSectionForm();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to save section";
+      const message =
+        error instanceof Error ? error.message : "Failed to save section";
       showToast(message, "error");
       console.error("Error saving section:", error);
     } finally {
@@ -131,7 +145,8 @@ export default function SectionManagement({ course, onClose }: SectionManagement
       showToast("Section deleted successfully", "success");
       fetchCourseSections();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to delete section";
+      const message =
+        error instanceof Error ? error.message : "Failed to delete section";
       showToast(message, "error");
       console.error("Error deleting section:", error);
     } finally {
@@ -146,26 +161,31 @@ export default function SectionManagement({ course, onClose }: SectionManagement
 
   const openQuizModal = async (section: CourseSection) => {
     setSelectedSection(section);
-    
+
     // If section has a quiz, fetch the full quiz data
     if (section.sectionQuiz) {
       try {
         setLoading(true);
         // Handle both string ID and object cases
-        const quizId = typeof section.sectionQuiz === 'string' ? section.sectionQuiz : section.sectionQuiz._id;
-        
+        const quizId =
+          typeof section.sectionQuiz === "string"
+            ? section.sectionQuiz
+            : section.sectionQuiz._id;
+
         if (quizId) {
           const quizData = await adminCourseAPI.getQuiz(quizId);
           setEditingQuiz(quizData);
         } else {
           // If we already have the full quiz object, use it directly
-          setEditingQuiz(typeof section.sectionQuiz === 'object' ? section.sectionQuiz : null);
+          setEditingQuiz(
+            typeof section.sectionQuiz === "object" ? section.sectionQuiz : null
+          );
         }
       } catch (error) {
-        console.error('Error fetching quiz:', error);
-        showToast('Failed to load quiz data', 'error');
+        console.error("Error fetching quiz:", error);
+        showToast("Failed to load quiz data", "error");
         // If fetching fails but we have the quiz object, use it
-        if (typeof section.sectionQuiz === 'object') {
+        if (typeof section.sectionQuiz === "object") {
           setEditingQuiz(section.sectionQuiz);
         } else {
           setEditingQuiz(null);
@@ -176,7 +196,7 @@ export default function SectionManagement({ course, onClose }: SectionManagement
     } else {
       setEditingQuiz(null);
     }
-    
+
     setShowQuizModal(true);
   };
 
@@ -198,20 +218,24 @@ export default function SectionManagement({ course, onClose }: SectionManagement
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-gray-900">Manage Sections - {course.title}</h2>
-          <p className="text-sm text-gray-600">Create and organize course sections</p>
+          <h2 className="text-lg font-bold text-gray-100">
+            Manage Sections - {course.title}
+          </h2>
+          <p className="text-sm text-gray-400">
+            Create and organize course sections
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={() => openSectionForm()}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add Section
           </button>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium"
+            className="px-4 py-2 text-gray-300 border border-[#2a3050] rounded-md hover:bg-[#1a1f3e] text-sm font-medium"
           >
             Back to Courses
           </button>

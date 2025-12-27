@@ -42,13 +42,13 @@ function AdminPortal() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-[#0a0e27] overflow-hidden">
       {/* Left Sidebar */}
-      <aside className="w-60 bg-white border-r border-gray-200 flex flex-col">
+      <aside className="w-60 bg-[#0d1230] border-r border-[#1a1f3e] flex flex-col">
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-[#1a1f3e]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
               <svg
                 className="w-6 h-6 text-white"
                 fill="none"
@@ -63,15 +63,17 @@ function AdminPortal() {
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold text-gray-900">LearnCode AI</span>
+            <span className="text-xl font-bold text-gray-100">
+              LearnCode AI
+            </span>
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="px-4 py-3 border-b border-gray-200">
+        <div className="px-4 py-3 border-b border-[#1a1f3e]">
           <div className="relative">
             <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -86,7 +88,7 @@ function AdminPortal() {
             <input
               type="text"
               placeholder="Search tutorials, users, content..."
-              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 text-sm bg-[#1a1f3e] border border-[#2a3050] text-gray-200 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -94,10 +96,10 @@ function AdminPortal() {
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "dashboard"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("dashboard")}
           >
@@ -118,10 +120,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "tutorials"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("tutorials")}
           >
@@ -142,10 +144,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "courses"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("courses")}
           >
@@ -166,10 +168,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "users"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("users")}
           >
@@ -190,10 +192,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "analytics"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("analytics")}
           >
@@ -214,10 +216,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "certificates"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("certificates")}
           >
@@ -238,10 +240,10 @@ function AdminPortal() {
           </button>
 
           <button
-            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "queries"
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-50"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
             }`}
             onClick={() => setActiveTab("queries")}
           >
@@ -263,10 +265,10 @@ function AdminPortal() {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-[#2a3050] p-4">
           <button
             onClick={() => navigate("/")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 mb-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-2.5 mb-2 rounded-lg text-gray-300 hover:bg-[#1a1f3e] transition-colors text-left cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -286,7 +288,7 @@ function AdminPortal() {
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-300 hover:bg-[#1a1f3e] transition-colors text-left cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -307,7 +309,7 @@ function AdminPortal() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden bg-gray-50">
+      <main className="flex-1 flex flex-col overflow-hidden bg-[#0a0e27]">
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === "dashboard" && (
@@ -355,4 +357,3 @@ function AdminPortal() {
 }
 
 export default AdminPortal;
-

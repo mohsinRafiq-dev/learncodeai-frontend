@@ -45,13 +45,22 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center p-4 font-mono relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-screen filter blur-[100px] opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00e676] rounded-full mix-blend-screen filter blur-[100px] opacity-10 animate-pulse delay-1000"></div>
+      </div>
+
+      {/* Circuit Pattern */}
+      <div className="absolute inset-0 circuit-pattern opacity-30"></div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#1a1f3a] neon-border-purple rounded-2xl mb-4">
             <svg
-              className="w-8 h-8 text-white"
+              className="w-8 h-8 text-[#8b5cf6]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -64,16 +73,29 @@ export default function SignupPage() {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Join LearnCode AI
+          <h1 className="text-3xl font-bold mb-2">
+            <span className="text-[#6272a4]">{"// "}</span>
+            <span className="neon-text-purple">Join</span>
+            <span className="text-white"> LearnCode</span>
+            <span className="neon-text-cyan"> AI</span>
           </h1>
-          <p className="text-gray-600">
-            Create your account and start your coding journey
+          <p className="text-[#6272a4]">
+            <span className="text-[#00b4d8]">{"/* "}</span>
+            Create your account and start coding
+            <span className="text-[#00b4d8]">{" */"}</span>
           </p>
         </div>
 
         {/* Sign Up Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+        <div className="terminal-window backdrop-blur-xl p-8">
+          {/* Terminal Header */}
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[#2a2f4a]">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27ca3f]"></div>
+            <span className="ml-2 text-[#6272a4] text-sm">auth.register()</span>
+          </div>
+
           {/* OAuth Buttons */}
           <div className="mb-6">
             <OAuthButtons
@@ -85,11 +107,11 @@ export default function SignupPage() {
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+              <div className="w-full border-t border-[#2a2f4a]"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
-                Or create account with email
+              <span className="px-4 bg-[#1a1f3a] text-[#6272a4]">
+                {"// or create account with email"}
               </span>
             </div>
           </div>
@@ -106,24 +128,26 @@ export default function SignupPage() {
           />
 
           {/* Sign In Link */}
-          <p className="text-center text-gray-600 text-sm mt-6">
+          <p className="text-center text-[#6272a4] text-sm mt-6">
+            <span className="text-[#00b4d8]">{"// "}</span>
             Already have an account?{" "}
             <Link
               to="/signin"
-              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+              className="text-[#00e676] hover:text-[#8b5cf6] font-semibold transition-colors"
             >
-              Sign in instead
+              signin()
             </Link>
           </p>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-gray-500 text-xs mt-6">
+        <p className="text-center text-[#6272a4] text-xs mt-6">
+          <span className="text-[#00b4d8]">{"/* "}</span>
           By creating an account, you agree to our{" "}
           <button
             type="button"
             onClick={() => setShowTermsModal(true)}
-            className="text-gray-600 hover:text-gray-700 underline"
+            className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer"
           >
             Terms
           </button>{" "}
@@ -131,10 +155,11 @@ export default function SignupPage() {
           <button
             type="button"
             onClick={() => setShowPrivacyModal(true)}
-            className="text-gray-600 hover:text-gray-700 underline"
+            className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer"
           >
             Privacy Policy
           </button>
+          <span className="text-[#00b4d8]">{" */"}</span>
         </p>
       </div>
 

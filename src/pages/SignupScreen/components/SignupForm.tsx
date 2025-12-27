@@ -24,17 +24,22 @@ export default function SignupForm({
   onTermsClick,
   onPrivacyClick,
 }: SignupFormProps) {
-  const [passwordStrength, setPasswordStrength] = useState<"weak" | "medium" | "strong" | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState<
+    "weak" | "medium" | "strong" | null
+  >(null);
   const [emailError, setEmailError] = useState<string | null>(null);
 
   const validateEmailFormat = (email: string): string | null => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return null;
-    if (!emailRegex.test(email)) return "Invalid email, please enter a valid email";
+    if (!emailRegex.test(email))
+      return "Invalid email, please enter a valid email";
     return null;
   };
 
-  const calculatePasswordStrength = (pwd: string): "weak" | "medium" | "strong" | null => {
+  const calculatePasswordStrength = (
+    pwd: string
+  ): "weak" | "medium" | "strong" | null => {
     if (pwd.length === 0) return null;
     let score = 0;
     if (pwd.length >= 8) score++;
@@ -48,29 +53,35 @@ export default function SignupForm({
   };
 
   const isPasswordStrong = (pwd: string): boolean => {
-    return pwd.length >= 8 &&
-           /[a-z]/.test(pwd) &&
-           /[A-Z]/.test(pwd) &&
-           /[0-9]/.test(pwd) &&
-           /[@$!%*?&]/.test(pwd);
+    return (
+      pwd.length >= 8 &&
+      /[a-z]/.test(pwd) &&
+      /[A-Z]/.test(pwd) &&
+      /[0-9]/.test(pwd) &&
+      /[@$!%*?&]/.test(pwd)
+    );
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Check password strength before submission
     if (formData.password && !isPasswordStrong(formData.password)) {
       return; // Prevent submission, error will be shown by validation
     }
-    
+
     onSubmit(e);
   };
+
   return (
     <>
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
+        <div className="mb-4 p-3 bg-[#e91e63]/10 border border-[#e91e63]/30 rounded-lg">
+          <p className="text-sm text-[#e91e63] font-mono">
+            <span className="text-[#6272a4]">{"// Error: "}</span>
+            {error}
+          </p>
         </div>
       )}
 
@@ -79,9 +90,10 @@ export default function SignupForm({
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-[#6272a4] mb-2"
           >
-            Full Name
+            <span className="text-[#8b5cf6]">const</span> name{" "}
+            <span className="text-[#6272a4]">=</span>
           </label>
           <input
             id="name"
@@ -89,8 +101,8 @@ export default function SignupForm({
             type="text"
             value={formData.name}
             onChange={onChange}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="John Doe"
+            className="w-full px-4 py-3 bg-[#0a0e27] border border-[#2a2f4a] rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono"
+            placeholder='"Your Name"'
             required
           />
         </div>
@@ -98,9 +110,10 @@ export default function SignupForm({
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-[#6272a4] mb-2"
           >
-            Email Address
+            <span className="text-[#8b5cf6]">const</span> email{" "}
+            <span className="text-[#6272a4]">=</span>
           </label>
           <input
             id="email"
@@ -111,15 +124,15 @@ export default function SignupForm({
               onChange(e);
               setEmailError(validateEmailFormat(e.target.value));
             }}
-            className={`w-full px-4 py-3 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              emailError ? 'border-red-300' : 'border-gray-300'
+            className={`w-full px-4 py-3 bg-[#0a0e27] border rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono ${
+              emailError ? "border-[#e91e63]" : "border-[#2a2f4a]"
             }`}
-            placeholder="you@example.com"
+            placeholder='"you@example.com"'
             required
           />
           {emailError && (
             <div className="mt-1">
-              <p className="text-sm text-red-600">{emailError}</p>
+              <p className="text-sm text-[#e91e63] font-mono">{emailError}</p>
             </div>
           )}
         </div>
@@ -127,9 +140,10 @@ export default function SignupForm({
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-[#6272a4] mb-2"
           >
-            Password
+            <span className="text-[#8b5cf6]">const</span> password{" "}
+            <span className="text-[#6272a4]">=</span>
           </label>
           <input
             id="password"
@@ -140,63 +154,97 @@ export default function SignupForm({
               onChange(e);
               setPasswordStrength(calculatePasswordStrength(e.target.value));
             }}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="••••••••"
+            className="w-full px-4 py-3 bg-[#0a0e27] border border-[#2a2f4a] rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono"
+            placeholder='"••••••••"'
             required
           />
           {passwordStrength && (
             <div className="mt-2 space-y-2">
               <div className="flex items-center gap-2">
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                <div className="flex-1 bg-[#2a2f4a] rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
                       passwordStrength === "weak"
-                        ? "bg-red-500 w-1/3"
+                        ? "bg-[#e91e63] w-1/3"
                         : passwordStrength === "medium"
-                        ? "bg-yellow-500 w-2/3"
-                        : "bg-green-500 w-full"
+                        ? "bg-[#ffbd2e] w-2/3"
+                        : "bg-[#00e676] w-full"
                     }`}
                   ></div>
                 </div>
                 <span
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-medium font-mono ${
                     passwordStrength === "weak"
-                      ? "text-red-600"
+                      ? "text-[#e91e63]"
                       : passwordStrength === "medium"
-                      ? "text-yellow-600"
-                      : "text-green-600"
+                      ? "text-[#ffbd2e]"
+                      : "text-[#00e676]"
                   }`}
                 >
                   {passwordStrength === "weak"
-                    ? "Weak"
+                    ? "// weak"
                     : passwordStrength === "medium"
-                    ? "Medium"
-                    : "Strong"}
+                    ? "// medium"
+                    : "// strong"}
                 </span>
               </div>
-              
+
               {passwordStrength === "weak" && (
-                <div className="text-xs text-gray-600 mt-1">
-                  <p className="mb-1 font-medium">Password must contain:</p>
+                <div className="text-xs text-[#6272a4] mt-1 font-mono">
+                  <p className="mb-1 font-medium text-[#00b4d8]">
+                    {"// Password requirements:"}
+                  </p>
                   <ul className="space-y-0.5">
-                    <li className={`flex items-center gap-1 ${formData.password.length >= 8 ? 'text-green-600' : 'text-red-600'}`}>
-                      <span>{formData.password.length >= 8 ? '✓' : '×'}</span>
+                    <li
+                      className={`flex items-center gap-1 ${
+                        formData.password.length >= 8
+                          ? "text-[#00e676]"
+                          : "text-[#e91e63]"
+                      }`}
+                    >
+                      <span>{formData.password.length >= 8 ? "✓" : "×"}</span>
                       At least 8 characters
                     </li>
-                    <li className={`flex items-center gap-1 ${/[a-z]/.test(formData.password) ? 'text-green-600' : 'text-red-600'}`}>
-                      <span>{/[a-z]/.test(formData.password) ? '✓' : '×'}</span>
+                    <li
+                      className={`flex items-center gap-1 ${
+                        /[a-z]/.test(formData.password)
+                          ? "text-[#00e676]"
+                          : "text-[#e91e63]"
+                      }`}
+                    >
+                      <span>{/[a-z]/.test(formData.password) ? "✓" : "×"}</span>
                       One lowercase letter
                     </li>
-                    <li className={`flex items-center gap-1 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-red-600'}`}>
-                      <span>{/[A-Z]/.test(formData.password) ? '✓' : '×'}</span>
+                    <li
+                      className={`flex items-center gap-1 ${
+                        /[A-Z]/.test(formData.password)
+                          ? "text-[#00e676]"
+                          : "text-[#e91e63]"
+                      }`}
+                    >
+                      <span>{/[A-Z]/.test(formData.password) ? "✓" : "×"}</span>
                       One uppercase letter
                     </li>
-                    <li className={`flex items-center gap-1 ${/[0-9]/.test(formData.password) ? 'text-green-600' : 'text-red-600'}`}>
-                      <span>{/[0-9]/.test(formData.password) ? '✓' : '×'}</span>
+                    <li
+                      className={`flex items-center gap-1 ${
+                        /[0-9]/.test(formData.password)
+                          ? "text-[#00e676]"
+                          : "text-[#e91e63]"
+                      }`}
+                    >
+                      <span>{/[0-9]/.test(formData.password) ? "✓" : "×"}</span>
                       One number
                     </li>
-                    <li className={`flex items-center gap-1 ${/[@$!%*?&]/.test(formData.password) ? 'text-green-600' : 'text-red-600'}`}>
-                      <span>{/[@$!%*?&]/.test(formData.password) ? '✓' : '×'}</span>
+                    <li
+                      className={`flex items-center gap-1 ${
+                        /[@$!%*?&]/.test(formData.password)
+                          ? "text-[#00e676]"
+                          : "text-[#e91e63]"
+                      }`}
+                    >
+                      <span>
+                        {/[@$!%*?&]/.test(formData.password) ? "✓" : "×"}
+                      </span>
                       One special character (@$!%*?&)
                     </li>
                   </ul>
@@ -209,9 +257,10 @@ export default function SignupForm({
         <div>
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-[#6272a4] mb-2"
           >
-            Confirm Password
+            <span className="text-[#8b5cf6]">const</span> confirmPassword{" "}
+            <span className="text-[#6272a4]">=</span>
           </label>
           <input
             id="confirmPassword"
@@ -219,8 +268,8 @@ export default function SignupForm({
             type="password"
             value={formData.confirmPassword}
             onChange={onChange}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="••••••••"
+            className="w-full px-4 py-3 bg-[#0a0e27] border border-[#2a2f4a] rounded-lg text-white placeholder-[#6272a4] focus:outline-none focus:border-[#00b4d8] focus:ring-1 focus:ring-[#00b4d8] transition-all font-mono"
+            placeholder='"••••••••"'
             required
           />
         </div>
@@ -230,15 +279,15 @@ export default function SignupForm({
             id="terms"
             name="terms"
             type="checkbox"
-            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 mt-0.5"
+            className="w-4 h-4 rounded border-[#2a2f4a] bg-[#0a0e27] text-[#00b4d8] focus:ring-[#00b4d8] focus:ring-offset-0 mt-0.5"
             required
           />
-          <label htmlFor="terms" className="ml-3 text-gray-700">
+          <label htmlFor="terms" className="ml-3 text-[#6272a4]">
             I agree to the{" "}
             <button
               type="button"
               onClick={onTermsClick}
-              className="text-blue-600 hover:text-blue-700 underline"
+              className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer"
             >
               Terms of Service
             </button>{" "}
@@ -246,7 +295,7 @@ export default function SignupForm({
             <button
               type="button"
               onClick={onPrivacyClick}
-              className="text-blue-600 hover:text-blue-700 underline"
+              className="text-[#8b5cf6] hover:text-[#00e676] underline transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
@@ -255,41 +304,57 @@ export default function SignupForm({
 
         <button
           type="submit"
-          disabled={isLoading || (formData.password ? !isPasswordStrong(formData.password) : false) || (formData.email ? !!emailError : false)}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 disabled:from-blue-400 disabled:to-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-lg"
+          disabled={
+            isLoading ||
+            (formData.password
+              ? !isPasswordStrong(formData.password)
+              : false) ||
+            (formData.email ? !!emailError : false)
+          }
+          className="group relative w-full cursor-pointer"
         >
-          {isLoading ? (
-            <div className="flex items-center justify-center gap-2">
-              <svg
-                className="animate-spin h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Creating Account...
-            </div>
-          ) : (
-            "Create Account"
-          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6] to-[#00e676] rounded-lg blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
+          <div className="relative w-full bg-gradient-to-r from-[#8b5cf6] to-[#00e676] hover:from-[#00b4d8] hover:to-[#8b5cf6] disabled:from-[#2a2f4a] disabled:to-[#2a2f4a] disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Creating Account...</span>
+              </>
+            ) : (
+              <>
+                <span className="text-[#0a0e27]">$</span>
+                <span>createAccount()</span>
+              </>
+            )}
+          </div>
         </button>
-        
-        {((formData.password && !isPasswordStrong(formData.password)) || (formData.email && emailError)) && (
-          <div className="mt-2 p-2 bg-orange-50 border border-orange-200 rounded-lg">
-            <p className="text-sm text-orange-700 text-center">
-              {emailError ? "Please enter a valid email address" : "Please create a strong password to continue"}
+
+        {((formData.password && !isPasswordStrong(formData.password)) ||
+          (formData.email && emailError)) && (
+          <div className="mt-2 p-2 bg-[#ffbd2e]/10 border border-[#ffbd2e]/30 rounded-lg">
+            <p className="text-sm text-[#ffbd2e] text-center font-mono">
+              <span className="text-[#6272a4]">{"// "}</span>
+              {emailError
+                ? "Please enter a valid email address"
+                : "Please create a strong password to continue"}
             </p>
           </div>
         )}
@@ -297,4 +362,3 @@ export default function SignupForm({
     </>
   );
 }
-

@@ -277,15 +277,15 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const getActivityColor = (type: string) => {
     switch (type) {
       case "user_signup":
-        return "bg-blue-100 text-blue-600";
+        return "bg-blue-900/30 text-blue-400";
       case "tutorial_created":
-        return "bg-green-100 text-green-600";
+        return "bg-green-900/30 text-green-400";
       case "content_updated":
-        return "bg-yellow-100 text-yellow-600";
+        return "bg-yellow-900/30 text-yellow-400";
       case "course_created":
-        return "bg-purple-100 text-purple-600";
+        return "bg-purple-900/30 text-purple-400";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-gray-800 text-gray-400";
     }
   };
 
@@ -306,13 +306,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0a0e27]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-3">
+      <header className="bg-[#0d1230] border-b border-[#2a3050] px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center flex-1">
             <div ref={searchRef} className="relative w-80">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search tutorials, users, courses..."
@@ -322,22 +322,22 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   handleSearch(e.target.value);
                 }}
                 onFocus={() => searchQuery && setShowSearchResults(true)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
               />
 
               {/* Search Results Popup */}
               {showSearchResults && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[#0d1230] border border-[#2a3050] rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
                   {searchLoading ? (
-                    <div className="p-4 text-center text-gray-500 text-sm">
+                    <div className="p-4 text-center text-gray-400 text-sm">
                       Searching...
                     </div>
                   ) : (
                     <>
                       {/* Tutorials Section */}
                       {searchResults.tutorials.length > 0 && (
-                        <div className="border-b border-gray-100">
-                          <div className="px-4 py-2 bg-gray-50 text-xs font-semibold text-gray-700">
+                        <div className="border-b border-[#2a3050]">
+                          <div className="px-4 py-2 bg-[#1a1f3e] text-xs font-semibold text-gray-300">
                             Tutorials
                           </div>
                           {searchResults.tutorials.map((tutorial) => (
@@ -347,11 +347,11 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 handleEditTutorial(tutorial);
                                 setShowSearchResults(false);
                               }}
-                              className="w-full px-4 py-2 hover:bg-gray-50 text-left flex items-center gap-2"
+                              className="w-full px-4 py-2 hover:bg-[#1a1f3e] text-left flex items-center gap-2"
                             >
-                              <BookOpen className="w-4 h-4 text-blue-600" />
+                              <BookOpen className="w-4 h-4 text-blue-400" />
                               <div className="flex-1">
-                                <div className="text-sm text-gray-900">
+                                <div className="text-sm text-gray-200">
                                   {tutorial.title}
                                 </div>
                                 <div className="text-xs text-gray-500">
@@ -365,8 +365,8 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
                       {/* Courses Section */}
                       {searchResults.courses.length > 0 && (
-                        <div className="border-b border-gray-100">
-                          <div className="px-4 py-2 bg-gray-50 text-xs font-semibold text-gray-700">
+                        <div className="border-b border-[#2a3050]">
+                          <div className="px-4 py-2 bg-[#1a1f3e] text-xs font-semibold text-gray-300">
                             Courses
                           </div>
                           {searchResults.courses.map((course) => (
@@ -376,11 +376,11 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 handleEditCourse(course);
                                 setShowSearchResults(false);
                               }}
-                              className="w-full px-4 py-2 hover:bg-gray-50 text-left flex items-center gap-2"
+                              className="w-full px-4 py-2 hover:bg-[#1a1f3e] text-left flex items-center gap-2"
                             >
-                              <FileText className="w-4 h-4 text-purple-600" />
+                              <FileText className="w-4 h-4 text-purple-400" />
                               <div className="flex-1">
-                                <div className="text-sm text-gray-900">
+                                <div className="text-sm text-gray-200">
                                   {course.title}
                                 </div>
                                 <div className="text-xs text-gray-500">
@@ -395,7 +395,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                       {/* Users Section */}
                       {searchResults.users.length > 0 && (
                         <div>
-                          <div className="px-4 py-2 bg-gray-50 text-xs font-semibold text-gray-700">
+                          <div className="px-4 py-2 bg-[#1a1f3e] text-xs font-semibold text-gray-300">
                             Users
                           </div>
                           {searchResults.users.map((user) => (
@@ -405,11 +405,11 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 onNavigate?.("users", { userId: user._id });
                                 setShowSearchResults(false);
                               }}
-                              className="w-full px-4 py-2 hover:bg-gray-50 text-left flex items-center gap-2"
+                              className="w-full px-4 py-2 hover:bg-[#1a1f3e] text-left flex items-center gap-2"
                             >
-                              <User className="w-4 h-4 text-green-600" />
+                              <User className="w-4 h-4 text-green-400" />
                               <div className="flex-1">
-                                <div className="text-sm text-gray-900">
+                                <div className="text-sm text-gray-200">
                                   {user.name}
                                 </div>
                                 <div className="text-xs text-gray-500">
@@ -426,7 +426,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         searchResults.courses.length === 0 &&
                         searchResults.users.length === 0 &&
                         !searchLoading && (
-                          <div className="p-4 text-center text-gray-500 text-sm">
+                          <div className="p-4 text-center text-gray-400 text-sm">
                             No results found
                           </div>
                         )}
@@ -437,11 +437,11 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-gray-100 rounded-md">
-              <Bell className="w-5 h-5 text-gray-600" />
+            <button className="p-2 hover:bg-[#1a1f3e] rounded-md">
+              <Bell className="w-5 h-5 text-gray-400" />
             </button>
-            <button className="p-2 hover:bg-gray-100 rounded-md">
-              <HelpCircle className="w-5 h-5 text-gray-600" />
+            <button className="p-2 hover:bg-[#1a1f3e] rounded-md">
+              <HelpCircle className="w-5 h-5 text-gray-400" />
             </button>
           </div>
         </div>
@@ -451,13 +451,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       <main className="px-6 py-6">
         {/* Welcome Section */}
         <div className="mb-6">
-          <div className="text-sm text-gray-500 mb-1">
+          <div className="text-sm text-gray-400 mb-1">
             Admin Panel / Dashboard
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-100">
             Dashboard Overview
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-400 mt-1">
             Here's a summary of your site's activity.
           </p>
         </div>
@@ -468,18 +468,18 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
             Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 animate-pulse"
+                className="bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050] animate-pulse"
               >
-                <div className="h-3 bg-gray-200 rounded w-24 mb-3"></div>
-                <div className="h-8 bg-gray-200 rounded w-16"></div>
+                <div className="h-3 bg-[#1a1f3e] rounded w-24 mb-3"></div>
+                <div className="h-8 bg-[#1a1f3e] rounded w-16"></div>
               </div>
             ))
           ) : error ? (
-            <div className="col-span-4 bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-              <p className="text-red-600 text-sm">{error}</p>
+            <div className="col-span-4 bg-red-900/20 border border-red-500/30 rounded-lg p-4 text-center">
+              <p className="text-red-400 text-sm">{error}</p>
               <button
                 onClick={loadDashboardStats}
-                className="mt-2 text-red-600 hover:text-red-700 text-sm font-medium"
+                className="mt-2 text-red-400 hover:text-red-300 text-sm font-medium"
               >
                 Try Again
               </button>
@@ -513,16 +513,16 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
             ].map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-5 shadow-sm border border-gray-100"
+                className="bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050]"
               >
-                <div className="text-xs text-gray-500 mb-3">{stat.label}</div>
+                <div className="text-xs text-gray-400 mb-3">{stat.label}</div>
                 <div className="flex items-end justify-between">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-gray-100">
                     {stat.value}
                   </div>
                   <div
                     className={`text-xs font-semibold ${
-                      stat.positive ? "text-green-600" : "text-red-600"
+                      stat.positive ? "text-green-400" : "text-red-400"
                     }`}
                   >
                     {stat.change}
@@ -535,8 +535,8 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
         <div className="grid grid-cols-3 gap-6 mb-6">
           {/* User Growth Chart */}
-          <div className="col-span-2 bg-white rounded-lg p-5 shadow-sm border border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">
+          <div className="col-span-2 bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050]">
+            <h2 className="text-base font-semibold text-gray-100 mb-4">
               User Growth (Last 30 Days)
             </h2>
             <div className="relative h-64 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-lg overflow-hidden">
@@ -585,8 +585,8 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">
+          <div className="bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050]">
+            <h2 className="text-base font-semibold text-gray-100 mb-4">
               Quick Actions
             </h2>
             <div className="space-y-2">
@@ -595,7 +595,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   setEditingItem(null);
                   setShowTutorialModal(true);
                 }}
-                className="w-full px-4 py-2.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-md hover:from-blue-700 hover:to-blue-800 text-sm font-medium flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Add New Tutorial
@@ -605,21 +605,21 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   setEditingItem(null);
                   setShowCourseModal(true);
                 }}
-                className="w-full px-4 py-2.5 bg-purple-500 text-white rounded-md hover:bg-purple-600 text-sm font-medium flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-md hover:from-purple-700 hover:to-purple-800 text-sm font-medium flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Add New Course
               </button>
               <button
                 onClick={() => onNavigate?.("users")}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-md hover:bg-gray-50 text-sm font-medium flex items-center justify-center gap-2 text-gray-700"
+                className="w-full px-4 py-2.5 border border-[#2a3050] rounded-md hover:bg-[#1a1f3e] text-sm font-medium flex items-center justify-center gap-2 text-gray-300"
               >
                 <Users className="w-4 h-4" />
                 Manage Users
               </button>
               <button
                 onClick={() => onNavigate?.("analytics")}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-md hover:bg-gray-50 text-sm font-medium flex items-center justify-center gap-2 text-gray-700"
+                className="w-full px-4 py-2.5 border border-[#2a3050] rounded-md hover:bg-[#1a1f3e] text-sm font-medium flex items-center justify-center gap-2 text-gray-300"
               >
                 <FileText className="w-4 h-4" />
                 View Reports
@@ -630,13 +630,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
         <div className="grid grid-cols-3 gap-6 mb-6">
           {/* Most Viewed Content */}
-          <div className="col-span-2 bg-white rounded-lg p-5 shadow-sm border border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">
+          <div className="col-span-2 bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050]">
+            <h2 className="text-base font-semibold text-gray-100 mb-4">
               Most Viewed Content
             </h2>
             <div className="space-y-2.5">
               {mostViewedContent.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 text-sm">
+                <div className="text-center py-8 text-gray-400 text-sm">
                   No content data available
                 </div>
               ) : (
@@ -647,14 +647,17 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   return (
                     <div key={index} className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <div className="text-xs text-gray-700 font-medium" title={item.name}>
+                        <div
+                          className="text-xs text-gray-300 font-medium"
+                          title={item.name}
+                        >
                           {item.name}
                         </div>
                         <div className="text-xs text-gray-500 capitalize">
                           {item.type}
                         </div>
                       </div>
-                      <div className="flex-1 bg-gray-100 rounded h-6 relative overflow-hidden">
+                      <div className="flex-1 bg-[#1a1f3e] rounded h-6 relative overflow-hidden">
                         <div
                           className="h-6 rounded transition-all flex items-center justify-end pr-2"
                           style={{
@@ -675,13 +678,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">
+          <div className="bg-[#0d1230] rounded-lg p-5 shadow-sm border border-[#2a3050]">
+            <h2 className="text-base font-semibold text-gray-100 mb-4">
               Recent Activity
             </h2>
             <div className="space-y-3">
               {recentActivities.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 text-sm">
+                <div className="text-center py-8 text-gray-400 text-sm">
                   No recent activity
                 </div>
               ) : (
@@ -694,7 +697,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         <Icon className="w-4 h-4" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-gray-900 leading-relaxed">
+                        <p className="text-xs text-gray-200 leading-relaxed">
                           {activity.text}
                         </p>
                         <p className="text-xs text-gray-500 mt-0.5">
@@ -710,22 +713,22 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </div>
 
         {/* Latest Content Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900">
+        <div className="bg-[#0d1230] rounded-lg shadow-sm border border-[#2a3050]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a3050]">
+            <h2 className="text-base font-semibold text-gray-100">
               Latest Content
             </h2>
             <div className="flex gap-2">
               <button
                 onClick={() => onNavigate?.("tutorials")}
-                className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                className="text-blue-400 hover:text-blue-300 text-sm font-medium"
               >
                 View All Tutorials
               </button>
-              <span className="text-gray-300">|</span>
+              <span className="text-gray-600">|</span>
               <button
                 onClick={() => onNavigate?.("courses")}
-                className="text-purple-500 hover:text-purple-600 text-sm font-medium"
+                className="text-purple-400 hover:text-purple-300 text-sm font-medium"
               >
                 View All Courses
               </button>
@@ -734,23 +737,23 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                <tr className="bg-[#1a1f3e] border-b border-[#2a3050]">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Type
                   </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Title
                   </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Language
                   </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Author
                   </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Status
                   </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-600">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400">
                     Date Created
                   </th>
                   <th className="px-5 py-3"></th>
@@ -761,7 +764,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   <tr>
                     <td
                       colSpan={7}
-                      className="px-5 py-8 text-center text-gray-500 text-sm"
+                      className="px-5 py-8 text-center text-gray-400 text-sm"
                     >
                       No content found
                     </td>
@@ -772,34 +775,34 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     {latestTutorials.map((tutorial, index) => (
                       <tr
                         key={`tutorial-${tutorial._id || index}`}
-                        className="border-b border-gray-50 hover:bg-gray-50"
+                        className="border-b border-[#2a3050] hover:bg-[#1a1f3e]"
                       >
                         <td className="px-5 py-4">
-                          <span className="px-2 py-1 rounded text-xs font-medium bg-blue-50 text-blue-700">
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-blue-900/30 text-blue-400">
                             Tutorial
                           </span>
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-900">
+                        <td className="px-5 py-4 text-sm text-gray-200">
                           {tutorial.title}
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {tutorial.language?.toUpperCase() || "N/A"}
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {tutorial.createdBy?.name || "Unknown"}
                         </td>
                         <td className="px-5 py-4">
-                          <span className="px-2.5 py-1 rounded text-xs font-medium bg-teal-50 text-teal-700">
+                          <span className="px-2.5 py-1 rounded text-xs font-medium bg-teal-900/30 text-teal-400">
                             Published
                           </span>
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {formatDate(tutorial.createdAt)}
                         </td>
                         <td className="px-5 py-4 text-right">
                           <button
                             onClick={() => handleEditTutorial(tutorial)}
-                            className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                            className="text-blue-400 hover:text-blue-300 text-sm font-medium"
                           >
                             Edit
                           </button>
@@ -810,34 +813,34 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     {latestCourses.map((course, index) => (
                       <tr
                         key={`course-${course._id || index}`}
-                        className="border-b border-gray-50 hover:bg-gray-50"
+                        className="border-b border-[#2a3050] hover:bg-[#1a1f3e]"
                       >
                         <td className="px-5 py-4">
-                          <span className="px-2 py-1 rounded text-xs font-medium bg-purple-50 text-purple-700">
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-purple-900/30 text-purple-400">
                             Course
                           </span>
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-900">
+                        <td className="px-5 py-4 text-sm text-gray-200">
                           {course.title}
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {course.language?.toUpperCase() || "N/A"}
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {course.instructor?.name || "Unknown"}
                         </td>
                         <td className="px-5 py-4">
-                          <span className="px-2.5 py-1 rounded text-xs font-medium bg-teal-50 text-teal-700">
+                          <span className="px-2.5 py-1 rounded text-xs font-medium bg-teal-900/30 text-teal-400">
                             Published
                           </span>
                         </td>
-                        <td className="px-5 py-4 text-sm text-gray-600">
+                        <td className="px-5 py-4 text-sm text-gray-400">
                           {formatDate(course.createdAt)}
                         </td>
                         <td className="px-5 py-4 text-right">
                           <button
                             onClick={() => handleEditCourse(course)}
-                            className="text-purple-500 hover:text-purple-600 text-sm font-medium"
+                            className="text-purple-400 hover:text-purple-300 text-sm font-medium"
                           >
                             Edit
                           </button>
@@ -853,10 +856,10 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
         {/* Tutorial Modal */}
         {showTutorialModal && (
-          <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900">
+          <div className="fixed inset-0 backdrop-blur bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#0d1230] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#2a3050]">
+              <div className="flex items-center justify-between p-6 border-b border-[#2a3050]">
+                <h2 className="text-xl font-bold text-gray-100">
                   {editingItem ? "Edit Tutorial" : "Create New Tutorial"}
                 </h2>
                 <button
@@ -864,13 +867,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     setShowTutorialModal(false);
                     setEditingItem(null);
                   }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-200"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="p-6">
-                <p className="text-gray-600 text-center py-8">
+                <p className="text-gray-400 text-center py-8">
                   Tutorial form will be implemented here. For now, please use
                   the Tutorials management page.
                 </p>
@@ -882,7 +885,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                       editingItem ? { editTutorial: editingItem } : {}
                     );
                   }}
-                  className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="w-full py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-md hover:from-blue-700 hover:to-blue-800"
                 >
                   Go to Tutorials Page
                 </button>
@@ -893,10 +896,10 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
         {/* Course Modal */}
         {showCourseModal && (
-          <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900">
+          <div className="fixed inset-0 backdrop-blur bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#0d1230] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#2a3050]">
+              <div className="flex items-center justify-between p-6 border-b border-[#2a3050]">
+                <h2 className="text-xl font-bold text-gray-100">
                   {editingItem ? "Edit Course" : "Create New Course"}
                 </h2>
                 <button
@@ -904,13 +907,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     setShowCourseModal(false);
                     setEditingItem(null);
                   }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-200"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="p-6">
-                <p className="text-gray-600 text-center py-8">
+                <p className="text-gray-400 text-center py-8">
                   Course form will be implemented here. For now, please use the
                   Courses management page.
                 </p>
@@ -922,7 +925,7 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                       editingItem ? { editCourse: editingItem } : {}
                     );
                   }}
-                  className="w-full py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+                  className="w-full py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-md hover:from-purple-700 hover:to-purple-800"
                 >
                   Go to Courses Page
                 </button>
@@ -934,4 +937,3 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     </div>
   );
 }
-

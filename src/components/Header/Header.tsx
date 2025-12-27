@@ -48,6 +48,8 @@ export default function Header() {
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
     { to: "/tutorials", label: "Tutorials" },
+    { to: "/quizzes", label: "Quizzes" },
+    { to: "/discussions", label: "Forum" },
     { to: "/editor", label: "Code Editor" },
     { to: "/contact", label: "Contact Us" },
   ];
@@ -86,22 +88,22 @@ export default function Header() {
             {/* Avatar Button */}
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="flex items-center space-x-2 p-1 rounded-full hover:bg-[#1a1f3e] transition-colors"
             >
               {user?.profilePicture &&
               getProfileImageUrl(user.profilePicture) ? (
                 <img
                   src={getProfileImageUrl(user.profilePicture) || ""}
                   alt={user.name}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-[#8b5cf6]/50"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold border-2 border-gray-200">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#00b4d8] to-[#8b5cf6] flex items-center justify-center text-white font-semibold border-2 border-[#8b5cf6]/50">
                   {getAvatarDisplay()}
                 </div>
               )}
               <svg
-                className={`w-4 h-4 text-gray-600 transition-transform ${
+                className={`w-4 h-4 text-[#6272a4] transition-transform ${
                   dropdownOpen ? "rotate-180" : ""
                 }`}
                 fill="none"
@@ -119,34 +121,34 @@ export default function Header() {
 
             {/* Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg py-2 z-50">
+              <div className="absolute right-0 mt-2 w-64 bg-[#0d1230] border border-[#2a3050] rounded-xl shadow-lg shadow-[#8b5cf6]/10 py-2 z-50">
                 {/* User Info */}
-                <div className="px-4 py-3 border-b border-gray-100">
+                <div className="px-4 py-3 border-b border-[#2a3050]">
                   <div className="flex items-center space-x-3">
                     {user?.profilePicture &&
                     getProfileImageUrl(user.profilePicture) ? (
                       <img
                         src={getProfileImageUrl(user.profilePicture) || ""}
                         alt={user.name}
-                        className="w-12 h-12 rounded-full object-cover"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-[#8b5cf6]/50"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#00b4d8] to-[#8b5cf6] flex items-center justify-center text-white font-bold text-lg">
                         {getAvatarDisplay()}
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 truncate">
+                      <p className="font-semibold text-gray-100 truncate">
                         {user?.name}
                       </p>
-                      <p className="text-sm text-gray-600 truncate">
+                      <p className="text-sm text-gray-400 truncate">
                         {user?.email}
                       </p>
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
                           user?.role === "admin"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-blue-100 text-blue-800"
+                            ? "bg-purple-900/30 text-purple-400"
+                            : "bg-cyan-900/30 text-cyan-400"
                         }`}
                       >
                         {user?.role?.charAt(0).toUpperCase()}
@@ -161,7 +163,7 @@ export default function Header() {
                   <Link
                     to="/profile"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#00b4d8] transition-colors"
                   >
                     <svg
                       className="w-5 h-5"
@@ -182,7 +184,7 @@ export default function Header() {
                   <Link
                     to="/profile?tab=courses"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#00b4d8] transition-colors"
                   >
                     <svg
                       className="w-5 h-5"
@@ -203,7 +205,7 @@ export default function Header() {
                   <Link
                     to="/profile"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#00b4d8] transition-colors"
                   >
                     <svg
                       className="w-5 h-5"
@@ -225,7 +227,7 @@ export default function Header() {
                     <Link
                       to="/admin"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#8b5cf6] transition-colors"
                     >
                       <svg
                         className="w-5 h-5"
@@ -251,12 +253,12 @@ export default function Header() {
                   )}
 
                   {/* Divider */}
-                  <div className="border-t border-gray-100 my-2"></div>
+                  <div className="border-t border-[#2a3050] my-2"></div>
 
                   {/* Logout */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                    className="flex items-center space-x-3 px-4 py-3 text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors w-full text-left"
                   >
                     <svg
                       className="w-5 h-5"
@@ -339,15 +341,15 @@ export default function Header() {
               <img
                 src={getProfileImageUrl(user.profilePicture) || ""}
                 alt={user.name}
-                className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                className="w-10 h-10 rounded-full object-cover border-2 border-[#8b5cf6]/50"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold border-2 border-gray-200">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#00b4d8] to-[#8b5cf6] flex items-center justify-center text-white font-semibold border-2 border-[#8b5cf6]/50">
                 {getAvatarDisplay()}
               </div>
             )}
             <svg
-              className={`w-4 h-4 text-gray-600 transition-transform ${
+              className={`w-4 h-4 text-[#6272a4] transition-transform ${
                 dropdownOpen ? "rotate-180" : ""
               }`}
               fill="none"

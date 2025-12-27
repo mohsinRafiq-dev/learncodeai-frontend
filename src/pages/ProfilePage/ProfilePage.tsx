@@ -38,6 +38,9 @@ import {
   ExternalLink,
   Bell,
   LogOut,
+  Terminal,
+  Sparkles,
+  Trash2,
 } from "lucide-react";
 
 const ProfilePage: React.FC = () => {
@@ -50,16 +53,18 @@ const ProfilePage: React.FC = () => {
   );
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [savedTutorials, setSavedTutorials] = useState<SavedTutorial[]>([]);
-  const [createdTutorials, setCreatedTutorials] = useState<{
-    _id: string;
-    title: string;
-    description: string;
-    language: string;
-    concept: string;
-    difficulty: string;
-    content: string;
-    tags?: string[];
-  }[]>([]);
+  const [createdTutorials, setCreatedTutorials] = useState<
+    {
+      _id: string;
+      title: string;
+      description: string;
+      language: string;
+      concept: string;
+      difficulty: string;
+      content: string;
+      tags?: string[];
+    }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
@@ -67,7 +72,12 @@ const ProfilePage: React.FC = () => {
   >(() => {
     // Try to load from localStorage first
     const stored = localStorage.getItem("profileActiveTab");
-    if (stored && ["overview", "courses", "tutorials", "certificates", "settings"].includes(stored)) {
+    if (
+      stored &&
+      ["overview", "courses", "tutorials", "certificates", "settings"].includes(
+        stored
+      )
+    ) {
       return stored as typeof activeTab;
     }
     return "overview";
@@ -166,7 +176,9 @@ const ProfilePage: React.FC = () => {
     const tabParam = searchParams.get("tab");
     if (
       tabParam &&
-      ["overview", "courses", "tutorials", "settings", "certificates"].includes(tabParam)
+      ["overview", "courses", "tutorials", "settings", "certificates"].includes(
+        tabParam
+      )
     ) {
       setActiveTab(tabParam as typeof activeTab);
       localStorage.setItem("profileActiveTab", tabParam);
@@ -251,21 +263,25 @@ const ProfilePage: React.FC = () => {
   const getDifficultyColorClass = (difficulty: string) => {
     switch (difficulty) {
       case "beginner":
-        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
       case "intermediate":
-        return "bg-amber-50 text-amber-700 border-amber-200";
+        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       case "advanced":
-        return "bg-rose-50 text-rose-700 border-rose-200";
+        return "bg-rose-500/20 text-rose-400 border-rose-500/30";
       default:
-        return "bg-gray-50 text-gray-700 border-gray-200";
+        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
   const handleDeleteCreatedTutorial = async (tutorialId: string) => {
-    if (!confirm("Are you sure you want to delete this tutorial? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this tutorial? This action cannot be undone."
+      )
+    ) {
       return;
     }
-    
+
     try {
       await tutorialAPI.deleteUserTutorial(tutorialId);
       // Refresh the created tutorials list
@@ -281,10 +297,15 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your profile...</p>
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        <div className="text-center relative z-10">
+          <div className="w-16 h-16 border-4 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 font-mono">// Loading your profile...</p>
         </div>
       </div>
     );
@@ -292,20 +313,32 @@ const ProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full border border-red-100">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ExternalLink className="w-8 h-8 text-red-600" />
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl"></div>
+        </div>
+        <div className="relative z-10 terminal-window neon-border-pink p-8 max-w-md w-full">
+          <div className="flex items-center gap-2 mb-6 pb-3 border-b border-gray-700/50">
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <span className="ml-2 text-gray-500 text-xs font-mono">
+              error.tsx
+            </span>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            Oops!
+          <div className="w-16 h-16 neon-border-pink rounded-2xl flex items-center justify-center mx-auto mb-4 bg-red-500/10">
+            <ExternalLink className="w-8 h-8 text-red-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2 text-center font-mono">
+            // Oops!
           </h2>
-          <p className="text-gray-600 mb-6 text-center">{error}</p>
+          <p className="text-gray-400 mb-6 text-center">{error}</p>
           <button
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg"
+            className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-pink-500/25 transition-all duration-300"
             onClick={loadProfileData}
           >
-            Try Again
+            retry()
           </button>
         </div>
       </div>
@@ -317,7 +350,21 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-0 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl"></div>
+        {/* Circuit Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300b4d8' fill-opacity='1'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3Ccircle cx='27' cy='7' r='1'/%3E%3Ccircle cx='47' cy='7' r='1'/%3E%3Ccircle cx='7' cy='27' r='1'/%3E%3Ccircle cx='27' cy='27' r='1'/%3E%3Ccircle cx='47' cy='27' r='1'/%3E%3Ccircle cx='7' cy='47' r='1'/%3E%3Ccircle cx='27' cy='47' r='1'/%3E%3Ccircle cx='47' cy='47' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        ></div>
+      </div>
+
       {/* Profile Completion Modal */}
       <ProfileCompletionModal
         isOpen={showProfileModal}
@@ -326,7 +373,7 @@ const ProfilePage: React.FC = () => {
       />
 
       {/* Modern Header */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-[#0d1230]/80 backdrop-blur-xl border-b border-cyan-500/10 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -338,49 +385,90 @@ const ProfilePage: React.FC = () => {
                       : `http://localhost:5000${user.profilePicture}`
                   }
                   alt={user.name}
-                  className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-200 shadow-sm"
+                  className="w-14 h-14 rounded-2xl object-cover border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/10"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-cyan-500/20">
                   {getAvatarDisplay(user)}
                 </div>
               )}
 
               <div>
-                <h1 className="text-lg font-bold text-gray-900">{user.name}</h1>
-                <p className="text-sm text-gray-600 flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5" />
+                <h1 className="text-lg font-bold text-white font-mono">
+                  <span className="text-cyan-400">const</span>{" "}
+                  {user.name.replace(/\s+/g, "_")}
+                </h1>
+                <p className="text-sm text-gray-400 flex items-center gap-1.5 font-mono">
+                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
                   {user.email}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
-              <button className="p-2.5 hover:bg-gray-100 rounded-xl transition-colors">
-                <Bell className="w-5 h-5 text-gray-600" />
+              <button className="p-2.5 hover:bg-cyan-500/10 rounded-xl transition-colors border border-transparent hover:border-cyan-500/20">
+                <Bell className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </button>
-              <button className="p-2.5 hover:bg-gray-100 rounded-xl transition-colors">
-                <Settings className="w-5 h-5 text-gray-600" />
+              <button className="p-2.5 hover:bg-purple-500/10 rounded-xl transition-colors border border-transparent hover:border-purple-500/20">
+                <Settings className="w-5 h-5 text-gray-400 hover:text-purple-400 transition-colors" />
               </button>
-              <button className="p-2.5 hover:bg-red-50 rounded-xl transition-colors">
-                <LogOut className="w-5 h-5 text-red-600" />
+              <button className="p-2.5 hover:bg-red-500/10 rounded-xl transition-colors border border-transparent hover:border-red-500/20">
+                <LogOut className="w-5 h-5 text-gray-400 hover:text-red-400 transition-colors" />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
         {/* Navigation Pills */}
         <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
           {[
-            { key: "overview", label: "Dashboard", icon: TrendingUp },
-            { key: "courses", label: "My Courses", icon: BookOpen },
-            { key: "tutorials", label: "Saved", icon: Heart },
-            { key: "certificates", label: "Certificates", icon: Award },
-            { key: "settings", label: "Settings", icon: Settings },
+            {
+              key: "overview",
+              label: "dashboard()",
+              icon: TrendingUp,
+              color: "cyan",
+            },
+            {
+              key: "courses",
+              label: "myCourses()",
+              icon: BookOpen,
+              color: "purple",
+            },
+            { key: "tutorials", label: "saved()", icon: Heart, color: "pink" },
+            {
+              key: "certificates",
+              label: "certificates()",
+              icon: Award,
+              color: "yellow",
+            },
+            {
+              key: "settings",
+              label: "settings()",
+              icon: Settings,
+              color: "green",
+            },
           ].map((tab) => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+            const colorClasses = {
+              cyan: isActive
+                ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-400 shadow-cyan-500/20"
+                : "hover:border-cyan-500/30 hover:text-cyan-400",
+              purple: isActive
+                ? "bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-purple-500/20"
+                : "hover:border-purple-500/30 hover:text-purple-400",
+              pink: isActive
+                ? "bg-pink-500/20 border-pink-500/50 text-pink-400 shadow-pink-500/20"
+                : "hover:border-pink-500/30 hover:text-pink-400",
+              yellow: isActive
+                ? "bg-yellow-500/20 border-yellow-500/50 text-yellow-400 shadow-yellow-500/20"
+                : "hover:border-yellow-500/30 hover:text-yellow-400",
+              green: isActive
+                ? "bg-green-500/20 border-green-500/50 text-green-400 shadow-green-500/20"
+                : "hover:border-green-500/30 hover:text-green-400",
+            };
             return (
               <button
                 key={tab.key}
@@ -388,10 +476,14 @@ const ProfilePage: React.FC = () => {
                   setActiveTab(tab.key as typeof activeTab);
                   localStorage.setItem("profileActiveTab", tab.key);
                 }}
-                className={`px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all whitespace-nowrap ${
-                  activeTab === tab.key
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105"
-                    : "bg-white text-gray-700 hover:bg-gray-50 shadow-sm"
+                className={`px-6 py-3 rounded-xl font-mono text-sm flex items-center gap-2 transition-all whitespace-nowrap border ${
+                  isActive
+                    ? `${
+                        colorClasses[tab.color as keyof typeof colorClasses]
+                      } shadow-lg`
+                    : `bg-[#0d1230]/50 text-gray-400 border-gray-700/30 ${
+                        colorClasses[tab.color as keyof typeof colorClasses]
+                      }`
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -409,44 +501,56 @@ const ProfilePage: React.FC = () => {
               {[
                 {
                   icon: BookOpen,
-                  label: "Enrolled Courses",
+                  label: "// Enrolled Courses",
                   value: dashboardStats.enrolledCourses,
-                  color: "from-blue-500 to-blue-600",
+                  color: "cyan",
+                  borderClass: "border-cyan-500/30",
+                  bgClass: "bg-cyan-500/10",
+                  iconClass: "text-cyan-400",
                 },
                 {
                   icon: CheckCircle,
-                  label: "Completed",
+                  label: "// Completed",
                   value: dashboardStats.completedCourses,
-                  color: "from-emerald-500 to-emerald-600",
+                  color: "green",
+                  borderClass: "border-green-500/30",
+                  bgClass: "bg-green-500/10",
+                  iconClass: "text-green-400",
                 },
                 {
                   icon: Heart,
-                  label: "Saved",
+                  label: "// Saved",
                   value: dashboardStats.savedTutorials,
-                  color: "from-pink-500 to-pink-600",
+                  color: "pink",
+                  borderClass: "border-pink-500/30",
+                  bgClass: "bg-pink-500/10",
+                  iconClass: "text-pink-400",
                 },
                 {
                   icon: Award,
-                  label: "Certificates",
+                  label: "// Certificates",
                   value: dashboardStats.certificates,
-                  color: "from-amber-500 to-amber-600",
+                  color: "yellow",
+                  borderClass: "border-yellow-500/30",
+                  bgClass: "bg-yellow-500/10",
+                  iconClass: "text-yellow-400",
                 },
               ].map((stat, idx) => {
                 const Icon = stat.icon;
                 return (
                   <div
                     key={idx}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
+                    className={`terminal-window ${stat.borderClass} p-6 hover:shadow-lg hover:shadow-${stat.color}-500/10 transition-all`}
                   >
                     <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4 shadow-lg`}
+                      className={`w-12 h-12 rounded-xl ${stat.bgClass} flex items-center justify-center mb-4`}
                     >
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className={`w-6 h-6 ${stat.iconClass}`} />
                     </div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">
+                    <p className="text-sm font-mono text-gray-500 mb-1">
                       {stat.label}
                     </p>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className={`text-3xl font-bold text-white font-mono`}>
                       {stat.value}
                     </p>
                   </div>
@@ -456,56 +560,78 @@ const ProfilePage: React.FC = () => {
 
             {/* Progress Cards */}
             <div className="grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <div className="terminal-window neon-border-cyan p-8">
+                <div className="flex items-center gap-2 mb-6 pb-3 border-b border-gray-700/50">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="ml-2 text-gray-500 text-xs font-mono">
+                    progress.tsx
+                  </span>
+                </div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                    <Target className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Course Progress</h3>
-                    <p className="text-sm text-gray-600">
-                      Average completion rate
+                    <h3 className="font-bold text-white font-mono">
+                      courseProgress
+                    </h3>
+                    <p className="text-sm text-gray-500 font-mono">
+                      // Average completion rate
                     </p>
                   </div>
                 </div>
                 <div className="relative">
                   <div className="flex items-center gap-4">
-                    <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="flex-1 h-4 bg-gray-800/50 rounded-full overflow-hidden border border-gray-700/30">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all shadow-inner"
+                        className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full transition-all shadow-inner"
                         style={{
                           width: `${dashboardStats.averageCourseProgress}%`,
                         }}
                       />
                     </div>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold text-cyan-400 font-mono">
                       {formatProgress(dashboardStats.averageCourseProgress)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <div className="terminal-window neon-border-purple p-8">
+                <div className="flex items-center gap-2 mb-6 pb-3 border-b border-gray-700/50">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="ml-2 text-gray-500 text-xs font-mono">
+                    learning-time.tsx
+                  </span>
+                </div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg">
-                    <Clock className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Learning Time</h3>
-                    <p className="text-sm text-gray-600">
-                      Total hours invested
+                    <h3 className="font-bold text-white font-mono">
+                      learningTime
+                    </h3>
+                    <p className="text-sm text-gray-500 font-mono">
+                      // Total hours invested
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                    <BarChart3 className="w-8 h-8 text-purple-600" />
+                  <div className="w-16 h-16 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                    <BarChart3 className="w-8 h-8 text-purple-400" />
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className="text-3xl font-bold text-white font-mono">
                       {formatDuration(dashboardStats.totalTimeSpentMinutes)}
                     </p>
-                    <p className="text-sm text-gray-600">of focused learning</p>
+                    <p className="text-sm text-gray-500 font-mono">
+                      // of focused learning
+                    </p>
                   </div>
                 </div>
               </div>
@@ -517,11 +643,12 @@ const ProfilePage: React.FC = () => {
         {activeTab === "courses" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">
-                My Learning Journey
+              <h2 className="text-2xl font-bold text-white font-mono">
+                <span className="text-purple-400">const</span> learningJourney{" "}
+                <span className="text-gray-500">=</span>
               </h2>
-              <span className="px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-semibold">
-                {courseProgress.length} Active Courses
+              <span className="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-xl text-sm font-mono border border-purple-500/30">
+                {courseProgress.length} active
               </span>
             </div>
 
@@ -530,30 +657,39 @@ const ProfilePage: React.FC = () => {
                 {courseProgress.map((course) => (
                   <div
                     key={course.enrollmentId}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all"
+                    className="terminal-window neon-border-purple p-6 hover:shadow-lg hover:shadow-purple-500/10 transition-all"
                   >
+                    <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-700/50">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span className="ml-2 text-gray-500 text-xs font-mono">
+                        course.tsx
+                      </span>
+                    </div>
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/20">
                         <Code className="w-7 h-7 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <h3 className="font-bold text-gray-900 text-lg leading-tight">
+                          <h3 className="font-bold text-white text-lg leading-tight font-mono">
                             {course.course.title}
                           </h3>
                           <span
                             className={`px-3 py-1 rounded-lg text-xs font-bold border ${getDifficultyColorClass(
                               course.course.difficulty
-                            )} whitespace-nowrap`}
+                            )} whitespace-nowrap font-mono`}
                           >
                             {course.course.difficulty}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-1">
+                        <p className="text-sm text-cyan-400 mb-1 font-mono">
+                          //{" "}
                           {course.course.instructor?.name ||
                             "Unknown Instructor"}
                         </p>
-                        <p className="text-sm text-gray-500 line-clamp-2">
+                        <p className="text-sm text-gray-400 line-clamp-2">
                           {course.course.description}
                         </p>
                       </div>
@@ -562,36 +698,36 @@ const ProfilePage: React.FC = () => {
                     {/* Progress */}
                     <div className="mb-5">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-semibold text-gray-700">
-                          Progress
+                        <span className="text-sm font-mono text-gray-400">
+                          progress:
                         </span>
-                        <span className="text-sm font-bold text-blue-600">
+                        <span className="text-sm font-bold text-cyan-400 font-mono">
                           {formatProgress(course.progressPercentage)}
                         </span>
                       </div>
-                      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-3 bg-gray-800/50 rounded-full overflow-hidden border border-gray-700/30">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all"
+                          className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full transition-all"
                           style={{ width: `${course.progressPercentage}%` }}
                         />
                       </div>
-                      <p className="text-xs text-gray-500 mt-2">
-                        {course.completedSections} of {course.totalSections}{" "}
+                      <p className="text-xs text-gray-500 mt-2 font-mono">
+                        // {course.completedSections} of {course.totalSections}{" "}
                         sections completed
                       </p>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-700/30">
                       <span
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono ${
                           course.status === "active"
-                            ? "bg-emerald-50 text-emerald-700"
+                            ? "bg-green-500/20 text-green-400 border border-green-500/30"
                             : course.status === "completed"
-                            ? "bg-blue-50 text-blue-700"
+                            ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
                             : course.status === "withdrawn"
-                            ? "bg-orange-50 text-orange-700"
-                            : "bg-gray-50 text-gray-700"
+                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                            : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
                         }`}
                       >
                         {course.status.toUpperCase()}
@@ -603,9 +739,9 @@ const ProfilePage: React.FC = () => {
                             onClick={() =>
                               navigate(`/courses/${course.course._id}`)
                             }
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg"
+                            className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-cyan-500/20 font-mono transition-all"
                           >
-                            Continue
+                            continue()
                             <ChevronRight className="w-4 h-4" />
                           </button>
                         )}
@@ -614,9 +750,9 @@ const ProfilePage: React.FC = () => {
                             onClick={() =>
                               handleWithdrawFromCourse(course.enrollmentId)
                             }
-                            className="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm font-semibold"
+                            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-xl text-sm font-semibold font-mono border border-red-500/30 transition-all"
                           >
-                            Withdraw
+                            withdraw()
                           </button>
                         )}
                         {course.status === "withdrawn" && (
@@ -624,9 +760,9 @@ const ProfilePage: React.FC = () => {
                             onClick={() =>
                               handleContinueAgain(course.enrollmentId)
                             }
-                            className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-lg"
+                            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/20 font-mono transition-all"
                           >
-                            Resume
+                            resume()
                           </button>
                         )}
                       </div>
@@ -635,21 +771,21 @@ const ProfilePage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl p-16 text-center shadow-lg border border-gray-100">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center mx-auto mb-6">
-                  <BookOpen className="w-10 h-10 text-blue-600" />
+              <div className="terminal-window neon-border-purple p-16 text-center">
+                <div className="w-20 h-20 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-6 border border-purple-500/30">
+                  <BookOpen className="w-10 h-10 text-purple-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Start Your Learning Journey
+                <h3 className="text-2xl font-bold text-white mb-3 font-mono">
+                  // Start Your Learning Journey
                 </h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                <p className="text-gray-400 mb-8 max-w-md mx-auto">
                   Discover courses and start building your skills today
                 </p>
                 <button
                   onClick={() => navigate("/tutorials")}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-lg"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-lg shadow-purple-500/20 font-mono transition-all"
                 >
-                  Explore Courses
+                  exploreCourses()
                   <ExternalLink className="w-5 h-5" />
                 </button>
               </div>
@@ -663,14 +799,13 @@ const ProfilePage: React.FC = () => {
             {/* AI-Created Tutorials Section */}
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  My AI-Created Tutorials
+                <h2 className="text-2xl font-bold text-white font-mono flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-purple-400" />
+                  <span className="text-purple-400">const</span>{" "}
+                  aiCreatedTutorials
                 </h2>
-                <span className="px-4 py-2 bg-purple-50 text-purple-700 rounded-xl text-sm font-semibold flex items-center gap-2">
-                  {createdTutorials.length} Created
+                <span className="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-xl text-sm font-mono flex items-center gap-2 border border-purple-500/30">
+                  {createdTutorials.length} created
                 </span>
               </div>
 
@@ -679,19 +814,17 @@ const ProfilePage: React.FC = () => {
                   {createdTutorials.map((tutorial) => (
                     <div
                       key={tutorial._id}
-                      className="bg-white rounded-2xl p-5 shadow-lg border border-purple-100 hover:shadow-xl hover:border-purple-300 transition-all group relative"
+                      className="terminal-window neon-border-purple p-5 hover:shadow-lg hover:shadow-purple-500/10 transition-all group relative"
                     >
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDeleteCreatedTutorial(tutorial._id);
                         }}
-                        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-red-500/30"
                         title="Delete tutorial"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        <Trash2 className="w-4 h-4" />
                       </button>
 
                       <div
@@ -704,22 +837,20 @@ const ProfilePage: React.FC = () => {
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-start gap-3 flex-1 min-w-0 pr-8">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                              </svg>
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">
+                              <Sparkles className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-gray-900 text-sm mb-1 truncate">
+                              <h4 className="font-bold text-white text-sm mb-1 truncate font-mono">
                                 {tutorial.title}
                               </h4>
-                              <p className="text-xs text-gray-600">
-                                {tutorial.concept}
+                              <p className="text-xs text-gray-500 font-mono">
+                                // {tutorial.concept}
                               </p>
                             </div>
                           </div>
                           <span
-                            className={`px-2.5 py-1 rounded-lg text-xs font-bold border flex-shrink-0 ${getDifficultyColorClass(
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold border flex-shrink-0 font-mono ${getDifficultyColorClass(
                               tutorial.difficulty
                             )}`}
                           >
@@ -727,18 +858,16 @@ const ProfilePage: React.FC = () => {
                           </span>
                         </div>
 
-                        <p className="text-gray-600 text-xs mb-4 line-clamp-2 leading-relaxed">
+                        <p className="text-gray-400 text-xs mb-4 line-clamp-2 leading-relaxed">
                           {tutorial.description}
                         </p>
 
-                        <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-100">
-                          <span className="text-gray-500 flex items-center gap-1">
-                            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
-                              AI-Generated
-                            </span>
+                        <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-700/30">
+                          <span className="text-xs bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded-full font-mono border border-purple-500/30">
+                            AI-Generated
                           </span>
-                          <span className="text-purple-600 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                            View Tutorial
+                          <span className="text-cyan-400 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all font-mono">
+                            view()
                             <ChevronRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
@@ -747,23 +876,22 @@ const ProfilePage: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-2xl p-12 text-center shadow-lg border border-purple-100">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
+                <div className="terminal-window neon-border-purple p-12 text-center">
+                  <div className="w-20 h-20 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-6 border border-purple-500/30">
+                    <Sparkles className="w-10 h-10 text-purple-400" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                    No AI Tutorials Yet
+                  <h3 className="text-2xl font-bold text-white mb-3 font-mono">
+                    // No AI Tutorials Yet
                   </h3>
-                  <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                    Generate personalized tutorials with AI on any programming topic
+                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                    Generate personalized tutorials with AI on any programming
+                    topic
                   </p>
                   <button
                     onClick={() => navigate("/tutorials")}
-                    className="text-purple-600 hover:text-purple-800 font-semibold inline-flex items-center gap-2"
+                    className="text-purple-400 hover:text-purple-300 font-semibold inline-flex items-center gap-2 font-mono transition-colors"
                   >
-                    Generate Tutorial
+                    generateTutorial()
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -773,88 +901,88 @@ const ProfilePage: React.FC = () => {
             {/* Saved Tutorials Section */}
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Saved Tutorials
+                <h2 className="text-2xl font-bold text-white font-mono">
+                  <span className="text-pink-400">const</span> savedTutorials
                 </h2>
-                <span className="px-4 py-2 bg-pink-50 text-pink-700 rounded-xl text-sm font-semibold flex items-center gap-2">
+                <span className="px-4 py-2 bg-pink-500/10 text-pink-400 rounded-xl text-sm font-mono flex items-center gap-2 border border-pink-500/30">
                   <Heart className="w-4 h-4" />
-                  {savedTutorials.length} Saved
+                  {savedTutorials.length} saved
                 </span>
               </div>
 
-            {savedTutorials.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {savedTutorials.map((saved) =>
-                  saved.tutorial ? (
-                    <div
-                      key={saved._id}
-                      onClick={() =>
-                        navigate(
-                          `/tutorials/${saved.tutorial.language}?tutorialId=${saved.tutorial._id}`
-                        )
-                      }
-                      className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all cursor-pointer group"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-start gap-3 flex-1 min-w-0">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                            <Code className="w-5 h-5 text-white" />
+              {savedTutorials.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {savedTutorials.map((saved) =>
+                    saved.tutorial ? (
+                      <div
+                        key={saved._id}
+                        onClick={() =>
+                          navigate(
+                            `/tutorials/${saved.tutorial.language}?tutorialId=${saved.tutorial._id}`
+                          )
+                        }
+                        className="terminal-window neon-border-pink p-5 hover:shadow-lg hover:shadow-pink-500/10 transition-all cursor-pointer group"
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-pink-500/20 group-hover:scale-110 transition-transform">
+                              <Code className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-white text-sm mb-1 truncate font-mono">
+                                {saved.tutorial.title}
+                              </h4>
+                              <p className="text-xs text-gray-500 font-mono">
+                                // {saved.tutorial.concept}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-gray-900 text-sm mb-1 truncate">
-                              {saved.tutorial.title}
-                            </h4>
-                            <p className="text-xs text-gray-600">
-                              {saved.tutorial.concept}
-                            </p>
-                          </div>
+                          <span
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold border flex-shrink-0 font-mono ${getDifficultyColorClass(
+                              saved.tutorial.difficulty
+                            )}`}
+                          >
+                            {saved.tutorial.difficulty.charAt(0).toUpperCase()}
+                          </span>
                         </div>
-                        <span
-                          className={`px-2.5 py-1 rounded-lg text-xs font-bold border flex-shrink-0 ${getDifficultyColorClass(
-                            saved.tutorial.difficulty
-                          )}`}
-                        >
-                          {saved.tutorial.difficulty.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
 
-                      <p className="text-gray-600 text-xs mb-4 line-clamp-2 leading-relaxed">
-                        {saved.tutorial.description}
-                      </p>
+                        <p className="text-gray-400 text-xs mb-4 line-clamp-2 leading-relaxed">
+                          {saved.tutorial.description}
+                        </p>
 
-                      <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-100">
-                        <span className="text-gray-500">
-                          {new Date(saved.savedAt).toLocaleDateString()}
-                        </span>
-                        <span className="text-blue-600 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                          Start Learning
-                          <ChevronRight className="w-3.5 h-3.5" />
-                        </span>
+                        <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-700/30">
+                          <span className="text-gray-500 font-mono">
+                            // {new Date(saved.savedAt).toLocaleDateString()}
+                          </span>
+                          <span className="text-cyan-400 font-semibold flex items-center gap-1 group-hover:gap-2 transition-all font-mono">
+                            startLearning()
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ) : null
-                )}
-              </div>
-            ) : (
-              <div className="bg-white rounded-2xl p-16 text-center shadow-lg border border-gray-100">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center mx-auto mb-6">
-                  <Heart className="w-10 h-10 text-pink-600" />
+                    ) : null
+                  )}
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  No Saved Tutorials Yet
-                </h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  Save tutorials to quickly access them later
-                </p>
-                <button
-                  onClick={() => navigate("/tutorials")}
-                  className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center gap-2"
-                >
-                  Browse Tutorials
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            )}
+              ) : (
+                <div className="terminal-window neon-border-pink p-16 text-center">
+                  <div className="w-20 h-20 rounded-full bg-pink-500/10 flex items-center justify-center mx-auto mb-6 border border-pink-500/30">
+                    <Heart className="w-10 h-10 text-pink-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-3 font-mono">
+                    // No Saved Tutorials Yet
+                  </h3>
+                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                    Save tutorials to quickly access them later
+                  </p>
+                  <button
+                    onClick={() => navigate("/tutorials")}
+                    className="text-pink-400 hover:text-pink-300 font-semibold inline-flex items-center gap-2 font-mono transition-colors"
+                  >
+                    browseTutorials()
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -863,11 +991,11 @@ const ProfilePage: React.FC = () => {
         {activeTab === "certificates" && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                My Certificates
+              <h2 className="text-2xl font-bold text-white mb-2 font-mono">
+                <span className="text-yellow-400">const</span> myCertificates
               </h2>
-              <p className="text-gray-600">
-                View and download your earned certificates
+              <p className="text-gray-400 font-mono">
+                // View and download your earned certificates
               </p>
             </div>
             <UserCertificates />
@@ -877,17 +1005,25 @@ const ProfilePage: React.FC = () => {
         {/* Settings Tab */}
         {activeTab === "settings" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Account Settings
+            <h2 className="text-2xl font-bold text-white font-mono">
+              <span className="text-green-400">const</span> accountSettings
             </h2>
 
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
-                <h3 className="text-lg font-bold text-white">
-                  Profile Information
+            <div className="terminal-window neon-border-green overflow-hidden">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 p-6 border-b border-green-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="ml-2 text-gray-500 text-xs font-mono">
+                    profile-settings.tsx
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white font-mono">
+                  profileInformation
                 </h3>
-                <p className="text-blue-100 text-sm">
-                  Manage your personal details
+                <p className="text-green-400/70 text-sm font-mono">
+                  // Manage your personal details
                 </p>
               </div>
 
@@ -895,8 +1031,8 @@ const ProfilePage: React.FC = () => {
                 {/* Basic Info */}
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Full Name
+                    <label className="block text-sm font-mono text-cyan-400 mb-3">
+                      fullName:
                     </label>
                     <input
                       type="text"
@@ -907,14 +1043,14 @@ const ProfilePage: React.FC = () => {
                           name: e.target.value,
                         }))
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium"
+                      className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium text-white placeholder-gray-500 transition-all"
                       disabled={!editingProfile}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Date of Birth
+                    <label className="block text-sm font-mono text-cyan-400 mb-3">
+                      dateOfBirth:
                     </label>
                     <input
                       type="date"
@@ -925,7 +1061,7 @@ const ProfilePage: React.FC = () => {
                           dateOfBirth: e.target.value,
                         }))
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium"
+                      className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium text-white transition-all"
                       disabled={!editingProfile}
                     />
                   </div>
@@ -933,8 +1069,8 @@ const ProfilePage: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Location
+                    <label className="block text-sm font-mono text-cyan-400 mb-3">
+                      location:
                     </label>
                     <input
                       type="text"
@@ -945,15 +1081,15 @@ const ProfilePage: React.FC = () => {
                           location: e.target.value,
                         }))
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium"
+                      className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium text-white placeholder-gray-500 transition-all"
                       disabled={!editingProfile}
                       placeholder="City, Country"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Experience Level
+                    <label className="block text-sm font-mono text-cyan-400 mb-3">
+                      experienceLevel:
                     </label>
                     <select
                       value={profileForm.experience}
@@ -968,7 +1104,7 @@ const ProfilePage: React.FC = () => {
                             | "expert",
                         }))
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium"
+                      className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium text-white transition-all"
                       disabled={!editingProfile}
                     >
                       <option value="">Select experience</option>
@@ -982,10 +1118,10 @@ const ProfilePage: React.FC = () => {
 
                 {/* Bio */}
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-3">
-                    Bio
-                    <span className="text-gray-500 font-normal ml-2">
-                      ({profileForm.bio.length}/500)
+                  <label className="block text-sm font-mono text-cyan-400 mb-3">
+                    bio:{" "}
+                    <span className="text-gray-500">
+                      // {profileForm.bio.length}/500
                     </span>
                   </label>
                   <textarea
@@ -998,7 +1134,7 @@ const ProfilePage: React.FC = () => {
                         }));
                       }
                     }}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium resize-none"
+                    className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium resize-none text-white placeholder-gray-500 transition-all"
                     disabled={!editingProfile}
                     rows={4}
                     placeholder="Tell us about yourself..."
@@ -1007,8 +1143,8 @@ const ProfilePage: React.FC = () => {
 
                 {/* Profile Picture */}
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-3">
-                    Profile Picture
+                  <label className="block text-sm font-mono text-cyan-400 mb-3">
+                    profilePicture:
                   </label>
 
                   {/* Current Picture Preview */}
@@ -1021,7 +1157,7 @@ const ProfilePage: React.FC = () => {
                             : `http://localhost:5000${profileForm.profilePicture}`
                         }
                         alt="Profile preview"
-                        className="w-20 h-20 rounded-xl object-cover border-2 border-gray-200"
+                        className="w-20 h-20 rounded-xl object-cover border-2 border-green-500/30"
                       />
                       {editingProfile && (
                         <button
@@ -1032,9 +1168,9 @@ const ProfilePage: React.FC = () => {
                               profilePicture: "",
                             }))
                           }
-                          className="text-sm text-red-600 hover:text-red-700 font-medium"
+                          className="text-sm text-red-400 hover:text-red-300 font-medium font-mono transition-colors"
                         >
-                          Remove Picture
+                          remove()
                         </button>
                       )}
                     </div>
@@ -1043,8 +1179,8 @@ const ProfilePage: React.FC = () => {
                   {/* Upload from Device */}
                   {editingProfile && (
                     <div className="mb-4">
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
-                        Upload from Device
+                      <label className="block text-xs font-mono text-gray-500 mb-2">
+                        // Upload from Device
                       </label>
                       <input
                         type="file"
@@ -1069,18 +1205,19 @@ const ProfilePage: React.FC = () => {
                             }
                           }
                         }}
-                        className="block w-full text-sm text-gray-600
+                        className="block w-full text-sm text-gray-400
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-xl file:border-0
                           file:text-sm file:font-semibold
-                          file:bg-gradient-to-r file:from-blue-500 file:to-purple-500
+                          file:bg-gradient-to-r file:from-green-500 file:to-emerald-500
                           file:text-white
-                          hover:file:from-blue-600 hover:file:to-purple-600
+                          hover:file:from-green-600 hover:file:to-emerald-600
                           file:cursor-pointer
-                          cursor-pointer"
+                          cursor-pointer
+                          file:shadow-lg file:shadow-green-500/20"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Max size: 5MB. Accepted: JPG, PNG, GIF, WebP
+                      <p className="text-xs text-gray-500 mt-1 font-mono">
+                        // Max size: 5MB. Accepted: JPG, PNG, GIF, WebP
                       </p>
                     </div>
                   )}
@@ -1088,8 +1225,8 @@ const ProfilePage: React.FC = () => {
                   {/* Or use URL */}
                   {editingProfile && (
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
-                        Or use Image URL
+                      <label className="block text-xs font-mono text-gray-500 mb-2">
+                        // Or use Image URL
                       </label>
                       <input
                         type="url"
@@ -1104,7 +1241,7 @@ const ProfilePage: React.FC = () => {
                             profilePicture: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium"
+                        className="w-full px-4 py-3 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm font-medium text-white placeholder-gray-500 transition-all"
                         placeholder="https://example.com/avatar.jpg"
                       />
                     </div>
@@ -1113,13 +1250,13 @@ const ProfilePage: React.FC = () => {
 
                 {/* Social Links */}
                 <div className="space-y-4">
-                  <h4 className="text-sm font-bold text-gray-900">
-                    Social Links
+                  <h4 className="text-sm font-mono text-cyan-400">
+                    socialLinks:
                   </h4>
                   <div className="grid grid-cols-1 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
-                        GitHub
+                      <label className="block text-xs font-mono text-gray-500 mb-2">
+                        // GitHub
                       </label>
                       <input
                         type="url"
@@ -1130,14 +1267,14 @@ const ProfilePage: React.FC = () => {
                             github: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm text-white placeholder-gray-500 transition-all"
                         disabled={!editingProfile}
                         placeholder="https://github.com/username"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
-                        LinkedIn
+                      <label className="block text-xs font-mono text-gray-500 mb-2">
+                        // LinkedIn
                       </label>
                       <input
                         type="url"
@@ -1148,14 +1285,14 @@ const ProfilePage: React.FC = () => {
                             linkedin: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm text-white placeholder-gray-500 transition-all"
                         disabled={!editingProfile}
                         placeholder="https://linkedin.com/in/username"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
-                        Website
+                      <label className="block text-xs font-mono text-gray-500 mb-2">
+                        // Website
                       </label>
                       <input
                         type="url"
@@ -1166,7 +1303,7 @@ const ProfilePage: React.FC = () => {
                             website: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm text-white placeholder-gray-500 transition-all"
                         disabled={!editingProfile}
                         placeholder="https://yourwebsite.com"
                       />
@@ -1176,14 +1313,14 @@ const ProfilePage: React.FC = () => {
 
                 {/* Programming Languages */}
                 <div className="space-y-3">
-                  <label className="block text-sm font-bold text-gray-900">
-                    Programming Languages
+                  <label className="block text-sm font-mono text-cyan-400">
+                    programmingLanguages:
                   </label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {profileForm.programmingLanguages.map((lang, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full text-sm font-mono border border-cyan-500/30"
                       >
                         {lang}
                         {editingProfile && (
@@ -1197,7 +1334,7 @@ const ProfilePage: React.FC = () => {
                                   ),
                               }));
                             }}
-                            className="ml-1 hover:text-blue-900"
+                            className="ml-1 hover:text-cyan-300 transition-colors"
                           >
                             ×
                           </button>
@@ -1227,7 +1364,7 @@ const ProfilePage: React.FC = () => {
                             }));
                           }
                         }}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="flex-1 px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-sm text-white placeholder-gray-500 transition-all"
                       />
                     </div>
                   )}
@@ -1235,14 +1372,14 @@ const ProfilePage: React.FC = () => {
 
                 {/* Skills */}
                 <div className="space-y-3">
-                  <label className="block text-sm font-bold text-gray-900">
-                    Skills
+                  <label className="block text-sm font-mono text-cyan-400">
+                    skills:
                   </label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {profileForm.skills.map((skill, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-purple-500/10 text-purple-400 rounded-full text-sm font-mono border border-purple-500/30"
                       >
                         {skill}
                         {editingProfile && (
@@ -1255,7 +1392,7 @@ const ProfilePage: React.FC = () => {
                                 ),
                               }));
                             }}
-                            className="ml-1 hover:text-purple-900"
+                            className="ml-1 hover:text-purple-300 transition-colors"
                           >
                             ×
                           </button>
@@ -1278,14 +1415,11 @@ const ProfilePage: React.FC = () => {
                             e.preventDefault();
                             setProfileForm((prev) => ({
                               ...prev,
-                              skills: [
-                                ...prev.skills,
-                                value,
-                              ],
+                              skills: [...prev.skills, value],
                             }));
                           }
                         }}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="flex-1 px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-sm text-white placeholder-gray-500 transition-all"
                       />
                     </div>
                   )}
@@ -1293,14 +1427,14 @@ const ProfilePage: React.FC = () => {
 
                 {/* Interests */}
                 <div className="space-y-3">
-                  <label className="block text-sm font-bold text-gray-900">
-                    Interests
+                  <label className="block text-sm font-mono text-cyan-400">
+                    interests:
                   </label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {profileForm.interests.map((interest, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium"
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-sm font-mono border border-green-500/30"
                       >
                         {interest}
                         {editingProfile && (
@@ -1313,7 +1447,7 @@ const ProfilePage: React.FC = () => {
                                 ),
                               }));
                             }}
-                            className="ml-1 hover:text-green-900"
+                            className="ml-1 hover:text-green-300 transition-colors"
                           >
                             ×
                           </button>
@@ -1336,34 +1470,31 @@ const ProfilePage: React.FC = () => {
                             e.preventDefault();
                             setProfileForm((prev) => ({
                               ...prev,
-                              interests: [
-                                ...prev.interests,
-                                value,
-                              ],
+                              interests: [...prev.interests, value],
                             }));
                           }
                         }}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="flex-1 px-4 py-2 bg-[#0a0e27] border-2 border-gray-700/50 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm text-white placeholder-gray-500 transition-all"
                       />
                     </div>
                   )}
                 </div>
 
                 {/* Email Notifications */}
-                <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
+                <div className="flex items-center justify-between p-4 bg-cyan-500/5 rounded-xl border border-cyan-500/20">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Bell className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
+                      <Bell className="w-5 h-5 text-cyan-400" />
                     </div>
                     <div>
                       <label
                         htmlFor="notifications"
-                        className="block text-sm font-bold text-gray-900"
+                        className="block text-sm font-mono text-white"
                       >
-                        Email Notifications
+                        emailNotifications
                       </label>
-                      <p className="text-xs text-gray-600">
-                        Receive updates about your courses
+                      <p className="text-xs text-gray-500 font-mono">
+                        // Receive updates about your courses
                       </p>
                     </div>
                   </div>
@@ -1384,18 +1515,18 @@ const ProfilePage: React.FC = () => {
                       className="sr-only peer"
                       disabled={!editingProfile}
                     />
-                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-14 h-7 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-500/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
                   </label>
                 </div>
 
-                <div className="flex items-center gap-4 pt-6 border-t-2 border-gray-100">
+                <div className="flex items-center gap-4 pt-6 border-t-2 border-gray-700/30">
                   {editingProfile ? (
                     <>
                       <button
                         onClick={handleUpdateProfile}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg"
+                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-green-500/20 font-mono transition-all"
                       >
-                        Save Changes
+                        saveChanges()
                       </button>
                       <button
                         onClick={() => {
@@ -1419,18 +1550,18 @@ const ProfilePage: React.FC = () => {
                             });
                           }
                         }}
-                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold"
+                        className="flex-1 bg-gray-700/50 hover:bg-gray-700 text-gray-300 px-8 py-3 rounded-xl font-bold font-mono border border-gray-600/50 transition-all"
                       >
-                        Cancel
+                        cancel()
                       </button>
                     </>
                   ) : (
                     <button
                       onClick={() => setEditingProfile(true)}
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2"
+                      className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 font-mono transition-all"
                     >
                       <Edit3 className="w-5 h-5" />
-                      Edit Profile
+                      editProfile()
                     </button>
                   )}
                 </div>
@@ -1444,4 +1575,3 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
-

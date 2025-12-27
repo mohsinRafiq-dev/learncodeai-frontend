@@ -17,6 +17,8 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AdminPortal from "./pages/AdminPortal/AdminPortal";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
+import QuizzesPage from "./pages/QuizzesPage/QuizzesPage";
+import DiscussionPage from "./pages/DiscussionPage/DiscussionPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 
 function App() {
@@ -77,6 +79,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/quizzes"
+              element={
+                <ProtectedRoute>
+                  <QuizzesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/discussions" element={<DiscussionPage />} />
           </Route>
           {/* Admin routes without Layout (no navbar) */}
           <Route
@@ -100,4 +111,3 @@ function App() {
 }
 
 export default App;
-

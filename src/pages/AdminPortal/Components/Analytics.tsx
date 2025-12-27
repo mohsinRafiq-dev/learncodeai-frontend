@@ -67,30 +67,30 @@ export default function AnalyticsDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-[#0a0e27] p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <div className="text-sm text-gray-500 mb-1">
+              <div className="text-sm text-gray-400 mb-1">
                 Admin Panel / Analytics
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-100">
                 Analytics Dashboard
               </h1>
             </div>
             <div className="flex items-center gap-3">
-              <button className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
+              <button className="px-4 py-2 bg-[#0d1230] border border-[#2a3050] rounded-md text-sm font-medium text-gray-200 hover:bg-[#1a1f3e] flex items-center gap-2">
                 Last 30 Days
                 <ChevronDown className="w-4 h-4" />
               </button>
-              <button className="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800">
+              <button className="px-4 py-2 bg-purple-600 text-white rounded-md text-sm font-medium hover:bg-purple-700">
                 Export to CSV
               </button>
             </div>
           </div>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-400 text-sm">
             Overview of site performance and user engagement.
           </p>
         </div>
@@ -98,7 +98,10 @@ export default function AnalyticsDashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-gray-900 rounded-lg p-6">
+            <div
+              key={index}
+              className="bg-[#0d1230] border border-[#2a3050] rounded-lg p-6"
+            >
               <div className="text-xs text-gray-400 mb-2">{stat.label}</div>
               <div className="text-3xl font-bold text-white mb-1">
                 {stat.value}
@@ -117,7 +120,7 @@ export default function AnalyticsDashboard() {
         {/* Charts Row */}
         <div className="grid grid-cols-2 gap-6 mb-6">
           {/* User Growth Chart */}
-          <div className="bg-gray-900 rounded-lg p-6">
+          <div className="bg-[#0d1230] border border-[#2a3050] rounded-lg p-6">
             <div className="mb-2">
               <h3 className="text-white font-semibold text-base">
                 User Growth
@@ -143,11 +146,11 @@ export default function AnalyticsDashboard() {
                   >
                     <stop
                       offset="0%"
-                      style={{ stopColor: "#3b82f6", stopOpacity: 0.4 }}
+                      style={{ stopColor: "#a855f7", stopOpacity: 0.4 }}
                     />
                     <stop
                       offset="100%"
-                      style={{ stopColor: "#3b82f6", stopOpacity: 0 }}
+                      style={{ stopColor: "#a855f7", stopOpacity: 0 }}
                     />
                   </linearGradient>
                 </defs>
@@ -159,7 +162,7 @@ export default function AnalyticsDashboard() {
                 <path
                   d="M 0,120 Q 50,80 100,100 T 200,90 T 300,40 T 400,80"
                   fill="none"
-                  stroke="#3b82f6"
+                  stroke="#a855f7"
                   strokeWidth="2"
                 />
               </svg>
@@ -173,7 +176,7 @@ export default function AnalyticsDashboard() {
           </div>
 
           {/* Chatbot Query Categories */}
-          <div className="bg-gray-900 rounded-lg p-6">
+          <div className="bg-[#0d1230] border border-[#2a3050] rounded-lg p-6">
             <div className="mb-2">
               <h3 className="text-white font-semibold text-base">
                 Chatbot Query Categories
@@ -230,7 +233,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Top Performing Courses */}
-        <div className="bg-gray-900 rounded-lg p-6">
+        <div className="bg-[#0d1230] border border-[#2a3050] rounded-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-white font-semibold text-base">
@@ -247,7 +250,7 @@ export default function AnalyticsDashboard() {
                 placeholder="Search courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="pl-10 pr-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
           </div>
@@ -256,7 +259,7 @@ export default function AnalyticsDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-800">
+                <tr className="border-b border-[#2a3050]">
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase">
                     Course Name
                   </th>
@@ -278,7 +281,7 @@ export default function AnalyticsDashboard() {
                 {courses.map((course, index) => (
                   <tr
                     key={index}
-                    className="border-b border-gray-800 hover:bg-gray-800"
+                    className="border-b border-[#2a3050] hover:bg-[#1a1f3e]"
                   >
                     <td className="px-4 py-4 text-sm text-white">
                       {course.name}
@@ -305,4 +308,3 @@ export default function AnalyticsDashboard() {
     </div>
   );
 }
-

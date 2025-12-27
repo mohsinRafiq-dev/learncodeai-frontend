@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Search,
-  Plus,
-  Trash2,
-  Edit,
-  X,
-} from "lucide-react";
+import { Search, Plus, Trash2, Edit, X } from "lucide-react";
 import { adminTutorialAPI } from "../../../services/adminTutorialAPI";
 import { useToast } from "../../../contexts/ToastContext";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal";
@@ -15,7 +9,9 @@ interface TutorialManagementProps {
   highlightedTutorialId?: string;
 }
 
-export default function TutorialManagement({ highlightedTutorialId }: TutorialManagementProps) {
+export default function TutorialManagement({
+  highlightedTutorialId,
+}: TutorialManagementProps) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTutorial, setEditingTutorial] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,13 +22,18 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
   const [languages, setLanguages] = useState<string[]>([]);
   const [concepts, setConcepts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [highlightedTutorial, setHighlightedTutorial] = useState<string | null>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ show: boolean; tutorialId: string | null }>({
+  const [highlightedTutorial, setHighlightedTutorial] = useState<string | null>(
+    null
+  );
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    show: boolean;
+    tutorialId: string | null;
+  }>({
     show: false,
     tutorialId: null,
   });
   const { showToast } = useToast();
-  
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -45,7 +46,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
     notes: [] as string[],
     tips: [] as string[],
   });
-  
+
   const [newLanguage, setNewLanguage] = useState("");
   const [newConcept, setNewConcept] = useState("");
   const [showNewLanguageInput, setShowNewLanguageInput] = useState(false);
@@ -72,11 +73,11 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
     try {
       setLoading(true);
       const params: any = {};
-      
+
       if (activeTab !== "all") params.language = activeTab;
       if (selectedDifficulty !== "all") params.difficulty = selectedDifficulty;
       if (searchTerm) params.search = searchTerm;
-      
+
       const response = await adminTutorialAPI.getAllTutorials(params);
       setTutorials(response.data || []);
     } catch (error) {
@@ -143,23 +144,28 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
       notes: tutorial.notes || [],
       tips: tutorial.tips || [],
     });
-    
+
     if (tutorial.language) {
       await fetchConcepts(tutorial.language);
     }
-    
+
     setShowAddModal(true);
   };
 
   const handleSaveTutorial = async () => {
     try {
-      if (!formData.title || !formData.content || !formData.language || !formData.concept) {
+      if (
+        !formData.title ||
+        !formData.content ||
+        !formData.language ||
+        !formData.concept
+      ) {
         showToast("Please fill in all required fields", "error");
         return;
       }
 
       setLoading(true);
-      
+
       if (editingTutorial) {
         await adminTutorialAPI.updateTutorial(editingTutorial._id, formData);
         showToast("Tutorial updated successfully", "success");
@@ -167,11 +173,14 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
         await adminTutorialAPI.createTutorial(formData);
         showToast("Tutorial created successfully", "success");
       }
-      
+
       setShowAddModal(false);
       fetchTutorials();
     } catch (error: any) {
-      showToast(error.response?.data?.message || "Failed to save tutorial", "error");
+      showToast(
+        error.response?.data?.message || "Failed to save tutorial",
+        "error"
+      );
       console.error("Error saving tutorial:", error);
     } finally {
       setLoading(false);
@@ -180,7 +189,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
   const handleDeleteTutorial = async () => {
     if (!deleteConfirm.tutorialId) return;
-    
+
     try {
       setLoading(true);
       await adminTutorialAPI.deleteTutorial(deleteConfirm.tutorialId);
@@ -241,7 +250,11 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
     });
   };
 
-  const updateCodeExample = (index: number, field: 'code' | 'explanation', value: string) => {
+  const updateCodeExample = (
+    index: number,
+    field: "code" | "explanation",
+    value: string
+  ) => {
     const updated = [...formData.codeExamples];
     updated[index] = { ...updated[index], [field]: value };
     setFormData({ ...formData, codeExamples: updated });
@@ -280,21 +293,21 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0a0e27]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-[#0d1230] border-b border-[#2a3050] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               Admin Panel / Tutorials
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-100">
               Tutorial Management
             </h1>
           </div>
           <button
             onClick={openAddModal}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add New Tutorial
@@ -303,16 +316,16 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
       </div>
 
       {/* Language Tabs and Filters */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[#0d1230] border-b border-[#2a3050]">
         {/* Tabs */}
-        <div className="px-6 border-b border-gray-200">
+        <div className="px-6 border-b border-[#2a3050]">
           <div className="flex items-center gap-1 overflow-x-auto">
             <button
               onClick={() => setActiveTab("all")}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === "all"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-purple-500 text-purple-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600"
               }`}
             >
               All Languages
@@ -323,8 +336,8 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                 onClick={() => setActiveTab(lang)}
                 className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === lang
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    ? "border-purple-500 text-purple-400"
+                    : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600"
                 }`}
               >
                 {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -336,19 +349,19 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
         <div className="px-6 py-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search tutorials..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
               />
             </div>
             <select
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="px-4 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500"
             >
               <option value="all">All Difficulties</option>
               <option value="beginner">Beginner</option>
@@ -361,29 +374,29 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
       {/* Tutorials Table */}
       <div className="px-6 py-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-[#0d1230] rounded-lg shadow-sm border border-[#2a3050] overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+              <tr className="bg-[#1a1f3e] border-b border-[#2a3050]">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   TITLE
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   CONCEPT
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   AUTHOR
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   DIFFICULTY
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   DATE
                 </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400">
                   LANGUAGE
                 </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-600">
+                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-400">
                   ACTIONS
                 </th>
               </tr>
@@ -391,13 +404,19 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-gray-400"
+                  >
                     Loading tutorials...
                   </td>
                 </tr>
               ) : tutorials.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-gray-400"
+                  >
                     No tutorials found
                   </td>
                 </tr>
@@ -405,51 +424,57 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                 tutorials.map((tutorial) => (
                   <tr
                     key={tutorial._id}
-                    className={`border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 ${
-                      highlightedTutorial === tutorial._id 
-                        ? 'bg-blue-50 border-l-4 border-l-blue-500 border-r-4 border-r-blue-500 border-t-2 border-t-blue-400 border-b-2 border-b-blue-400 shadow-lg shadow-blue-200/50 animate-pulse' 
-                        : ''
+                    className={`border-b border-[#2a3050] hover:bg-[#1a1f3e] transition-all duration-300 ${
+                      highlightedTutorial === tutorial._id
+                        ? "bg-purple-900/30 border-l-4 border-l-purple-500 border-r-4 border-r-purple-500 border-t-2 border-t-purple-400 border-b-2 border-b-purple-400 shadow-lg shadow-purple-500/20 animate-pulse"
+                        : ""
                     }`}
                   >
-                    <td className="px-6 py-4 text-sm text-gray-900 font-medium">
+                    <td className="px-6 py-4 text-sm text-gray-100 font-medium">
                       {tutorial.title}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-400">
                       {tutorial.concept}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-400">
                       {tutorial.createdBy?.name || "Admin"}
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-2.5 py-1 rounded text-xs font-medium ${
                           tutorial.difficulty === "beginner"
-                            ? "bg-green-50 text-green-700"
+                            ? "bg-green-900/30 text-green-400"
                             : tutorial.difficulty === "intermediate"
-                            ? "bg-yellow-50 text-yellow-700"
-                            : "bg-red-50 text-red-700"
+                            ? "bg-yellow-900/30 text-yellow-400"
+                            : "bg-red-900/30 text-red-400"
                         }`}
                       >
                         {tutorial.difficulty}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-400">
                       {new Date(tutorial.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {tutorial.language.charAt(0).toUpperCase() + tutorial.language.slice(1)}
+                    <td className="px-6 py-4 text-sm text-gray-400">
+                      {tutorial.language.charAt(0).toUpperCase() +
+                        tutorial.language.slice(1)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button 
+                        <button
                           onClick={() => openEditModal(tutorial)}
-                          className="p-1.5 hover:bg-gray-100 rounded text-blue-600"
+                          className="p-1.5 hover:bg-[#1a1f3e] rounded text-blue-400"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button 
-                          onClick={() => setDeleteConfirm({ show: true, tutorialId: tutorial._id })}
-                          className="p-1.5 hover:bg-gray-100 rounded text-red-600"
+                        <button
+                          onClick={() =>
+                            setDeleteConfirm({
+                              show: true,
+                              tutorialId: tutorial._id,
+                            })
+                          }
+                          className="p-1.5 hover:bg-[#1a1f3e] rounded text-red-400"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -464,9 +489,10 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
         {/* Stats */}
         {tutorials.length > 0 && (
-          <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+          <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
             <div>
-              Showing {tutorials.length} tutorial{tutorials.length !== 1 ? "s" : ""}
+              Showing {tutorials.length} tutorial
+              {tutorials.length !== 1 ? "s" : ""}
             </div>
           </div>
         )}
@@ -474,31 +500,36 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
       {/* Add Tutorial Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#0d1230] rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-[#2a3050]">
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-[#2a3050] flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-500 mb-1">
-                  Admin Panel / Tutorials / {editingTutorial ? "Edit" : "Create New"}
+                <div className="text-sm text-gray-400 mb-1">
+                  Admin Panel / Tutorials /{" "}
+                  {editingTutorial ? "Edit" : "Create New"}
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-100">
                   {editingTutorial ? "Edit Tutorial" : "Create New Tutorial"}
                 </h2>
               </div>
               <div className="flex items-center gap-3">
-                <button 
+                <button
                   onClick={handleSaveTutorial}
                   disabled={loading}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600 disabled:opacity-50"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-md text-sm font-medium hover:bg-purple-700 disabled:opacity-50"
                 >
-                  {loading ? "Saving..." : editingTutorial ? "Update Tutorial" : "Create Tutorial"}
+                  {loading
+                    ? "Saving..."
+                    : editingTutorial
+                    ? "Update Tutorial"
+                    : "Create Tutorial"}
                 </button>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-md"
+                  className="p-2 hover:bg-[#1a1f3e] rounded-md"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 text-gray-400" />
                 </button>
               </div>
             </div>
@@ -510,7 +541,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                 <div className="space-y-6">
                   {/* Tutorial Title */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Tutorial Title *
                     </label>
                     <input
@@ -520,29 +551,32 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                       onChange={(e) =>
                         setFormData({ ...formData, title: e.target.value })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Description
                     </label>
                     <textarea
                       placeholder="Brief description of the tutorial"
                       value={formData.description}
                       onChange={(e) =>
-                        setFormData({ ...formData, description: e.target.value })
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                       rows={3}
                     />
                   </div>
 
                   {/* Language */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Language *
                     </label>
                     {!showNewLanguageInput ? (
@@ -550,7 +584,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                         <select
                           value={formData.language}
                           onChange={(e) => handleLanguageChange(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
                           <option value="">Select a language</option>
                           {languages.map((lang) => (
@@ -561,7 +595,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                         </select>
                         <button
                           onClick={() => setShowNewLanguageInput(true)}
-                          className="text-xs text-blue-600 hover:text-blue-700"
+                          className="text-xs text-purple-400 hover:text-purple-300"
                         >
                           + Add new language
                         </button>
@@ -579,13 +613,13 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                               handleAddNewLanguage();
                             }
                           }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                           autoFocus
                         />
                         <div className="flex gap-2">
                           <button
                             onClick={handleAddNewLanguage}
-                            className="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                            className="flex-1 px-3 py-1.5 bg-purple-600 text-white rounded text-xs hover:bg-purple-700"
                           >
                             Add Language
                           </button>
@@ -594,7 +628,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                               setShowNewLanguageInput(false);
                               setNewLanguage("");
                             }}
-                            className="flex-1 px-3 py-1.5 border border-gray-300 rounded text-xs hover:bg-gray-50"
+                            className="flex-1 px-3 py-1.5 border border-[#2a3050] rounded text-xs text-gray-300 hover:bg-[#1a1f3e]"
                           >
                             Cancel
                           </button>
@@ -605,7 +639,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
                   {/* Concept */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Concept *
                     </label>
                     {!showNewConceptInput ? (
@@ -613,10 +647,13 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                         <select
                           value={formData.concept}
                           onChange={(e) =>
-                            setFormData({ ...formData, concept: e.target.value })
+                            setFormData({
+                              ...formData,
+                              concept: e.target.value,
+                            })
                           }
                           disabled={!formData.language}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
                         >
                           <option value="">Select a concept</option>
                           {concepts.map((concept) => (
@@ -628,7 +665,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                         <button
                           onClick={() => setShowNewConceptInput(true)}
                           disabled={!formData.language}
-                          className="text-xs text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="text-xs text-purple-400 hover:text-purple-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           + Add new concept
                         </button>
@@ -651,13 +688,13 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                               handleAddNewConcept();
                             }
                           }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                           autoFocus
                         />
                         <div className="flex gap-2">
                           <button
                             onClick={handleAddNewConcept}
-                            className="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                            className="flex-1 px-3 py-1.5 bg-purple-600 text-white rounded text-xs hover:bg-purple-700"
                           >
                             Add Concept
                           </button>
@@ -666,7 +703,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                               setShowNewConceptInput(false);
                               setNewConcept("");
                             }}
-                            className="flex-1 px-3 py-1.5 border border-gray-300 rounded text-xs hover:bg-gray-50"
+                            className="flex-1 px-3 py-1.5 border border-[#2a3050] rounded text-xs text-gray-300 hover:bg-[#1a1f3e]"
                           >
                             Cancel
                           </button>
@@ -677,7 +714,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
                   {/* Difficulty */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Difficulty
                     </label>
                     <select
@@ -685,7 +722,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                       onChange={(e) =>
                         setFormData({ ...formData, difficulty: e.target.value })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                       <option value="beginner">Beginner</option>
                       <option value="intermediate">Intermediate</option>
@@ -695,19 +732,19 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
                   {/* Tags */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Tags
                     </label>
                     <div className="flex flex-wrap gap-2 mb-2">
                       {formData.tags.map((tag, idx) => (
                         <span
                           key={idx}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/30 text-purple-400 rounded text-xs font-medium"
                         >
                           {tag}
                           <button
                             onClick={() => removeTag(tag)}
-                            className="hover:bg-blue-100 rounded-full p-0.5"
+                            className="hover:bg-purple-900/50 rounded-full p-0.5"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -724,7 +761,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                           e.currentTarget.value = "";
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Add tags to improve discoverability.
@@ -733,19 +770,19 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
 
                   {/* Notes */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Notes
                     </label>
                     <div className="space-y-2 mb-2">
                       {formData.notes.map((note, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2 p-2 bg-gray-50 rounded text-xs"
+                          className="flex items-start gap-2 p-2 bg-[#1a1f3e] rounded text-xs text-gray-300"
                         >
                           <span className="flex-1">{note}</span>
                           <button
                             onClick={() => removeNote(idx)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-400 hover:text-red-300"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -763,25 +800,25 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                           if (value) addNote(value);
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
 
                   {/* Tips */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Tips
                     </label>
                     <div className="space-y-2 mb-2">
                       {formData.tips.map((tip, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2 p-2 bg-yellow-50 rounded text-xs"
+                          className="flex items-start gap-2 p-2 bg-yellow-900/20 rounded text-xs text-yellow-300"
                         >
                           <span className="flex-1">{tip}</span>
                           <button
                             onClick={() => removeTip(idx)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-400 hover:text-red-300"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -799,7 +836,7 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                           if (value) addTip(value);
                         }
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                 </div>
@@ -808,18 +845,21 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                 <div className="col-span-2 space-y-4">
                   {/* Tutorial Content */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block text-sm font-semibold text-gray-100 mb-2">
                       Tutorial Content *
                     </label>
-                    <div className="border border-gray-300 rounded-md overflow-hidden">
-                      <div className="bg-white p-4 min-h-[300px]">
+                    <div className="border border-[#2a3050] rounded-md overflow-hidden">
+                      <div className="bg-[#1a1f3e] p-4 min-h-[300px]">
                         <textarea
                           placeholder="Write the tutorial content here. You can use markdown formatting."
                           value={formData.content}
                           onChange={(e) =>
-                            setFormData({ ...formData, content: e.target.value })
+                            setFormData({
+                              ...formData,
+                              content: e.target.value,
+                            })
                           }
-                          className="w-full h-full min-h-[280px] text-sm text-gray-700 focus:outline-none resize-none"
+                          className="w-full h-full min-h-[280px] text-sm text-gray-200 bg-transparent placeholder-gray-500 focus:outline-none resize-none"
                         />
                       </div>
                     </div>
@@ -831,55 +871,67 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
                   {/* Code Examples */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-sm font-semibold text-gray-900">
+                      <label className="block text-sm font-semibold text-gray-100">
                         Code Examples
                       </label>
                       <button
                         onClick={addCodeExample}
-                        className="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center gap-1"
+                        className="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 flex items-center gap-1"
                       >
                         <Plus className="w-3 h-3" />
                         Add Example
                       </button>
                     </div>
-                    
+
                     <div className="space-y-3">
                       {formData.codeExamples.map((example, idx) => (
-                        <div key={idx} className="border border-gray-300 rounded-md p-3 bg-gray-50">
+                        <div
+                          key={idx}
+                          className="border border-[#2a3050] rounded-md p-3 bg-[#1a1f3e]"
+                        >
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-semibold text-gray-700">
+                            <span className="text-xs font-semibold text-gray-300">
                               Example {idx + 1}
                             </span>
                             <button
                               onClick={() => removeCodeExample(idx)}
-                              className="text-red-500 hover:text-red-700"
+                              className="text-red-400 hover:text-red-300"
                             >
                               <X className="w-4 h-4" />
                             </button>
                           </div>
-                          
+
                           <div className="space-y-2">
                             <textarea
                               placeholder="Enter code example..."
                               value={example.code}
-                              onChange={(e) => updateCodeExample(idx, 'code', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                              onChange={(e) =>
+                                updateCodeExample(idx, "code", e.target.value)
+                              }
+                              className="w-full px-3 py-2 bg-[#0a0e27] border border-[#2a3050] rounded-md text-sm font-mono text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                               rows={4}
                             />
                             <input
                               type="text"
                               placeholder="Explanation (optional)"
                               value={example.explanation || ""}
-                              onChange={(e) => updateCodeExample(idx, 'explanation', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                              onChange={(e) =>
+                                updateCodeExample(
+                                  idx,
+                                  "explanation",
+                                  e.target.value
+                                )
+                              }
+                              className="w-full px-3 py-2 bg-[#0a0e27] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
                           </div>
                         </div>
                       ))}
-                      
+
                       {formData.codeExamples.length === 0 && (
                         <p className="text-xs text-gray-500 text-center py-4">
-                          No code examples added yet. Click "Add Example" to add one.
+                          No code examples added yet. Click "Add Example" to add
+                          one.
                         </p>
                       )}
                     </div>
@@ -904,4 +956,3 @@ export default function TutorialManagement({ highlightedTutorialId }: TutorialMa
     </div>
   );
 }
-

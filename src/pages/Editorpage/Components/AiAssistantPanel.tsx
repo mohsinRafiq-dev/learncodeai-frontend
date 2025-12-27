@@ -248,27 +248,27 @@ function AiAssistantPanel({
   };
 
   return (
-    <div className="flex flex-col bg-gray-50 overflow-hidden max-h-screen h-full w-full">
+    <div className="flex flex-col bg-[#0d1230] overflow-hidden max-h-screen h-full w-full">
       {/* Assistant Header */}
-      <div className="flex items-center justify-between p-3 border-b border-gray-300 flex-shrink-0">
+      <div className="flex items-center justify-between p-3 border-b border-[#1a1f3e] flex-shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-xl">🤖</span>
           <div className="flex flex-col">
-            <h2 className="font-semibold text-gray-900 text-sm">AI Tutor</h2>
+            <h2 className="font-semibold text-white text-sm">AI Tutor</h2>
             {code && code.trim() && (
-              <span className="text-xs text-green-600 flex items-center gap-1">
+              <span className="text-xs text-[#00e676] flex items-center gap-1">
                 ✓ Reading your code
               </span>
             )}
           </div>
         </div>
-        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+        <span className="text-xs bg-[#8b5cf6]/20 text-[#a78bfa] px-2 py-1 rounded border border-[#8b5cf6]/30">
           {language.toUpperCase()}
         </span>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-white">
+      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0a0e27]">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -279,12 +279,12 @@ function AiAssistantPanel({
             <div
               className={`max-w-[85%] rounded-lg px-4 py-2 text-sm ${
                 message.isUser
-                  ? "bg-blue-500 text-white"
+                  ? "bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] text-white"
                   : message.type === "error-help"
-                  ? "bg-red-50 text-gray-800 border border-red-200"
+                  ? "bg-[#e91e63]/10 text-gray-200 border border-[#e91e63]/30"
                   : message.type === "problem-help"
-                  ? "bg-yellow-50 text-gray-800 border border-yellow-200"
-                  : "bg-gray-100 text-gray-800"
+                  ? "bg-[#ff9800]/10 text-gray-200 border border-[#ff9800]/30"
+                  : "bg-[#1a1f3e] text-gray-200 border border-[#2a3050]"
               }`}
             >
               {message.isUser ? message.text : formatMarkdownText(message.text)}
@@ -293,15 +293,15 @@ function AiAssistantPanel({
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-4 py-2">
+            <div className="bg-[#1a1f3e] rounded-lg px-4 py-2 border border-[#2a3050]">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-[#00b4d8] rounded-full animate-bounce"></div>
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-[#8b5cf6] rounded-full animate-bounce"
                   style={{ animationDelay: "0.2s" }}
                 ></div>
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-[#00e676] rounded-full animate-bounce"
                   style={{ animationDelay: "0.4s" }}
                 ></div>
               </div>
@@ -313,27 +313,27 @@ function AiAssistantPanel({
 
       {/* Helper Buttons - Show when errors/problems exist */}
       {error && error.trim() ? (
-        <div className="px-3 py-2 border-t-4 border-red-500 bg-red-100 flex flex-col gap-2 flex-shrink-0 shadow-md">
-          <div className="text-xs text-red-900 font-semibold">
+        <div className="px-3 py-2 border-t-2 border-[#e91e63] bg-[#e91e63]/10 flex flex-col gap-2 flex-shrink-0">
+          <div className="text-xs text-[#e91e63] font-semibold">
             Runtime Error Detected:
           </div>
           <button
             onClick={handleExplainError}
             disabled={isLoading}
-            className="w-full bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1"
+            className="w-full bg-gradient-to-r from-[#e91e63] to-[#f06292] hover:from-[#c2185b] hover:to-[#e91e63] disabled:from-gray-600 disabled:to-gray-700 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1 shadow-lg shadow-pink-500/20"
           >
             📍 Explain Error
           </button>
         </div>
       ) : problems && problems.length > 0 ? (
-        <div className="px-3 py-2 border-t-4 border-yellow-500 bg-yellow-100 flex flex-col gap-2 flex-shrink-0 shadow-md">
-          <div className="text-xs text-yellow-900 font-semibold">
+        <div className="px-3 py-2 border-t-2 border-[#ff9800] bg-[#ff9800]/10 flex flex-col gap-2 flex-shrink-0">
+          <div className="text-xs text-[#ff9800] font-semibold">
             Syntax Problems Detected:
           </div>
           <button
             onClick={handleAskForHint}
             disabled={isLoading}
-            className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-300 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1"
+            className="w-full bg-gradient-to-r from-[#ff9800] to-[#ffb74d] hover:from-[#f57c00] hover:to-[#ff9800] disabled:from-gray-600 disabled:to-gray-700 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1 shadow-lg shadow-orange-500/20"
           >
             💡 Ask for Hint
           </button>
@@ -342,11 +342,11 @@ function AiAssistantPanel({
 
       {/* Clear Chat History Button */}
       {messages.length > 1 && (
-        <div className="px-3 py-2 border-t border-gray-200 bg-gray-50 flex justify-center">
+        <div className="px-3 py-2 border-t border-[#1a1f3e] bg-[#0d1230] flex justify-center">
           <button
             onClick={handleClearHistory}
             disabled={isLoading}
-            className="text-xs text-gray-500 hover:text-red-500 disabled:text-gray-300 transition-colors flex items-center gap-1"
+            className="text-xs text-gray-500 hover:text-[#e91e63] disabled:text-gray-600 transition-colors flex items-center gap-1"
             title="Clear chat history"
           >
             🗑️ Clear History
@@ -355,8 +355,8 @@ function AiAssistantPanel({
       )}
 
       {/* Input Box */}
-      <div className="p-3 border-t border-gray-300 bg-gray-50 flex-shrink-0">
-        <div className="flex items-center gap-2 rounded-lg bg-white border border-gray-300 px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+      <div className="p-3 border-t border-[#1a1f3e] bg-[#0d1230] flex-shrink-0">
+        <div className="flex items-center gap-2 rounded-lg bg-[#1a1f3e] border border-[#2a3050] px-3 py-2 focus-within:ring-2 focus-within:ring-[#8b5cf6] focus-within:border-[#8b5cf6]">
           <input
             type="text"
             value={inputValue}
@@ -368,12 +368,12 @@ function AiAssistantPanel({
             }}
             placeholder="Ask anything about your code..."
             disabled={isLoading}
-            className="flex-1 bg-transparent outline-none text-sm text-gray-900 placeholder-gray-500 disabled:opacity-50"
+            className="flex-1 bg-transparent outline-none text-sm text-gray-200 placeholder-gray-500 disabled:opacity-50"
           />
           <button
             onClick={handleSendMessage}
             disabled={isLoading || !inputValue.trim()}
-            className="text-blue-600 hover:text-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="text-[#00b4d8] hover:text-[#0096c7] disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
             title="Send message"
           >
             <svg
@@ -397,4 +397,3 @@ function AiAssistantPanel({
 }
 
 export default AiAssistantPanel;
-

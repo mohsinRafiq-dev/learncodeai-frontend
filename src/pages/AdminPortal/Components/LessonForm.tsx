@@ -59,7 +59,11 @@ export default function LessonForm({
         notes: editingLesson.notes || [],
         tips: editingLesson.tips || [],
         resources: editingLesson.resources || [],
-        difficulty: (editingLesson.difficulty as "beginner" | "intermediate" | "advanced") || "beginner",
+        difficulty:
+          (editingLesson.difficulty as
+            | "beginner"
+            | "intermediate"
+            | "advanced") || "beginner",
         estimatedHours: editingLesson.estimatedHours || 0,
       });
     } else {
@@ -100,7 +104,11 @@ export default function LessonForm({
     });
   };
 
-  const updateCodeExample = (index: number, field: keyof CodeExample, value: string) => {
+  const updateCodeExample = (
+    index: number,
+    field: keyof CodeExample,
+    value: string
+  ) => {
     const updated = [...lessonFormData.codeExamples];
     updated[index] = { ...updated[index], [field]: value };
     setLessonFormData({ ...lessonFormData, codeExamples: updated });
@@ -170,31 +178,40 @@ export default function LessonForm({
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#0d1230] border border-[#2a3050] rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-[#2a3050] flex items-center justify-between">
           <div>
-            <div className="text-sm text-gray-500 mb-1">
-              Admin Panel / Courses / {course.title} / {section.title} / {editingLesson ? "Edit" : "Create New"}
+            <div className="text-sm text-gray-400 mb-1">
+              Admin Panel / Courses / {course.title} / {section.title} /{" "}
+              {editingLesson ? "Edit" : "Create New"}
             </div>
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-gray-100">
               {editingLesson ? "Edit Lesson" : "Create New Lesson"}
             </h2>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={handleSave}
-              disabled={loading || !lessonFormData.title.trim() || !lessonFormData.content.trim()}
-              className="px-4 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 disabled:opacity-50"
+              disabled={
+                loading ||
+                !lessonFormData.title.trim() ||
+                !lessonFormData.content.trim()
+              }
+              className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50"
             >
-              {loading ? "Saving..." : editingLesson ? "Update Lesson" : "Create Lesson"}
+              {loading
+                ? "Saving..."
+                : editingLesson
+                ? "Update Lesson"
+                : "Create Lesson"}
             </button>
             <button
               onClick={onCancel}
-              className="p-2 hover:bg-gray-100 rounded-md"
+              className="p-2 hover:bg-[#1a1f3e] rounded-md"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 text-gray-400" />
             </button>
           </div>
         </div>
@@ -206,7 +223,7 @@ export default function LessonForm({
             <div className="space-y-6">
               {/* Lesson Title */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Lesson Title *
                 </label>
                 <input
@@ -219,13 +236,13 @@ export default function LessonForm({
                       title: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Description
                 </label>
                 <textarea
@@ -237,14 +254,14 @@ export default function LessonForm({
                       description: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows={3}
                 />
               </div>
 
               {/* Difficulty */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Difficulty *
                 </label>
                 <select
@@ -252,10 +269,13 @@ export default function LessonForm({
                   onChange={(e) =>
                     setLessonFormData({
                       ...lessonFormData,
-                      difficulty: e.target.value as "beginner" | "intermediate" | "advanced",
+                      difficulty: e.target.value as
+                        | "beginner"
+                        | "intermediate"
+                        | "advanced",
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -265,7 +285,7 @@ export default function LessonForm({
 
               {/* Order */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Lesson Order *
                 </label>
                 <input
@@ -278,13 +298,13 @@ export default function LessonForm({
                       order: parseInt(e.target.value) || 1,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
 
               {/* Estimated Hours */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Estimated Hours
                 </label>
                 <input
@@ -298,14 +318,14 @@ export default function LessonForm({
                       estimatedHours: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="0.0"
                 />
               </div>
 
               {/* Video URL */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Video URL
                 </label>
                 <input
@@ -317,14 +337,14 @@ export default function LessonForm({
                       videoUrl: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="https://..."
                 />
               </div>
 
               {/* Duration */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Duration (minutes)
                 </label>
                 <input
@@ -337,7 +357,7 @@ export default function LessonForm({
                       duration: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="0"
                 />
               </div>
@@ -347,7 +367,7 @@ export default function LessonForm({
             <div className="col-span-2 space-y-6">
               {/* Lesson Content */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Lesson Content *
                 </label>
                 <textarea
@@ -359,7 +379,7 @@ export default function LessonForm({
                       content: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows={12}
                 />
               </div>
@@ -367,69 +387,98 @@ export default function LessonForm({
               {/* Code Examples */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="block text-sm font-semibold text-gray-900">
+                  <label className="block text-sm font-semibold text-gray-100">
                     Code Examples
                   </label>
                   <button
                     type="button"
                     onClick={addCodeExample}
-                    className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded hover:bg-green-100 border border-green-200"
+                    className="px-3 py-1 text-xs bg-green-900/30 text-green-400 rounded hover:bg-green-900/50 border border-green-700"
                   >
                     + Add Example
                   </button>
                 </div>
                 <div className="space-y-3">
                   {lessonFormData.codeExamples.map((example, index) => (
-                    <div key={index} className="border border-gray-200 rounded-md p-3 bg-gray-50">
+                    <div
+                      key={index}
+                      className="border border-[#2a3050] rounded-md p-3 bg-[#1a1f3e]"
+                    >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-gray-700">Example {index + 1}</span>
+                        <span className="text-xs font-medium text-gray-300">
+                          Example {index + 1}
+                        </span>
                         <button
                           type="button"
                           onClick={() => removeCodeExample(index)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-400 hover:text-red-300"
                         >
                           <X className="w-3 h-3" />
                         </button>
                       </div>
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div>
-                          <label className="block text-xs text-gray-600 mb-1">Language</label>
+                          <label className="block text-xs text-gray-400 mb-1">
+                            Language
+                          </label>
                           <input
                             type="text"
-                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded"
+                            className="w-full px-2 py-1 text-xs bg-[#0d1230] border border-[#2a3050] rounded text-gray-200 placeholder-gray-500"
                             value={example.language}
-                            onChange={(e) => updateCodeExample(index, 'language', e.target.value)}
+                            onChange={(e) =>
+                              updateCodeExample(
+                                index,
+                                "language",
+                                e.target.value
+                              )
+                            }
                             placeholder="e.g., JavaScript"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs text-gray-600 mb-1">Title</label>
+                          <label className="block text-xs text-gray-400 mb-1">
+                            Title
+                          </label>
                           <input
                             type="text"
-                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded"
+                            className="w-full px-2 py-1 text-xs bg-[#0d1230] border border-[#2a3050] rounded text-gray-200 placeholder-gray-500"
                             value={example.title}
-                            onChange={(e) => updateCodeExample(index, 'title', e.target.value)}
+                            onChange={(e) =>
+                              updateCodeExample(index, "title", e.target.value)
+                            }
                             placeholder="Example title"
                           />
                         </div>
                       </div>
                       <div className="mb-2">
-                        <label className="block text-xs text-gray-600 mb-1">Code</label>
+                        <label className="block text-xs text-gray-400 mb-1">
+                          Code
+                        </label>
                         <textarea
-                          className="w-full px-2 py-1 text-xs border border-gray-300 rounded font-mono"
+                          className="w-full px-2 py-1 text-xs bg-[#0d1230] border border-[#2a3050] rounded font-mono text-gray-200 placeholder-gray-500"
                           rows={4}
                           value={example.code}
-                          onChange={(e) => updateCodeExample(index, 'code', e.target.value)}
+                          onChange={(e) =>
+                            updateCodeExample(index, "code", e.target.value)
+                          }
                           placeholder="Enter code..."
                         />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-600 mb-1">Description</label>
+                        <label className="block text-xs text-gray-400 mb-1">
+                          Description
+                        </label>
                         <textarea
-                          className="w-full px-2 py-1 text-xs border border-gray-300 rounded"
+                          className="w-full px-2 py-1 text-xs bg-[#0d1230] border border-[#2a3050] rounded text-gray-200 placeholder-gray-500"
                           rows={2}
                           value={example.description}
-                          onChange={(e) => updateCodeExample(index, 'description', e.target.value)}
+                          onChange={(e) =>
+                            updateCodeExample(
+                              index,
+                              "description",
+                              e.target.value
+                            )
+                          }
                           placeholder="Optional description..."
                         />
                       </div>
@@ -441,13 +490,13 @@ export default function LessonForm({
               {/* Notes */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="block text-sm font-semibold text-gray-900">
+                  <label className="block text-sm font-semibold text-gray-100">
                     Notes
                   </label>
                   <button
                     type="button"
                     onClick={addNote}
-                    className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded hover:bg-blue-100 border border-blue-200"
+                    className="px-3 py-1 text-xs bg-blue-900/30 text-blue-400 rounded hover:bg-blue-900/50 border border-blue-700"
                   >
                     + Add Note
                   </button>
@@ -457,7 +506,7 @@ export default function LessonForm({
                     <div key={index} className="flex items-center gap-2">
                       <input
                         type="text"
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+                        className="flex-1 px-2 py-1 text-sm bg-[#1a1f3e] border border-[#2a3050] rounded text-gray-200 placeholder-gray-500"
                         value={note}
                         onChange={(e) => updateNote(index, e.target.value)}
                         placeholder="Add a note..."
@@ -465,7 +514,7 @@ export default function LessonForm({
                       <button
                         type="button"
                         onClick={() => removeNote(index)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-400 hover:text-red-300"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -477,13 +526,13 @@ export default function LessonForm({
               {/* Tips */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="block text-sm font-semibold text-gray-900">
+                  <label className="block text-sm font-semibold text-gray-100">
                     Tips
                   </label>
                   <button
                     type="button"
                     onClick={addTip}
-                    className="px-3 py-1 text-xs bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 border border-yellow-200"
+                    className="px-3 py-1 text-xs bg-yellow-900/30 text-yellow-400 rounded hover:bg-yellow-900/50 border border-yellow-700"
                   >
                     + Add Tip
                   </button>
@@ -493,7 +542,7 @@ export default function LessonForm({
                     <div key={index} className="flex items-center gap-2">
                       <input
                         type="text"
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+                        className="flex-1 px-2 py-1 text-sm bg-[#1a1f3e] border border-[#2a3050] rounded text-gray-200 placeholder-gray-500"
                         value={tip}
                         onChange={(e) => updateTip(index, e.target.value)}
                         placeholder="Add a helpful tip..."
@@ -501,7 +550,7 @@ export default function LessonForm({
                       <button
                         type="button"
                         onClick={() => removeTip(index)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-400 hover:text-red-300"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -512,21 +561,33 @@ export default function LessonForm({
 
               {/* Resources */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-100 mb-2">
                   Resources
                 </label>
                 <textarea
                   placeholder="Add resources (format: Title: URL, one per line)"
-                  value={lessonFormData.resources.map(r => `${r.title}: ${r.url}`).join('\n')}
+                  value={lessonFormData.resources
+                    .map((r) => `${r.title}: ${r.url}`)
+                    .join("\n")}
                   onChange={(e) => {
-                    const lines = e.target.value.split('\n').filter(line => line.trim());
-                    const resources = lines.map(line => {
-                      const [title, url] = line.split(': ').map(s => s.trim());
-                      return { title: title || '', url: url || '', type: 'link' };
-                    }).filter(r => r.title && r.url);
+                    const lines = e.target.value
+                      .split("\n")
+                      .filter((line) => line.trim());
+                    const resources = lines
+                      .map((line) => {
+                        const [title, url] = line
+                          .split(": ")
+                          .map((s) => s.trim());
+                        return {
+                          title: title || "",
+                          url: url || "",
+                          type: "link",
+                        };
+                      })
+                      .filter((r) => r.title && r.url);
                     setLessonFormData({ ...lessonFormData, resources });
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 bg-[#1a1f3e] border border-[#2a3050] rounded-md text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows={3}
                 />
                 <div className="text-xs text-gray-500 mt-1">
@@ -538,23 +599,30 @@ export default function LessonForm({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+        <div className="px-6 py-4 border-t border-[#2a3050] flex items-center justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium"
+            className="px-4 py-2 text-gray-300 border border-[#2a3050] rounded-md hover:bg-[#1a1f3e] text-sm font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            disabled={loading || !lessonFormData.title.trim() || !lessonFormData.content.trim()}
-            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50 text-sm font-medium"
+            disabled={
+              loading ||
+              !lessonFormData.title.trim() ||
+              !lessonFormData.content.trim()
+            }
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 text-sm font-medium"
           >
-            {loading ? "Saving..." : editingLesson ? "Update Lesson" : "Create Lesson"}
+            {loading
+              ? "Saving..."
+              : editingLesson
+              ? "Update Lesson"
+              : "Create Lesson"}
           </button>
         </div>
       </div>
     </div>
   );
 }
-

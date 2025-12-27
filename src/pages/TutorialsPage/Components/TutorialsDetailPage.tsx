@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { AlertTriangle } from "lucide-react";
 import {
   fetchTutorialsByLanguageAndConcept,
   saveTutorial,
@@ -476,10 +477,10 @@ const TutorialsDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-gray-400 text-lg">
             Loading {language} tutorials...
           </p>
         </div>
@@ -489,15 +490,17 @@ const TutorialsDetailPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
-          <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
+        <div className="text-center bg-[#0d1230] rounded-2xl shadow-xl p-8 max-w-md mx-4 border border-[#1a1f3e]">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-900/30 flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-red-500" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-200 mb-2">
             Something went wrong
           </h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <p className="text-gray-400 mb-6">{error}</p>
           <button
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
             onClick={() => window.location.reload()}
           >
             Try Again
@@ -524,12 +527,12 @@ const TutorialsDetailPage: React.FC = () => {
 
       <div
         ref={containerRef}
-        className="flex h-screen bg-gray-50 overflow-hidden overflow-x-hidden"
+        className="flex h-screen bg-[#0a0e27] overflow-hidden overflow-x-hidden"
       >
         {/* AI Panel Toggle Button */}
         <button
           onClick={toggleAiPanel}
-          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-l-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-l-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
           style={{
             right: isAiMinimized ? "12px" : `${aiPanelWidth + 4}px`,
             top: "50vh",
@@ -571,7 +574,7 @@ const TutorialsDetailPage: React.FC = () => {
         {/* Left Sidebar Toggle Button */}
         <button
           onClick={toggleLeftSidebar}
-          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-r-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-r-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
           style={{
             left: isLeftMinimized ? "12px" : `${leftSidebarWidth + 4}px`,
             top: "50vh",
@@ -612,7 +615,7 @@ const TutorialsDetailPage: React.FC = () => {
 
         {/* Left Sidebar */}
         <div
-          className="bg-white border-r border-gray-200 overflow-hidden flex flex-col transition-all duration-300"
+          className="bg-[#0d1230] border-r border-[#1a1f3e] overflow-hidden flex flex-col transition-all duration-300"
           style={{
             width: isLeftMinimized ? "48px" : `${leftSidebarWidth}px`,
             minWidth: isLeftMinimized ? "48px" : "250px",
@@ -621,13 +624,13 @@ const TutorialsDetailPage: React.FC = () => {
         >
           {!isLeftMinimized && (
             <>
-              <div className="p-4 border-b border-gray-200">
+              <div className="p-4 border-b border-[#1a1f3e]">
                 <input
                   type="text"
                   placeholder="Filter tutorials"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 text-sm bg-[#1a1f3e] border border-[#2a3050] text-gray-200 placeholder-gray-500 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                 />
               </div>
 
@@ -644,14 +647,14 @@ const TutorialsDetailPage: React.FC = () => {
                           onClick={() => handleTutorialSelect(tutorial)}
                           className={`p-3 rounded-lg cursor-pointer transition-all text-sm ${
                             selectedTutorial?._id === tutorial._id
-                              ? "bg-blue-50 border border-blue-200 text-blue-800"
-                              : "hover:bg-gray-50 text-gray-700"
+                              ? "bg-purple-900/30 border border-purple-500/50 text-purple-300"
+                              : "hover:bg-[#1a1f3e] text-gray-300"
                           }`}
                         >
                           <div className="font-medium mb-1 flex items-center gap-2">
                             <span>• {tutorial.title}</span>
                             {isPersonal && (
-                              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
+                              <span className="text-xs bg-purple-900/50 text-purple-400 px-2 py-0.5 rounded-full font-semibold">
                                 My
                               </span>
                             )}
@@ -662,7 +665,7 @@ const TutorialsDetailPage: React.FC = () => {
                   ) : (
                     <div className="text-center py-8 text-gray-500 text-sm">
                       <svg
-                        className="w-12 h-12 mx-auto mb-2 text-gray-400"
+                        className="w-12 h-12 mx-auto mb-2 text-gray-600"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -681,11 +684,11 @@ const TutorialsDetailPage: React.FC = () => {
               </div>
 
               {/* Generate with AI Button */}
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-[#1a1f3e]">
                 <button
                   onClick={handleGenerateAITutorial}
                   disabled={isGenerating}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isGenerating ? (
                     <>
@@ -720,10 +723,10 @@ const TutorialsDetailPage: React.FC = () => {
         {!isLeftMinimized && (
           <div
             onMouseDown={handleLeftMouseDown}
-            className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
+            className="w-1 bg-[#1a1f3e] hover:bg-purple-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
           >
             <div className="absolute inset-y-0 -left-1 -right-1 flex items-center justify-center">
-              <div className="w-1 h-8 bg-gray-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-1 h-8 bg-purple-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
           </div>
         )}
@@ -735,20 +738,20 @@ const TutorialsDetailPage: React.FC = () => {
             {selectedTutorial ? (
               <>
                 {/* Breadcrumb */}
-                <div className="bg-white border-b border-gray-200 px-6 py-3">
-                  <div className="flex items-center text-sm text-gray-600">
+                <div className="bg-[#0d1230] border-b border-[#1a1f3e] px-6 py-3">
+                  <div className="flex items-center text-sm text-gray-400">
                     <button
                       onClick={handleBackClick}
-                      className="hover:text-blue-600"
+                      className="hover:text-purple-400 cursor-pointer"
                     >
                       Home
                     </button>
                     <span className="mx-2">/</span>
-                    <span className="hover:text-blue-600 cursor-pointer">
+                    <span className="hover:text-purple-400 cursor-pointer">
                       {selectedTutorial.language}
                     </span>
                     <span className="mx-2">/</span>
-                    <span className="text-gray-900 font-medium">
+                    <span className="text-gray-200 font-medium">
                       {selectedTutorial.concept}
                     </span>
                   </div>
@@ -757,25 +760,25 @@ const TutorialsDetailPage: React.FC = () => {
                 <div className="max-w-4xl mx-auto p-8 overflow-x-hidden">
                   {tutorialLoading ? (
                     <div className="flex items-center justify-center h-64">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
                     </div>
                   ) : (
                     <>
                       {/* Tutorial Header */}
                       <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                        <h1 className="text-3xl font-bold text-gray-100 mb-4">
                           {selectedTutorial.title}
                         </h1>
 
                         {selectedTutorial.description && (
-                          <p className="text-gray-700 mb-6">
+                          <p className="text-gray-400 mb-6">
                             {selectedTutorial.description}
                           </p>
                         )}
 
                         <div className="flex items-center justify-between">
                           <div className="flex gap-2">
-                            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            <span className="bg-purple-900/50 text-purple-300 px-3 py-1 rounded-full text-sm font-medium">
                               {selectedTutorial.language.toUpperCase()}
                             </span>
                             <span
@@ -789,7 +792,7 @@ const TutorialsDetailPage: React.FC = () => {
 
                           <div className="flex gap-3">
                             <button
-                              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all bg-purple-50 text-purple-600 border border-purple-200 hover:shadow-md hover:bg-purple-100"
+                              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all bg-purple-900/30 text-purple-400 border border-purple-500/50 hover:shadow-md hover:bg-purple-900/50 cursor-pointer"
                               onClick={() =>
                                 exportTutorialToPDF(selectedTutorial)
                               }
@@ -811,10 +814,10 @@ const TutorialsDetailPage: React.FC = () => {
                               PDF
                             </button>
                             <button
-                              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all cursor-pointer ${
                                 isSaved
-                                  ? "bg-red-50 text-red-600 border border-red-200"
-                                  : "bg-blue-50 text-blue-600 border border-blue-200"
+                                  ? "bg-red-900/30 text-red-400 border border-red-500/50"
+                                  : "bg-cyan-900/30 text-cyan-400 border border-cyan-500/50"
                               } ${
                                 savingTutorial
                                   ? "opacity-60"
@@ -864,9 +867,9 @@ const TutorialsDetailPage: React.FC = () => {
                       {selectedTutorial.content &&
                         selectedTutorial.content.length > 0 && (
                           <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <h2 className="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-2">
                               <svg
-                                className="w-6 h-6 text-purple-600"
+                                className="w-6 h-6 text-purple-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -880,7 +883,7 @@ const TutorialsDetailPage: React.FC = () => {
                               </svg>
                               Content
                             </h2>
-                            <div className="prose prose-lg max-w-none bg-gradient-to-br from-white to-purple-50 rounded-xl p-6 border-2 border-purple-200 shadow-md">
+                            <div className="prose prose-lg max-w-none bg-gradient-to-br from-[#1a1f3e] to-purple-900/30 rounded-xl p-6 border-2 border-purple-500/30 shadow-md prose-invert">
                               {selectedTutorial.content
                                 .split("\n")
                                 .map((line, index) => {
@@ -889,7 +892,7 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <h2
                                         key={index}
-                                        className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mt-6 mb-3 pb-2 border-b-2 border-purple-300"
+                                        className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mt-6 mb-3 pb-2 border-b-2 border-purple-500/50"
                                       >
                                         {line.replace("## ", "")}
                                       </h2>
@@ -898,11 +901,9 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <h3
                                         key={index}
-                                        className="text-xl font-semibold text-indigo-700 mt-4 mb-2 flex items-center gap-2"
+                                        className="text-xl font-semibold text-cyan-400 mt-4 mb-2 flex items-center gap-2"
                                       >
-                                        <span className="text-indigo-500">
-                                          ▸
-                                        </span>
+                                        <span className="text-cyan-500">▸</span>
                                         {line.replace("### ", "")}
                                       </h3>
                                     );
@@ -916,13 +917,13 @@ const TutorialsDetailPage: React.FC = () => {
                                       return (
                                         <li
                                           key={index}
-                                          className="ml-4 text-gray-700 bg-blue-50 py-2 px-3 rounded-md mb-2"
+                                          className="ml-4 text-gray-300 bg-[#1a1f3e] py-2 px-3 rounded-md mb-2"
                                         >
-                                          <strong className="text-blue-700">
+                                          <strong className="text-cyan-400">
                                             {match[1]}
                                           </strong>
                                           :
-                                          <span className="text-gray-800">
+                                          <span className="text-gray-300">
                                             {match[2]}
                                           </span>
                                         </li>
@@ -931,7 +932,7 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <li
                                         key={index}
-                                        className="ml-4 text-gray-700 py-1"
+                                        className="ml-4 text-gray-300 py-1"
                                       >
                                         {line.replace("- ", "")}
                                       </li>
@@ -940,9 +941,9 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <li
                                         key={index}
-                                        className="ml-4 text-gray-700 py-1 hover:text-gray-900"
+                                        className="ml-4 text-gray-300 py-1 hover:text-gray-100"
                                       >
-                                        <span className="text-purple-500 mr-2">
+                                        <span className="text-purple-400 mr-2">
                                           ●
                                         </span>
                                         {line.replace("- ", "")}
@@ -956,13 +957,13 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <p
                                         key={index}
-                                        className="text-gray-700 mb-2 leading-relaxed"
+                                        className="text-gray-300 mb-2 leading-relaxed"
                                       >
                                         {parts.map((part, i) =>
                                           i % 2 === 1 ? (
                                             <strong
                                               key={i}
-                                              className="text-gray-900 font-semibold"
+                                              className="text-gray-100 font-semibold"
                                             >
                                               {part}
                                             </strong>
@@ -976,7 +977,7 @@ const TutorialsDetailPage: React.FC = () => {
                                     return (
                                       <p
                                         key={index}
-                                        className="text-gray-700 mb-2 leading-relaxed"
+                                        className="text-gray-300 mb-2 leading-relaxed"
                                       >
                                         {line}
                                       </p>
@@ -990,9 +991,9 @@ const TutorialsDetailPage: React.FC = () => {
                       {selectedTutorial.codeExamples &&
                         selectedTutorial.codeExamples.length > 0 && (
                           <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <h2 className="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-2">
                               <svg
-                                className="w-6 h-6 text-green-600"
+                                className="w-6 h-6 text-green-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -1010,18 +1011,18 @@ const TutorialsDetailPage: React.FC = () => {
                               (example, index) => (
                                 <div key={index} className="mb-6">
                                   {example.description && (
-                                    <p className="text-gray-700 mb-3 font-medium">
+                                    <p className="text-gray-300 mb-3 font-medium">
                                       {example.description}
                                     </p>
                                   )}
-                                  <div className="bg-gray-900 rounded-lg overflow-hidden border-2 border-green-500 shadow-lg">
+                                  <div className="bg-gray-900 rounded-lg overflow-hidden border-2 border-green-500/50 shadow-lg">
                                     <div className="flex items-center justify-between px-4 py-2 bg-gray-800">
                                       <span className="text-white text-sm font-medium">
                                         {example.title}
                                       </span>
                                       <div className="flex items-center gap-2">
                                         <button
-                                          className="flex items-center space-x-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors"
+                                          className="flex items-center space-x-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors cursor-pointer"
                                           onClick={() => {
                                             navigate("/editor", {
                                               state: {
@@ -1055,7 +1056,7 @@ const TutorialsDetailPage: React.FC = () => {
                                           <span>Run Code</span>
                                         </button>
                                         <button
-                                          className="flex items-center space-x-1 text-white text-sm hover:text-gray-300"
+                                          className="flex items-center space-x-1 text-white text-sm hover:text-gray-300 cursor-pointer"
                                           onClick={() =>
                                             navigator.clipboard.writeText(
                                               example.code
@@ -1091,21 +1092,21 @@ const TutorialsDetailPage: React.FC = () => {
                                     example.expectedOutput) && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
                                       {example.input && (
-                                        <div className="bg-blue-50 rounded-lg p-4">
-                                          <h4 className="text-sm font-semibold text-blue-900 mb-2">
+                                        <div className="bg-cyan-900/30 rounded-lg p-4 border border-cyan-500/30">
+                                          <h4 className="text-sm font-semibold text-cyan-400 mb-2">
                                             Input:
                                           </h4>
-                                          <pre className="text-sm text-blue-800 whitespace-pre-wrap">
+                                          <pre className="text-sm text-cyan-300 whitespace-pre-wrap">
                                             {example.input}
                                           </pre>
                                         </div>
                                       )}
                                       {example.expectedOutput && (
-                                        <div className="bg-green-50 rounded-lg p-4">
-                                          <h4 className="text-sm font-semibold text-green-900 mb-2">
+                                        <div className="bg-green-900/30 rounded-lg p-4 border border-green-500/30">
+                                          <h4 className="text-sm font-semibold text-green-400 mb-2">
                                             Expected Output:
                                           </h4>
-                                          <pre className="text-sm text-green-800 whitespace-pre-wrap">
+                                          <pre className="text-sm text-green-300 whitespace-pre-wrap">
                                             {example.expectedOutput}
                                           </pre>
                                         </div>
@@ -1120,10 +1121,10 @@ const TutorialsDetailPage: React.FC = () => {
                       {/* Key Takeaways Box */}
                       {selectedTutorial.notes &&
                         selectedTutorial.notes.length > 0 && (
-                          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 mb-8 border-2 border-blue-300 shadow-md">
-                            <h2 className="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                          <div className="bg-gradient-to-br from-[#1a1f3e] to-cyan-900/30 rounded-xl p-6 mb-8 border-2 border-cyan-500/30 shadow-md">
+                            <h2 className="text-lg font-bold text-cyan-400 mb-4 flex items-center gap-2">
                               <svg
-                                className="w-6 h-6 text-indigo-700"
+                                className="w-6 h-6 text-cyan-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -1141,12 +1142,12 @@ const TutorialsDetailPage: React.FC = () => {
                               {selectedTutorial.notes.map((note, index) => (
                                 <li
                                   key={index}
-                                  className="flex items-start bg-white rounded-lg p-3 shadow-sm"
+                                  className="flex items-start bg-[#0d1230] rounded-lg p-3 shadow-sm border border-[#2a3050]"
                                 >
-                                  <span className="text-indigo-600 mr-3 text-lg font-bold">
+                                  <span className="text-cyan-400 mr-3 text-lg font-bold">
                                     ✓
                                   </span>
-                                  <span className="text-gray-800 font-medium">
+                                  <span className="text-gray-300 font-medium">
                                     {note}
                                   </span>
                                 </li>
@@ -1158,9 +1159,9 @@ const TutorialsDetailPage: React.FC = () => {
                       {selectedTutorial.tips &&
                         selectedTutorial.tips.length > 0 && (
                           <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <h2 className="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-2">
                               <svg
-                                className="w-6 h-6 text-yellow-500"
+                                className="w-6 h-6 text-yellow-400"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                               >
@@ -1172,9 +1173,9 @@ const TutorialsDetailPage: React.FC = () => {
                               {selectedTutorial.tips.map((tip, index) => (
                                 <div
                                   key={index}
-                                  className="flex space-x-3 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border-l-4 border-yellow-500 shadow-md hover:shadow-lg transition-shadow"
+                                  className="flex space-x-3 p-4 bg-gradient-to-r from-yellow-900/30 to-amber-900/30 rounded-lg border-l-4 border-yellow-500 shadow-md hover:shadow-lg transition-shadow"
                                 >
-                                  <div className="text-yellow-600 flex-shrink-0">
+                                  <div className="text-yellow-400 flex-shrink-0">
                                     <svg
                                       className="w-6 h-6"
                                       fill="currentColor"
@@ -1183,7 +1184,7 @@ const TutorialsDetailPage: React.FC = () => {
                                       <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
                                     </svg>
                                   </div>
-                                  <p className="text-gray-800 font-medium">
+                                  <p className="text-gray-300 font-medium">
                                     {tip}
                                   </p>
                                 </div>
@@ -1195,9 +1196,9 @@ const TutorialsDetailPage: React.FC = () => {
                       {selectedTutorial.tags &&
                         selectedTutorial.tags.length > 0 && (
                           <div className="mb-8">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <h2 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                               <svg
-                                className="w-5 h-5 text-pink-500"
+                                className="w-5 h-5 text-pink-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -1215,7 +1216,7 @@ const TutorialsDetailPage: React.FC = () => {
                               {selectedTutorial.tags.map((tag, index) => (
                                 <span
                                   key={index}
-                                  className="px-4 py-2 bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-300 hover:shadow-md transition-shadow cursor-pointer"
+                                  className="px-4 py-2 bg-gradient-to-r from-pink-900/30 to-purple-900/30 text-purple-300 rounded-full text-sm font-medium border border-purple-500/50 hover:shadow-md transition-shadow cursor-pointer"
                                 >
                                   #{tag}
                                 </span>
@@ -1224,7 +1225,7 @@ const TutorialsDetailPage: React.FC = () => {
                           </div>
                         )}
                       {/* Navigation Buttons */}
-                      <div className="flex items-center justify-between border-t border-gray-200 pt-6">
+                      <div className="flex items-center justify-between border-t border-[#1a1f3e] pt-6">
                         <button
                           onClick={handlePreviousTutorial}
                           disabled={
@@ -1233,7 +1234,7 @@ const TutorialsDetailPage: React.FC = () => {
                               (t) => t._id === selectedTutorial._id
                             ) === 0
                           }
-                          className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          className="flex items-center space-x-2 px-4 py-2 text-gray-400 hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                         >
                           <span>←</span>
                           <span>Previous</span>
@@ -1247,7 +1248,7 @@ const TutorialsDetailPage: React.FC = () => {
                             ) ===
                               tutorials.length - 1
                           }
-                          className="flex items-center space-x-2 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          className="flex items-center space-x-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                         >
                           <span>Next</span>
                           <span>→</span>
@@ -1261,10 +1262,10 @@ const TutorialsDetailPage: React.FC = () => {
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <div className="text-6xl mb-4">👆</div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  <h2 className="text-xl font-semibold text-gray-200 mb-2">
                     Select a Tutorial
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-400">
                     Choose a tutorial from the sidebar to get started
                   </p>
                 </div>
@@ -1276,17 +1277,17 @@ const TutorialsDetailPage: React.FC = () => {
           {!isAiMinimized && (
             <div
               onMouseDown={handleAiMouseDown}
-              className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
+              className="w-1 bg-[#1a1f3e] hover:bg-purple-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
             >
               <div className="absolute inset-y-0 -left-1 -right-1 flex items-center justify-center">
-                <div className="w-1 h-8 bg-gray-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="w-1 h-8 bg-purple-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
           )}
 
           {/* AI Assistant Panel */}
           <div
-            className="bg-white flex-shrink-0 transition-all duration-300 overflow-hidden relative"
+            className="bg-[#0d1230] flex-shrink-0 transition-all duration-300 overflow-hidden relative"
             style={{
               width: isAiMinimized ? "48px" : `${aiPanelWidth}px`,
               minWidth: isAiMinimized ? "48px" : "250px",
@@ -1306,12 +1307,12 @@ const TutorialsDetailPage: React.FC = () => {
 
         {/* AI Tutorial Generation Modal */}
         {showAIModal && (
-          <div className="fixed inset-0 backdrop-blur-md bg-opacity-20 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
+          <div className="fixed inset-0 backdrop-blur-md bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#0d1230] rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all border border-[#1a1f3e]">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-purple-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -1328,7 +1329,7 @@ const TutorialsDetailPage: React.FC = () => {
                 <button
                   onClick={handleCloseAIModal}
                   disabled={isGenerating}
-                  className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+                  className="text-gray-400 hover:text-gray-200 transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   <svg
                     className="w-6 h-6"
@@ -1347,13 +1348,13 @@ const TutorialsDetailPage: React.FC = () => {
               </div>
 
               <div className="mb-6">
-                <p className="text-gray-600 mb-1">
+                <p className="text-gray-400 mb-1">
                   Creating{" "}
-                  <span className="font-semibold text-purple-600">
+                  <span className="font-semibold text-purple-400">
                     personal tutorial
                   </span>{" "}
                   for:{" "}
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-gray-200">
                     {language?.toUpperCase()}
                   </span>
                 </p>
@@ -1364,7 +1365,7 @@ const TutorialsDetailPage: React.FC = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Topic / Concept Name
                 </label>
                 <input
@@ -1384,7 +1385,7 @@ const TutorialsDetailPage: React.FC = () => {
                       : "Pointers and References"
                   }`}
                   disabled={isGenerating}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-[#1a1f3e] border border-[#2a3050] text-gray-200 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-[#0a0e27] disabled:cursor-not-allowed"
                   autoFocus
                 />
               </div>
@@ -1393,14 +1394,14 @@ const TutorialsDetailPage: React.FC = () => {
                 <button
                   onClick={handleCloseAIModal}
                   disabled={isGenerating}
-                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 bg-[#1a1f3e] text-gray-300 rounded-lg font-medium hover:bg-[#2a3050] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleGenerateTutorial}
                   disabled={isGenerating || !aiTopicInput.trim()}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isGenerating ? (
                     <>
@@ -1428,8 +1429,8 @@ const TutorialsDetailPage: React.FC = () => {
                 </button>
               </div>
 
-              <div className="mt-4 p-3 bg-purple-50 rounded-lg">
-                <p className="text-xs text-purple-800">
+              <div className="mt-4 p-3 bg-purple-900/30 rounded-lg border border-purple-500/30">
+                <p className="text-xs text-purple-300">
                   <span className="font-semibold">💡 Tip:</span> The AI will
                   generate a personal tutorial with examples and code snippets.
                   This tutorial will be saved to your account and you can edit
@@ -1445,4 +1446,3 @@ const TutorialsDetailPage: React.FC = () => {
 };
 
 export default TutorialsDetailPage;
-
