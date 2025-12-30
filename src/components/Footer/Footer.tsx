@@ -75,7 +75,7 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex gap-3">
-                <span className="text-[#00e676] font-mono">$</span>
+                <span className="text-[#00e676] font-mono pt-3">$</span>
                 <input
                   type="email"
                   placeholder="your.email@example.com"

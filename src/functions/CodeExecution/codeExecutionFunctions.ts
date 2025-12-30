@@ -43,23 +43,21 @@ console.log("Name:", person.name, "Age:", person.age);`,
   {
     id: "python",
     name: "Python",
-    defaultCode: `# Recursive function example
-def factorial(n):
-    if n <= 1:
-        return 1
-    return n * factorial(n - 1)
+    defaultCode: `# Simple Python examples
+def greet(name):
+    return f"Hello, {name}!"
 
-print("Factorial of 5:", factorial(5))
+# Call the function
+print(greet("Alice"))
 
-# While loop example
-count = 1
-while count <= 5:
-    print("Count:", count)
-    count += 1
+# Loop example
+for i in range(1, 6):
+    print(f"Number: {i}")
 
-# Dictionary example
-person = {"name": "Alice", "age": 30}
-print("Name:", person["name"], "Age:", person["age"])`,
+# List operations
+numbers = [1, 2, 3, 4, 5]
+doubled = [n * 2 for n in numbers]
+print("Doubled:", doubled)`,
   },
   {
     id: "cpp",

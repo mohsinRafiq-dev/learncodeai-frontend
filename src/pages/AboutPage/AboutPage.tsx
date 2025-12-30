@@ -173,13 +173,14 @@ const AboutPage: React.FC = () => {
               <div className="relative mb-6">
                 <div className="absolute inset-0 neon-border-cyan rounded-full blur-md opacity-50"></div>
                 <img
-                  src="/assets/aboutPage/asad.jpg"
-                  alt="Muhammad Asad Ullah Turab"
-                  className="relative w-24 h-24 rounded-full mx-auto neon-border-cyan"
+                  src="/assets/aboutPage/Muhammad Mohsin Rafiq.jpeg"
+                  alt="Muhammad Mohsin Rafiq"
+                  className="relative w-40 h-40 rounded-full mx-auto neon-border-cyan object-cover"
+                  style={{ imageRendering: "crisp-edges" }}
                 />
               </div>
               <h3 className="text-lg font-bold text-white mb-1">
-                Muhammad Asad Ullah Turab
+                Muhammad Mohsin Rafiq
               </h3>
               <p className="text-[#00b4d8] mb-3 font-mono text-sm">
                 {"<CEO & Founder />"}
@@ -209,12 +210,15 @@ const AboutPage: React.FC = () => {
               <div className="relative mb-6">
                 <div className="absolute inset-0 neon-border-purple rounded-full blur-md opacity-50"></div>
                 <img
-                  src="/assets/aboutPage/israr.jpg"
-                  alt="Israr Ahmad"
-                  className="relative w-24 h-24 rounded-full mx-auto neon-border-purple"
+                  src="/assets/aboutPage/Muhammad Bilal Nasir.jpeg"
+                  alt="Muhammad Bilal Nasir"
+                  className="relative w-40 h-40 rounded-full mx-auto neon-border-purple object-cover"
+                  style={{ imageRendering: "crisp-edges" }}
                 />
               </div>
-              <h3 className="text-lg font-bold text-white mb-1">Israr Ahmad</h3>
+              <h3 className="text-lg font-bold text-white mb-1">
+                Muhammad Bilal Nasir
+              </h3>
               <p className="text-[#8b5cf6] mb-3 font-mono text-sm">
                 {"{ CTO }"}
               </p>
@@ -243,13 +247,17 @@ const AboutPage: React.FC = () => {
               <div className="relative mb-6">
                 <div className="absolute inset-0 neon-border-green rounded-full blur-md opacity-50"></div>
                 <img
-                  src="/assets/aboutPage/saad.jpg"
-                  alt="Muhammad Saad"
-                  className="relative w-24 h-24 rounded-full mx-auto neon-border-green"
+                  src="/assets/aboutPage/Sonam Mursaleen.jpeg"
+                  alt="Sonam Mursaleen"
+                  className="relative w-40 h-40 rounded-full mx-auto neon-border-green object-cover"
+                  style={{
+                    imageRendering: "crisp-edges",
+                    objectPosition: "center 25%",
+                  }}
                 />
               </div>
               <h3 className="text-lg font-bold text-white mb-1">
-                Muhammad Saad
+                Sonam Mursaleen
               </h3>
               <p className="text-[#00e676] mb-3 font-mono text-sm">
                 {"[ Head of Education ]"}

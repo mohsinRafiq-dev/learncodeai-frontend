@@ -19,20 +19,42 @@ export interface ValidationError {
 export const checkPythonSyntax = (code: string): ValidationError[] => {
   const errors: ValidationError[] = [];
   const lines = code.split("\n");
+  
+  // Track bracket/parenthesis/brace balancing
+  let openParens = 0;
+  let openBrackets = 0;
+  let openBraces = 0;
+  const indentStack: number[] = [0];
 
   lines.forEach((line, index) => {
     const lineNum = index + 1;
     const trimmed = line.trim();
+    
+    // Skip empty lines
+    if (!trimmed) return;
+    
+    // Skip full-line comments
+    if (trimmed.startsWith("#")) return;
 
-    // Skip empty lines and comments
-    if (!trimmed || trimmed.startsWith("#")) return;
+    // Get the actual indentation (count spaces at beginning)
+    const indent = line.match(/^ */)?.[0].length || 0;
+    
+    // Check indentation consistency (must be multiple of 4 or consistent with previous)
+    if (indent % 4 !== 0 && indent > 0) {
+      errors.push({
+        message: "IndentationError: indentation should be a multiple of 4 spaces",
+        line: lineNum,
+        column: 1,
+      });
+    }
 
     // Check for missing colons at end of control structures
     if (
       trimmed.match(
         /^(if|elif|while|for|def|class|with|try|except|finally|else)\s+/
       ) &&
-      !trimmed.endsWith(":")
+      !trimmed.endsWith(":") &&
+      !trimmed.endsWith("\\")
     ) {
       errors.push({
         message: `SyntaxError: expected ":" at end of ${
@@ -43,53 +65,166 @@ export const checkPythonSyntax = (code: string): ValidationError[] => {
       });
     }
 
-    // Check for potential invalid syntax patterns
-    if (trimmed.match(/^\w+\s*=\s*\(\s*\)$/) && !trimmed.includes('tuple')) {
+    // Check for unclosed strings
+    let inString = false;
+    let stringChar = '';
+    let escaped = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      
+      if (char === '\\') {
+        escaped = true;
+        continue;
+      }
+      
+      if ((char === '"' || char === "'") && !inString) {
+        // Check for triple quotes
+        if (line.substring(i, i + 3) === '"""' || line.substring(i, i + 3) === "'''") {
+          // Skip triple-quoted strings
+          const tripleQuote = line.substring(i, i + 3);
+          const closeIndex = line.indexOf(tripleQuote, i + 3);
+          if (closeIndex === -1) {
+            // Unclosed triple quote (might span multiple lines, but flag it)
+            errors.push({
+              message: "SyntaxError: unterminated triple-quoted string literal",
+              line: lineNum,
+              column: i + 1,
+            });
+          } else {
+            i = closeIndex + 2; // Skip to end of triple quote
+          }
+          continue;
+        }
+        inString = true;
+        stringChar = char;
+      } else if (char === stringChar && inString) {
+        inString = false;
+        stringChar = '';
+      } else if (!inString) {
+        // Count brackets outside strings
+        if (char === '(') openParens++;
+        else if (char === ')') openParens--;
+        else if (char === '[') openBrackets++;
+        else if (char === ']') openBrackets--;
+        else if (char === '{') openBraces++;
+        else if (char === '}') openBraces--;
+      }
+    }
+    
+    // Check if string is still open at end of line
+    if (inString && !line.trimEnd().endsWith('\\')) {
       errors.push({
-        message: "SyntaxError: invalid assignment - empty parentheses",
+        message: `SyntaxError: unterminated string literal (${stringChar === '"' ? 'double' : 'single'} quote)`,
+        line: lineNum,
+        column: line.indexOf(stringChar) + 1,
+      });
+    }
+
+    // Check for invalid operators
+    if (trimmed.match(/\b(and|or|not)\b.*[&|!]/)) {
+      errors.push({
+        message: "SyntaxError: mixing Python logical operators with C-style operators (use 'and', 'or', 'not')",
         line: lineNum,
         column: 1,
       });
     }
 
-    // Check for standalone identifiers (potential undefined variables)
-    if (trimmed.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/) && 
-        !trimmed.match(/^(True|False|None|self|__name__|__main__)$/)) {
+    // Check for common mistakes
+    if (trimmed.match(/\belsif\b/)) {
       errors.push({
-        message: `NameError: potential undefined variable '${trimmed}'`,
+        message: "SyntaxError: 'elsif' is not valid in Python, use 'elif'",
+        line: lineNum,
+        column: trimmed.indexOf('elsif') + 1,
+      });
+    }
+
+    if (trimmed.match(/\bswitch\b/)) {
+      errors.push({
+        message: "SyntaxError: 'switch' is not valid in Python, use 'if-elif-else' or 'match' (Python 3.10+)",
+        line: lineNum,
+        column: trimmed.indexOf('switch') + 1,
+      });
+    }
+
+    // Check for assignment in condition (common mistake)
+    // Match single = but not ==, !=, <=, >=
+    if (trimmed.match(/^if\s+.*[^=!<>]=[^=]/)) {
+      errors.push({
+        message: "SyntaxError: invalid syntax - did you mean '==' for comparison?",
+        line: lineNum,
+        column: trimmed.indexOf('=') + 1,
+      });
+    }
+
+    // Check for missing commas in lists/tuples (basic check)
+    if (trimmed.match(/\[\s*\w+\s+\w+/) || trimmed.match(/\(\s*\w+\s+\w+/)) {
+      if (!trimmed.includes(',') && !trimmed.includes('+') && !trimmed.includes('-')) {
+        errors.push({
+          message: "SyntaxError: missing comma between items",
+          line: lineNum,
+          column: 1,
+        });
+      }
+    }
+
+    // Check for print statement vs print function
+    if (trimmed.match(/^print\s+[^(]/)) {
+      errors.push({
+        message: "SyntaxError: print is a function in Python 3, use print(...)",
         line: lineNum,
         column: 1,
-      });
-    }
-
-    // Check for unterminated string literals
-    const singleQuotes = (line.match(/'/g) || []).length;
-    const doubleQuotes = (line.match(/"/g) || []).length;
-
-    if (
-      singleQuotes % 2 !== 0 &&
-      !line.includes('"""') &&
-      !line.includes("'''")
-    ) {
-      errors.push({
-        message: "SyntaxError: unterminated string literal (single quote)",
-        line: lineNum,
-        column: line.indexOf("'") + 1,
-      });
-    }
-
-    if (
-      doubleQuotes % 2 !== 0 &&
-      !line.includes('"""') &&
-      !line.includes("'''")
-    ) {
-      errors.push({
-        message: "SyntaxError: unterminated string literal (double quote)",
-        line: lineNum,
-        column: line.indexOf('"') + 1,
       });
     }
   });
+
+  // Check for unmatched brackets at end
+  if (openParens > 0) {
+    errors.push({
+      message: "SyntaxError: unmatched '(' - missing closing parenthesis",
+      line: lines.length,
+      column: 1,
+    });
+  } else if (openParens < 0) {
+    errors.push({
+      message: "SyntaxError: unmatched ')' - extra closing parenthesis",
+      line: lines.length,
+      column: 1,
+    });
+  }
+
+  if (openBrackets > 0) {
+    errors.push({
+      message: "SyntaxError: unmatched '[' - missing closing bracket",
+      line: lines.length,
+      column: 1,
+    });
+  } else if (openBrackets < 0) {
+    errors.push({
+      message: "SyntaxError: unmatched ']' - extra closing bracket",
+      line: lines.length,
+      column: 1,
+    });
+  }
+
+  if (openBraces > 0) {
+    errors.push({
+      message: "SyntaxError: unmatched '{' - missing closing brace",
+      line: lines.length,
+      column: 1,
+    });
+  } else if (openBraces < 0) {
+    errors.push({
+      message: "SyntaxError: unmatched '}' - extra closing brace",
+      line: lines.length,
+      column: 1,
+    });
+  }
 
   return errors;
 };
