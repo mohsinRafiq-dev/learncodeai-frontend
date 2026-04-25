@@ -19,6 +19,7 @@ import AboutPage from "./pages/AboutPage/AboutPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import QuizzesPage from "./pages/QuizzesPage/QuizzesPage";
 import DiscussionPage from "./pages/DiscussionPage/DiscussionPage";
+import GamificationPage from "./pages/GamificationPage/GamificationPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 
 function App() {
@@ -88,6 +89,14 @@ function App() {
               }
             />
             <Route path="/discussions" element={<DiscussionPage />} />
+            <Route
+              path="/gamification"
+              element={
+                <ProtectedRoute>
+                  <GamificationPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
           {/* Admin routes without Layout (no navbar) */}
           <Route

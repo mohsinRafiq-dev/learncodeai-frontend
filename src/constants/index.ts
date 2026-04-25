@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
   GOOGLE_OAUTH: '/auth/google',
   GITHUB_OAUTH: '/auth/github',
   CODE_EXECUTE: '/code/execute',
+  GAMIFICATION: '/gamification/',
 } as const;
 
 // Routes
@@ -27,6 +28,7 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
   TUTORIALS: '/tutorials',
   QUIZZES: '/quizzes',
+  GAMIFICATION: '/gamification',
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin',
   ADMIN_USERS: '/admin/users',
