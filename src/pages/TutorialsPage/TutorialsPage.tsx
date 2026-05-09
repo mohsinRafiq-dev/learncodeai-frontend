@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, BookOpen } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import {
   fetchMainConcepts,
   type MainConcepts,
 } from "../../functions/TutorialFunctions/tutorialFunctions";
-import {
-  getAllCourses,
-  type Course,
-} from "../../functions/CourseFunctions/courseFunctions";
 import { getProfile } from "../../functions/ProfileFunctions/profileFunctions";
 import { useAuth } from "../../hooks/useAuth";
 import LanguageCard from "./Components/LanguageCard";
-import CourseCard from "./Components/CourseCard";
 
 const TutorialsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +17,6 @@ const TutorialsPage: React.FC = () => {
     javascript: [],
     cpp: [],
   });
-  const [courses, setCourses] = useState<Course[]>([]);
   const [userLanguages, setUserLanguages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,10 +34,6 @@ const TutorialsPage: React.FC = () => {
       // Load tutorials data
       const conceptsData = await fetchMainConcepts();
       setMainConcepts(conceptsData);
-
-      // Load courses data
-      const coursesResponse = await getAllCourses({ limit: 8 });
-      setCourses(coursesResponse.data);
 
       // Load user profile to get programming languages (if authenticated)
       if (isAuthenticated) {
@@ -67,10 +57,6 @@ const TutorialsPage: React.FC = () => {
 
   const handleLanguageClick = (language: string) => {
     navigate(`/tutorials/${language}`);
-  };
-
-  const handleCourseClick = (courseId: string) => {
-    navigate(`/courses/${courseId}`);
   };
 
   const getLanguages = () => {
@@ -173,7 +159,7 @@ const TutorialsPage: React.FC = () => {
         </div>
 
         {/* Programming Languages Section */}
-        <section className="mb-16">
+        <section className="mb-12">
           <h2 className="text-3xl font-bold mb-8 text-center">
             <span className="text-[#6272a4]">{"const "}</span>
             <span className="neon-text-green">languages</span>
@@ -195,54 +181,10 @@ const TutorialsPage: React.FC = () => {
           <p className="text-center text-[#6272a4] mt-8 font-mono">{"];"}</p>
         </section>
 
-        {/* Comprehensive Courses Section */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-center">
-            <span className="text-[#6272a4]">{"const "}</span>
-            <span className="neon-text-purple">courses</span>
-            <span className="text-[#6272a4]">{" = ["}</span>
-          </h2>
-          <p className="text-center text-[#6272a4] mb-8 max-w-2xl mx-auto font-mono">
-            <span className="text-[#00b4d8]">{"// "}</span>
-            Deep dive into structured courses with lessons, quizzes, and
-            certificates
-          </p>
-
-          {courses.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                {courses.map((course) => (
-                  <CourseCard
-                    key={course._id}
-                    course={course}
-                    onClick={() => handleCourseClick(course._id)}
-                  />
-                ))}
-              </div>
-              <p className="text-center text-[#6272a4] mt-8 font-mono">
-                {"];"}
-              </p>
-            </>
-          ) : (
-            <div className="terminal-window backdrop-blur-xl p-12 max-w-2xl mx-auto text-center">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#00b4d8]/10 flex items-center justify-center neon-border-cyan">
-                <BookOpen className="w-10 h-10 text-[#00b4d8]" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#00b4d8] mb-2 font-mono">
-                {"// No courses yet"}
-              </h3>
-              <p className="text-[#6272a4] font-mono">
-                Check back later for new courses!
-              </p>
-            </div>
-          )}
-        </section>
-
         {/* Footer Note */}
         <div className="text-center text-[#6272a4] text-sm max-w-3xl mx-auto pt-8 border-t border-[#00b4d8]/20 font-mono">
           <span className="text-[#00b4d8]">{"/* "}</span>
-          Each course contains detailed theory, practical examples, code
-          snippets, and quizzes
+          Choose a language to explore focused tutorials and concepts
           <span className="text-[#00b4d8]">{" */"}</span>
         </div>
       </div>

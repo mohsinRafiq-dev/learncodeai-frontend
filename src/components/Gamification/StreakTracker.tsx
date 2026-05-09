@@ -19,6 +19,13 @@ const StreakTracker: React.FC<{
 
   const currentStreak = streak.currentStreak || 0;
   const longestStreak = streak.longestStreak || 0;
+  const formatUtcDate = (dateValue: string | Date) =>
+    new Date(dateValue).toLocaleDateString(undefined, {
+      timeZone: "UTC",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
   // Generate calendar days for the past month
   const today = new Date();
@@ -73,7 +80,7 @@ const StreakTracker: React.FC<{
             <div className="flex items-center justify-between p-3 bg-red-900/20 rounded-lg">
               <span className="text-red-100">Last Activity</span>
               <span className="text-red-300">
-                {new Date(streak.lastActivityDate).toLocaleDateString()}
+                {formatUtcDate(streak.lastActivityDate)}
               </span>
             </div>
           )}
@@ -82,7 +89,7 @@ const StreakTracker: React.FC<{
             <div className="flex items-center justify-between p-3 bg-red-900/20 rounded-lg">
               <span className="text-red-100">Streak Started</span>
               <span className="text-red-300">
-                {new Date(streak.streakStartDate).toLocaleDateString()}
+                {formatUtcDate(streak.streakStartDate)}
               </span>
             </div>
           )}

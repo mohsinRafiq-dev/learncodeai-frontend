@@ -206,7 +206,16 @@ const AIChatAssistant: React.FC<AIChatAssistantProps> = ({
       )}
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#1a1f3e]">
-        <h2 className="font-semibold text-gray-200 text-sm">AI Assistant</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="font-semibold text-gray-200 text-sm">AI Assistant</h2>
+          <span className="flex items-center gap-1 text-[10px] text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded-full border border-green-500/30">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400"></span>
+            </span>
+            24/7
+          </span>
+        </div>
         <button
           onClick={async () => {
             if (window.confirm("Are you sure you want to clear all chats?")) {

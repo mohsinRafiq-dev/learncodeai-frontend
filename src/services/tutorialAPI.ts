@@ -69,7 +69,7 @@ export const tutorialAPI = {
 
   // Update tutorial progress
   updateTutorialProgress: async (tutorialId: string, completed: boolean, notes?: string) => {
-    const response = await api.put(`/tutorials/progress/${tutorialId}`, { completed, notes });
+    const response = await api.put(`/tutorials/progress/${tutorialId}`, { isCompleted: completed, notes });
     return response.data;
   },
 

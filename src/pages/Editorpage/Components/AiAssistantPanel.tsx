@@ -5,6 +5,7 @@ import {
   getCodeChatHistory,
   clearCodeChats,
 } from "../../../services/codeChatAPI";
+import { getCodeOptimization } from "../../../services/codeHelpAPI";
 import { formatMarkdownText } from "../../../utils/markdownFormatterHTML";
 
 interface Message {
@@ -12,7 +13,7 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
-  type?: "error-help" | "problem-help" | "question" | "regular";
+  type?: "error-help" | "problem-help" | "question" | "optimization" | "regular";
 }
 
 interface AiAssistantPanelProps {
@@ -247,6 +248,31 @@ function AiAssistantPanel({
     }
   };
 
+  const handleOptimizeCode = async () => {
+    if (!code || !code.trim()) {
+      addMessage("Please write some code first before asking for optimization.", false, "regular");
+      return;
+    }
+
+    addMessage("🚀 Please review my code and suggest optimizations.", true, "optimization");
+    setIsLoading(true);
+
+    try {
+      const suggestions = await getCodeOptimization(code, language);
+      addMessage(suggestions, false, "optimization");
+    } catch (err) {
+      addMessage(
+        `Couldn't optimize the code at this time. ${
+          err instanceof Error ? err.message : "Please try again later."
+        }`,
+        false,
+        "regular"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col bg-[#0d1230] overflow-hidden max-h-screen h-full w-full">
       {/* Assistant Header */}
@@ -284,6 +310,8 @@ function AiAssistantPanel({
                   ? "bg-[#e91e63]/10 text-gray-200 border border-[#e91e63]/30"
                   : message.type === "problem-help"
                   ? "bg-[#ff9800]/10 text-gray-200 border border-[#ff9800]/30"
+                  : message.type === "optimization"
+                  ? "bg-[#00e676]/10 text-gray-200 border border-[#00e676]/30"
                   : "bg-[#1a1f3e] text-gray-200 border border-[#2a3050]"
               }`}
             >
@@ -336,6 +364,19 @@ function AiAssistantPanel({
             className="w-full bg-gradient-to-r from-[#ff9800] to-[#ffb74d] hover:from-[#f57c00] hover:to-[#ff9800] disabled:from-gray-600 disabled:to-gray-700 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1 shadow-lg shadow-orange-500/20"
           >
             💡 Ask for Hint
+          </button>
+        </div>
+      ) : code && code.trim().length > 10 ? (
+        <div className="px-3 py-2 border-t-2 border-[#00e676] bg-[#00e676]/10 flex flex-col gap-2 flex-shrink-0">
+          <div className="text-xs text-[#00e676] font-semibold">
+            Code Analysis Available:
+          </div>
+          <button
+            onClick={handleOptimizeCode}
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-[#00c853] to-[#69f0ae] hover:from-[#00b248] hover:to-[#00c853] disabled:from-gray-600 disabled:to-gray-700 text-white text-sm py-2 px-3 rounded transition-colors font-bold flex items-center justify-center gap-1 shadow-lg shadow-green-500/20"
+          >
+            🚀 Optimize Code
           </button>
         </div>
       ) : null}

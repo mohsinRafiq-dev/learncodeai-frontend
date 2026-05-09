@@ -114,7 +114,7 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
       <div className="max-w-5xl mx-auto px-8 py-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading quiz...</p>
+          <p className="text-gray-300 text-lg">Loading quiz...</p>
         </div>
       </div>
     );
@@ -123,12 +123,12 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
   if (error || !quiz) {
     return (
       <div className="max-w-5xl mx-auto px-8 py-8">
-        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
+        <div className="bg-[#0d1230] rounded-2xl shadow-lg p-8 border border-[#1a1f3e] text-center">
           <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-100 mb-2">
             Quiz Not Available
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-300 mb-6">
             {error || "This quiz could not be loaded."}
           </p>
           <button
@@ -158,10 +158,10 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
         >
           <div className="text-center">
             <div className="text-6xl mb-4">{passed ? "🎉" : "📚"}</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-gray-100 mb-2">
               {passed ? "Congratulations!" : "Keep Learning"}
             </h2>
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-lg text-gray-200 mb-6">
               {passed
                 ? "You passed the quiz!"
                 : "You didn't pass this time, but don't give up!"}
@@ -169,19 +169,19 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
             <div className="flex items-center justify-center space-x-8">
               <div>
                 <p className="text-sm text-gray-600">Your Score</p>
-                <p className="text-4xl font-bold text-gray-900">
+                <p className="text-4xl font-bold text-gray-100">
                   {result.score}%
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Passing Score</p>
-                <p className="text-4xl font-bold text-gray-900">
+                <p className="text-4xl font-bold text-gray-100">
                   {quiz.passingScore}%
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Attempts</p>
-                <p className="text-4xl font-bold text-gray-900">
+                <p className="text-4xl font-bold text-gray-100">
                   {result.attemptCount}
                 </p>
               </div>
@@ -190,8 +190,8 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
         </div>
 
         {/* Detailed Results */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-6">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="bg-[#0d1230] rounded-2xl shadow-lg p-8 border border-[#1a1f3e] mb-6">
+          <h3 className="text-2xl font-bold text-gray-100 mb-6">
             Question Results
           </h3>
           <div className="space-y-6">
@@ -205,7 +205,7 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h4 className="font-semibold text-gray-900 flex-1">
+                  <h4 className="font-semibold text-gray-100 flex-1">
                     {index + 1}. {questionResult.question}
                   </h4>
                   <span
@@ -218,12 +218,12 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                     {questionResult.isCorrect ? "✓ Correct" : "✗ Incorrect"}
                   </span>
                 </div>
-                <p className="text-gray-700 mb-2">
+                <p className="text-gray-200 mb-2">
                   <span className="font-medium">Your Answer:</span>{" "}
                   {questionResult.userAnswer}
                 </p>
                 {questionResult.explanation && (
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-300 text-sm">
                     <span className="font-medium">Explanation:</span>{" "}
                     {questionResult.explanation}
                   </p>
@@ -274,11 +274,11 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
     <div className="max-w-5xl mx-auto px-8 py-8">
       {/* Quiz Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{quiz?.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-100 mb-2">{quiz?.title}</h1>
         {quiz?.description && (
-          <p className="text-gray-600">{quiz.description}</p>
+          <p className="text-gray-300">{quiz.description}</p>
         )}
-        <div className="mt-4 flex items-center space-x-6 text-sm text-gray-600">
+        <div className="mt-4 flex items-center space-x-6 text-sm text-gray-300">
           <span>
             <strong>{quiz?.questions?.length || 0}</strong> Questions
           </span>
@@ -294,13 +294,13 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
       </div>
 
       {/* Quiz Questions */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-6">
+      <div className="bg-[#0d1230] rounded-2xl shadow-lg p-8 border border-[#1a1f3e] mb-6">
         <div className="space-y-8">
           {quiz.questions && quiz.questions.length > 0 ? quiz.questions.map((question, index) => (
             <div key={question._id} className="pb-8 border-b border-gray-200 last:border-b-0 last:pb-0">
-              <h3 className="font-semibold text-lg text-gray-900 mb-4">
+              <h3 className="font-semibold text-lg text-gray-100 mb-4">
                 {index + 1}. {question.question}
-                <span className="ml-2 text-sm text-gray-500 font-normal">
+                <span className="ml-2 text-sm text-gray-400 font-normal">
                   ({question.points} {question.points === 1 ? "point" : "points"})
                 </span>
               </h3>
@@ -315,7 +315,7 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                       className={`flex items-start p-4 rounded-lg border cursor-pointer transition-colors ${
                         answers[question._id] === option.text
                           ? "bg-indigo-50 border-indigo-300"
-                          : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                          : "bg-[#1a1f3e] border-[#2a3050] hover:bg-[#252b52]"
                       }`}
                     >
                       <input
@@ -328,7 +328,7 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                         }
                         className="mt-1 mr-3"
                       />
-                      <span className="text-gray-700">{option.text}</span>
+                      <span className="text-gray-200">{option.text}</span>
                     </label>
                   ))}
                 </div>
@@ -343,7 +343,7 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                     handleAnswerChange(question._id, e.target.value)
                   }
                   placeholder="Enter your answer..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-[#1a1f3e] border border-[#2a3050] text-gray-100 rounded-lg focus:ring-2 focus:ring-[#00b4d8] focus:border-transparent"
                 />
               )}
 
@@ -356,21 +356,21 @@ const QuizViewer: React.FC<QuizViewerProps> = ({
                   }
                   placeholder="Write your code here..."
                   rows={10}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                  className="w-full px-4 py-3 bg-[#1a1f3e] border border-[#2a3050] text-gray-100 rounded-lg focus:ring-2 focus:ring-[#00b4d8] focus:border-transparent font-mono text-sm"
                 />
               )}
             </div>
           )) : (
-            <p className="text-gray-600">No questions available for this quiz.</p>
+            <p className="text-gray-300">No questions available for this quiz.</p>
           )}
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div className="flex items-center justify-between bg-[#0d1230] rounded-xl shadow-lg p-6 border border-[#1a1f3e]">
         <button
           onClick={onBack}
-          className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors"
+          className="px-6 py-3 bg-[#1a1f3e] hover:bg-[#252b52] text-gray-200 rounded-lg font-semibold transition-colors"
         >
           ← Back
         </button>

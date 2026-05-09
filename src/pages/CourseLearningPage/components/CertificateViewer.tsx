@@ -161,7 +161,7 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
       <div className="max-w-5xl mx-auto px-8 py-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading certificate...</p>
+          <p className="text-gray-300 text-lg">Loading certificate...</p>
         </div>
       </div>
     );
@@ -207,27 +207,27 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
       </div>
 
       {/* Course Completion Summary */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6">
+      <div className="bg-[#0d1230] rounded-2xl shadow-lg p-8 border border-[#1a1f3e] mb-6">
+        <h3 className="text-2xl font-bold text-gray-100 mb-6">
           Course Completion Summary
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div>
-              <p className="text-sm text-gray-600">Course Title</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-gray-400">Course Title</p>
+              <p className="text-lg font-semibold text-gray-100">
                 {course.title}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Instructor</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-gray-400">Instructor</p>
+              <p className="text-lg font-semibold text-gray-100">
                 {course.instructor?.name || 'Unknown Instructor'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Completion Date</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-gray-400">Completion Date</p>
+              <p className="text-lg font-semibold text-gray-100">
                 {enrollment.completionDate
                   ? new Date(enrollment.completionDate).toLocaleDateString()
                   : enrollment.status === "completed"
@@ -238,14 +238,14 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
           </div>
           <div className="space-y-3">
             <div>
-              <p className="text-sm text-gray-600">Progress</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-gray-400">Progress</p>
+              <p className="text-lg font-semibold text-gray-100">
                 {enrollment.overallProgress}%
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Final Quiz Score</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-gray-400">Final Quiz Score</p>
+              <p className="text-lg font-semibold text-gray-100">
                 {enrollment.finalQuizScore?.score !== undefined
                   ? `${enrollment.finalQuizScore.score}%`
                   : enrollment.status === "completed"
@@ -254,8 +254,8 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Certificate Template</p>
-              <p className="text-lg font-semibold text-gray-900 capitalize">
+              <p className="text-sm text-gray-400">Certificate Template</p>
+              <p className="text-lg font-semibold text-gray-100 capitalize">
                 {course.certificateTemplate}
               </p>
             </div>
@@ -265,8 +265,8 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
 
       {/* Certificate Preview (if approved) */}
       {certificate?.status === "approved" && (
-        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-6">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="bg-[#0d1230] rounded-2xl shadow-lg p-8 border border-[#1a1f3e] mb-6">
+          <h3 className="text-2xl font-bold text-gray-100 mb-6">
             Certificate Preview
           </h3>
           <div className="border-4 border-amber-400 rounded-xl p-12 bg-gradient-to-br from-amber-50 to-yellow-50">
@@ -316,7 +316,7 @@ const CertificateViewer: React.FC<CertificateViewerProps> = ({
       <div className="flex items-center justify-center space-x-4">
         <button
           onClick={onBackToCourse}
-          className="px-8 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-lg transition-colors"
+          className="px-8 py-4 bg-[#1a1f3e] hover:bg-[#252b52] text-gray-200 rounded-lg font-semibold text-lg transition-colors"
         >
           Back to Course
         </button>

@@ -63,6 +63,12 @@ export const gamificationAPI = {
     });
     return response.data;
   },
+
+  // Refresh streak (force update)
+  refreshStreak: async () => {
+    const response = await api.get("/gamification/streak/refresh/now");
+    return response.data;
+  },
 };
 
 export default gamificationAPI;

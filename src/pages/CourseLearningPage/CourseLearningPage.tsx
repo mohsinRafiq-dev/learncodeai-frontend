@@ -280,6 +280,22 @@ const CourseLearningPage: React.FC = () => {
     setViewMode("quiz");
   };
 
+  const handleFinalQuizSelect = () => {
+    if (!course?.finalQuiz) return;
+
+    if (!isFinalQuizUnlocked()) {
+      showToast(
+        "Complete all section quizzes before taking the final quiz.",
+        "warning"
+      );
+      return;
+    }
+
+    setSelectedSection(null);
+    setSelectedQuiz(course.finalQuiz);
+    setViewMode("quiz");
+  };
+
   const handleLessonComplete = async () => {
     if (!courseId || !selectedSection || !selectedLesson) return;
 
@@ -361,7 +377,19 @@ const CourseLearningPage: React.FC = () => {
   };
 
   const handlePreviousLesson = () => {
-    if (!course || !selectedSection) return;
+    if (!course) return;
+
+    if (viewMode === "quiz" && selectedQuiz?.type === "final-quiz") {
+      const lastSection = course.sections[course.sections.length - 1];
+      if (lastSection?.sectionQuiz) {
+        handleQuizSelect(lastSection);
+      } else if (lastSection?.lessons?.length) {
+        handleLessonSelect(lastSection, lastSection.lessons[lastSection.lessons.length - 1]);
+      }
+      return;
+    }
+
+    if (!selectedSection) return;
 
     if (viewMode === "quiz") {
       // Go back to last lesson of section
@@ -406,16 +434,32 @@ const CourseLearningPage: React.FC = () => {
     // Reload course data to get updated progress
     if (!courseId) return;
 
+    let refreshedEnrollment: CourseEnrollment | null = null;
     try {
       const courseResponse = await getCourseById(courseId);
       setEnrollment(courseResponse.enrollment || null);
+      refreshedEnrollment = courseResponse.enrollment || null;
 
       if (courseResponse.enrollment) {
         const enrollmentResponse = await getEnrollmentDetails(courseId);
         setEnrollment(enrollmentResponse.data);
+        refreshedEnrollment = enrollmentResponse.data;
       }
     } catch (err) {
       console.error("Error reloading course data:", err);
+    }
+
+    // Final quiz path: show certificate if issued, otherwise notify.
+    if (selectedQuiz?.type === "final-quiz") {
+      if (refreshedEnrollment?.certificateIssued) {
+        setViewMode("certificate");
+      } else {
+        showToast(
+          "Final quiz submitted. If all requirements are met, your certificate will appear here.",
+          "success"
+        );
+      }
+      return;
     }
 
     // Move to next section or show certificate
@@ -433,7 +477,7 @@ const CourseLearningPage: React.FC = () => {
       }
     } else {
       // Course completed - check for certificate
-      if (enrollment?.certificateIssued) {
+      if (refreshedEnrollment?.certificateIssued) {
         setViewMode("certificate");
       } else {
         showToast(
@@ -463,12 +507,12 @@ const CourseLearningPage: React.FC = () => {
     if (!enrollment?.sectionProgress) return false;
 
     const sectionProgress = enrollment.sectionProgress.find(
-      (sp: any) => sp.section === sectionId
+      (sp: any) => String(sp.section) === String(sectionId)
     );
     if (!sectionProgress) return false;
 
     return sectionProgress.lessons.some(
-      (lp: any) => lp.lesson === lessonId && lp.isCompleted
+      (lp: any) => String(lp.lesson) === String(lessonId) && lp.isCompleted
     );
   };
 
@@ -476,7 +520,7 @@ const CourseLearningPage: React.FC = () => {
     if (!enrollment?.sectionProgress) return false;
 
     const sectionProgress = enrollment.sectionProgress.find(
-      (sp: any) => sp.section === sectionId
+      (sp: any) => String(sp.section) === String(sectionId)
     );
     return sectionProgress?.sectionQuizScore?.passed || false;
   };
@@ -523,12 +567,17 @@ const CourseLearningPage: React.FC = () => {
     return true;
   };
 
+  const isFinalQuizUnlocked = (): boolean => {
+    if (!course?.sections?.length) return false;
+    return course.sections.every((section) => isSectionQuizCompleted(section._id));
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
         <div className="text-center">
           <svg
-            className="animate-spin h-12 w-12 text-indigo-600 mx-auto mb-4"
+            className="animate-spin h-12 w-12 text-[#00b4d8] mx-auto mb-4"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -546,7 +595,7 @@ const CourseLearningPage: React.FC = () => {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <p className="text-gray-600 text-lg">Loading course...</p>
+          <p className="text-[#6272a4] text-lg">Loading course...</p>
         </div>
       </div>
     );
@@ -554,8 +603,8 @@ const CourseLearningPage: React.FC = () => {
 
   if (error || !course) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
+        <div className="text-center bg-[#0d1230] border border-[#1a1f3e] rounded-2xl shadow-xl p-8 max-w-md mx-4">
           <svg
             className="w-20 h-20 text-red-500 mx-auto mb-4"
             fill="none"
@@ -569,12 +618,12 @@ const CourseLearningPage: React.FC = () => {
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
             />
           </svg>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-100 mb-2">
             Something went wrong
           </h2>
-          <p className="text-gray-600 mb-6">{error || "Course not found"}</p>
+          <p className="text-[#6272a4] mb-6">{error || "Course not found"}</p>
           <button
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-[#00b4d8] hover:bg-[#0096c7] text-[#0a0e27] px-6 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
             onClick={() => navigate("/tutorials")}
           >
             Try Again
@@ -587,15 +636,15 @@ const CourseLearningPage: React.FC = () => {
   // If not enrolled, show enrollment page
   if (!enrollment) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center p-4">
+        <div className="bg-[#0d1230] border border-[#1a1f3e] rounded-2xl shadow-xl p-8 max-w-2xl w-full">
+          <h1 className="text-3xl font-bold text-gray-100 mb-4">
             {course.title}
           </h1>
-          <p className="text-gray-600 mb-6">{course.description}</p>
+          <p className="text-[#6272a4] mb-6">{course.description}</p>
 
           <div className="flex flex-wrap gap-4 mb-6">
-            <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="bg-[#1a1f3e] text-[#00b4d8] px-3 py-1 rounded-full text-sm font-medium border border-[#00b4d8]/30">
               {course.language.toUpperCase()}
             </span>
             <span
@@ -609,7 +658,7 @@ const CourseLearningPage: React.FC = () => {
             >
               {course.difficulty}
             </span>
-            <span className="text-gray-700 flex items-center gap-1">
+            <span className="text-[#cbd5e1] flex items-center gap-1">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -625,7 +674,7 @@ const CourseLearningPage: React.FC = () => {
               </svg>
               {course.estimatedHours}h
             </span>
-            <span className="text-gray-700 flex items-center gap-1">
+            <span className="text-[#cbd5e1] flex items-center gap-1">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -645,16 +694,16 @@ const CourseLearningPage: React.FC = () => {
 
           <button
             onClick={handleEnroll}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition-colors mb-4"
+            className="w-full bg-[#00b4d8] hover:bg-[#0096c7] text-[#0a0e27] py-3 rounded-lg font-semibold transition-colors mb-4 cursor-pointer"
           >
             Enroll in Course
           </button>
 
           <button
             onClick={handleBackClick}
-            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
+            className="w-full bg-[#1a1f3e] hover:bg-[#252b52] text-[#cbd5e1] py-3 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            Back to Tutorials
+            Back to Courses
           </button>
         </div>
       </div>
@@ -675,7 +724,7 @@ const CourseLearningPage: React.FC = () => {
 
       <div
         ref={containerRef}
-        className="flex h-screen bg-gray-50 overflow-hidden overflow-x-hidden"
+        className="flex h-screen bg-[#0a0e27] overflow-hidden overflow-x-hidden"
       >
         {/* AI Panel Toggle Button */}
         <button
@@ -763,7 +812,7 @@ const CourseLearningPage: React.FC = () => {
 
         {/* Left Sidebar */}
         <div
-          className="bg-white border-r border-gray-200 overflow-hidden flex flex-col transition-all duration-300"
+          className="bg-[#0d1230] border-r border-[#1a1f3e] overflow-hidden flex flex-col transition-all duration-300"
           style={{
             width: isLeftMinimized ? "48px" : `${leftSidebarWidth}px`,
             minWidth: isLeftMinimized ? "48px" : "250px",
@@ -778,7 +827,7 @@ const CourseLearningPage: React.FC = () => {
                   placeholder="Filter sections"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 text-sm bg-[#1a1f3e] border border-[#2a3050] text-gray-200 placeholder-gray-500 rounded-lg focus:outline-none focus:border-[#00b4d8]"
                 />
               </div>
 
@@ -812,7 +861,7 @@ const CourseLearningPage: React.FC = () => {
                         {/* Section Header */}
                         <button
                           onClick={() => toggleSection(section._id)}
-                          className="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-semibold text-gray-900 transition-colors text-left"
+                          className="w-full flex items-center p-3 bg-[#1a1f3e] hover:bg-[#252b52] rounded-lg text-sm font-semibold text-gray-100 transition-colors text-left"
                         >
                           <span className="flex items-center gap-2">
                             <svg
@@ -861,12 +910,12 @@ const CourseLearningPage: React.FC = () => {
                                   disabled={!isUnlocked}
                                   className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
                                     isCurrent
-                                      ? "bg-blue-50 border border-blue-200 text-blue-800 font-medium"
+                                      ? "bg-[#132844] border border-[#00b4d8]/40 text-[#7dd3fc] font-medium"
                                       : isCompleted
-                                      ? "bg-green-50 text-green-700 hover:bg-green-100"
+                                      ? "bg-[#0f2a1c] text-green-300 hover:bg-[#143523]"
                                       : !isUnlocked
                                       ? "text-gray-400 cursor-not-allowed opacity-60"
-                                      : "text-gray-700 hover:bg-gray-50"
+                                      : "text-gray-300 hover:bg-[#1a1f3e]"
                                   }`}
                                 >
                                   <div className="flex items-center justify-between">
@@ -928,12 +977,12 @@ const CourseLearningPage: React.FC = () => {
                                 className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
                                   viewMode === "quiz" &&
                                   selectedSection?._id === section._id
-                                    ? "bg-blue-50 border border-blue-200 text-blue-800 font-medium"
+                                    ? "bg-[#132844] border border-[#00b4d8]/40 text-[#7dd3fc] font-medium"
                                     : isSectionQuizCompleted(section._id)
-                                    ? "bg-green-50 text-green-700 hover:bg-green-100"
+                                    ? "bg-[#0f2a1c] text-green-300 hover:bg-[#143523]"
                                     : !isContentUnlocked(section)
                                     ? "text-gray-400 cursor-not-allowed opacity-60"
-                                    : "text-gray-700 hover:bg-gray-50"
+                                    : "text-gray-300 hover:bg-[#1a1f3e]"
                                 }`}
                               >
                                 <div className="flex items-center justify-between">
@@ -992,13 +1041,60 @@ const CourseLearningPage: React.FC = () => {
                   })}
 
                   {/* Certificate */}
+                  {course.finalQuiz && (
+                    <button
+                      onClick={handleFinalQuizSelect}
+                      disabled={!isFinalQuizUnlocked()}
+                      className={`w-full text-left p-3 rounded-lg text-sm font-semibold transition-colors mb-2 ${
+                        viewMode === "quiz" && selectedQuiz?._id === course.finalQuiz?._id
+                          ? "bg-[#132844] border border-[#00b4d8]/40 text-[#7dd3fc]"
+                          : !isFinalQuizUnlocked()
+                          ? "text-gray-400 cursor-not-allowed opacity-60"
+                          : "bg-[#1a1f3e] text-[#cbd5e1] hover:bg-[#252b52]"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        {!isFinalQuizUnlocked() ? (
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"
+                            />
+                          </svg>
+                        )}
+                        <span>Final Quiz</span>
+                      </span>
+                    </button>
+                  )}
+
                   {enrollment.certificateIssued && (
                     <button
                       onClick={() => setViewMode("certificate")}
                       className={`w-full text-left p-3 rounded-lg text-sm font-semibold transition-colors ${
                         viewMode === "certificate"
-                          ? "bg-blue-50 border border-blue-200 text-blue-800"
-                          : "bg-gradient-to-r from-yellow-50 to-orange-50 text-gray-700 hover:shadow-md"
+                          ? "bg-[#132844] border border-[#00b4d8]/40 text-[#7dd3fc]"
+                          : "bg-gradient-to-r from-[#2a2f15] to-[#3a220f] text-yellow-200 hover:shadow-md"
                       }`}
                     >
                       <span className="flex items-center gap-2">
@@ -1025,15 +1121,15 @@ const CourseLearningPage: React.FC = () => {
               {/* Progress Bar */}
               <div className="p-4 border-t border-gray-200">
                 <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
+                  <div className="flex justify-between text-xs text-gray-400 mb-1">
                     <span>Progress</span>
                     <span className="font-semibold">
                       {Math.round(enrollment.overallProgress)}%
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-[#1a1f3e] rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-green-500 to-[#00b4d8] h-2 rounded-full transition-all duration-300"
                       style={{ width: `${enrollment.overallProgress}%` }}
                     ></div>
                   </div>
@@ -1047,10 +1143,10 @@ const CourseLearningPage: React.FC = () => {
         {!isLeftMinimized && (
           <div
             onMouseDown={handleLeftMouseDown}
-            className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
+            className="w-1 bg-[#1a1f3e] hover:bg-[#00b4d8] cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
           >
             <div className="absolute inset-y-0 -left-1 -right-1 flex items-center justify-center">
-              <div className="w-1 h-8 bg-gray-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-1 h-8 bg-[#6272a4] rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
           </div>
         )}
@@ -1062,20 +1158,20 @@ const CourseLearningPage: React.FC = () => {
             {viewMode === "lesson" && selectedLesson ? (
               <>
                 {/* Breadcrumb */}
-                <div className="bg-white border-b border-gray-200 px-6 py-3">
-                  <div className="flex items-center text-sm text-gray-600">
+                <div className="bg-[#0d1230] border-b border-[#1a1f3e] px-6 py-3">
+                  <div className="flex items-center text-sm text-gray-400">
                     <button
                       onClick={handleBackClick}
-                      className="hover:text-blue-600"
+                      className="hover:text-[#00b4d8]"
                     >
-                      Home
+                      Courses
                     </button>
                     <span className="mx-2">/</span>
-                    <span className="hover:text-blue-600 cursor-pointer">
+                    <span className="hover:text-[#00b4d8] cursor-pointer">
                       {course.title}
                     </span>
                     <span className="mx-2">/</span>
-                    <span className="text-gray-900 font-medium">
+                    <span className="text-gray-200 font-medium">
                       {selectedSection?.title}
                     </span>
                   </div>
@@ -1114,14 +1210,14 @@ const CourseLearningPage: React.FC = () => {
                   )}
 
                   {/* Navigation Buttons */}
-                  <div className="flex items-center justify-between bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                  <div className="flex items-center justify-between bg-[#0d1230] rounded-xl shadow-lg p-6 border border-[#1a1f3e]">
                     <button
                       onClick={handlePreviousLesson}
                       disabled={
                         course.sections[0]._id === selectedSection?._id &&
                         selectedSection.lessons[0]._id === selectedLesson._id
                       }
-                      className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="px-6 py-3 bg-[#1a1f3e] hover:bg-[#252b52] text-[#cbd5e1] rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       <svg
                         className="w-5 h-5"
@@ -1207,7 +1303,7 @@ const CourseLearningPage: React.FC = () => {
                 courseId={courseId!}
                 quizId={selectedQuiz._id}
                 sectionId={selectedSection?._id || null}
-                isFinalQuiz={false}
+                isFinalQuiz={selectedQuiz?.type === "final-quiz"}
                 onComplete={handleQuizComplete}
                 onBack={handlePreviousLesson}
               />
@@ -1243,17 +1339,17 @@ const CourseLearningPage: React.FC = () => {
           {!isAiMinimized && (
             <div
               onMouseDown={handleAiMouseDown}
-              className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
+              className="w-1 bg-[#1a1f3e] hover:bg-[#00b4d8] cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
             >
               <div className="absolute inset-y-0 -left-1 -right-1 flex items-center justify-center">
-                <div className="w-1 h-8 bg-gray-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="w-1 h-8 bg-[#6272a4] rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
           )}
 
           {/* AI Chat Assistant */}
           <div
-            className="border-l border-gray-200 bg-white overflow-hidden flex flex-col relative flex-shrink-0 transition-all duration-300"
+            className="border-l border-[#1a1f3e] bg-[#0a0e27] overflow-hidden flex flex-col relative flex-shrink-0 transition-all duration-300"
             style={{
               width: isAiMinimized ? "48px" : `${aiPanelWidth}px`,
               minWidth: isAiMinimized ? "48px" : "250px",

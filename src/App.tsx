@@ -12,6 +12,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import Layout from "./pages/Layout";
 import TutorialsPage from "./pages/TutorialsPage/TutorialsPage";
 import TutorialsDetailPage from "./pages/TutorialsPage/Components/TutorialsDetailPage";
+import CoursesPage from "./pages/CoursesPage/CoursesPage";
 import CourseLearningPage from "./pages/CourseLearningPage/CourseLearningPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AdminPortal from "./pages/AdminPortal/AdminPortal";
@@ -20,6 +21,7 @@ import ContactPage from "./pages/ContactPage/ContactPage";
 import QuizzesPage from "./pages/QuizzesPage/QuizzesPage";
 import DiscussionPage from "./pages/DiscussionPage/DiscussionPage";
 import GamificationPage from "./pages/GamificationPage/GamificationPage";
+import ProgressDashboardPage from "./pages/ProgressDashboardPage/ProgressDashboardPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 
 function App() {
@@ -60,7 +62,7 @@ function App() {
               path="/courses"
               element={
                 <ProtectedRoute>
-                  <TutorialsPage />
+                  <CoursesPage />
                 </ProtectedRoute>
               }
             />
@@ -94,6 +96,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <GamificationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/progress"
+              element={
+                <ProtectedRoute>
+                  <ProgressDashboardPage />
                 </ProtectedRoute>
               }
             />

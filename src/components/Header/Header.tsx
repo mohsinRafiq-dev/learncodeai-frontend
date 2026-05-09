@@ -48,8 +48,8 @@ export default function Header() {
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
     { to: "/tutorials", label: "Tutorials" },
+    { to: "/courses", label: "Courses" },
     { to: "/quizzes", label: "Quizzes" },
-    { to: "/gamification", label: "Gamification" },
     { to: "/discussions", label: "Forum" },
     { to: "/editor", label: "Code Editor" },
     { to: "/contact", label: "Contact Us" },
@@ -225,7 +225,7 @@ export default function Header() {
                   </Link>
 
                   <Link
-                    to="/profile"
+                    to="/progress"
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#00b4d8] transition-colors"
                   >
@@ -239,10 +239,10 @@ export default function Header() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                       />
                     </svg>
-                    <span>Progress</span>
+                    <span>Progress Dashboard</span>
                   </Link>
 
                   {user?.role === "admin" && (
@@ -455,7 +455,7 @@ export default function Header() {
             </Link>
 
             <Link
-              to="/profile"
+              to="/progress"
               onClick={() => {
                 setDropdownOpen(false);
                 setMobileMenuOpen(false);
@@ -463,7 +463,7 @@ export default function Header() {
               className="flex items-center space-x-3 px-4 py-3 text-[#6272a4] hover:text-[#00b4d8] hover:bg-[#0a0e27] transition-colors"
             >
               <span>📊</span>
-              <span>progress</span>
+              <span>progress_dashboard</span>
             </Link>
 
             <Link

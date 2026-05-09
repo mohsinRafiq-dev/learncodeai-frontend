@@ -17,6 +17,7 @@ export interface CodeHelpResponse {
     explanation?: string;
     hint?: string;
     answer?: string;
+    suggestions?: string;
   };
 }
 
@@ -92,6 +93,32 @@ export const askCodeQuestion = async (question: string, code?: string, language?
     if (axios.isAxiosError(error)) {
       throw new Error(
         error.response?.data?.message || "Failed to get answer"
+      );
+    }
+    throw error;
+  }
+};
+
+export const getCodeOptimization = async (code: string, language?: string): Promise<string> => {
+  try {
+    const token = localStorage.getItem("authToken");
+    
+    const response = await axios.post<CodeHelpResponse>(
+      `${API_BASE_URL}/api/codehelp/optimize`,
+      { code, language },
+      {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.data.suggestions || response.data.data.answer || "";
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Failed to get optimization suggestions"
       );
     }
     throw error;

@@ -61,6 +61,33 @@ const useGamification = (userId?: string) => {
     ]);
   };
 
+  const refreshGamificationData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      await fetchAllGamificationData();
+      console.log('✅ Gamification data refreshed successfully');
+    } catch (err: any) {
+      console.error('Error refreshing gamification data:', err);
+      setError(err.message || 'Failed to refresh data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshStreak = async () => {
+    try {
+      console.log('🔄 Manually refreshing streak...');
+      const response = await gamificationAPI.refreshStreak();
+      setStreak(response.data);
+      await fetchStats();
+      console.log('✅ Streak refreshed:', response.data);
+    } catch (err: any) {
+      console.error('Error refreshing streak:', err);
+      setError(err.message || 'Failed to refresh streak');
+    }
+  };
+
   useEffect(() => {
     fetchAllGamificationData();
   }, []);
@@ -73,6 +100,12 @@ const useGamification = (userId?: string) => {
     loading,
     error,
     refetch: fetchAllGamificationData,
+    refreshGamificationData,
+    refreshStreak,
+    fetchStats,
+    fetchStreak,
+    fetchLeaderboard,
+    fetchUserRank,
   };
 };
 

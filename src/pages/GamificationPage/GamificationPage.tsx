@@ -6,16 +6,17 @@ import GamificationStats from "../../components/Gamification/GamificationStats";
 import BadgesShowcase from "../../components/Gamification/BadgesShowcase";
 import StreakTracker from "../../components/Gamification/StreakTracker";
 import Leaderboard from "../../components/Gamification/Leaderboard";
-import { Award, Trophy, Flame, BarChart3 } from "lucide-react";
+import { Award, Trophy, Flame, BarChart3, RefreshCw } from "lucide-react";
 
 const GamificationPage: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
-  const { stats, streak, leaderboard, userRank, loading, error } =
+  const { stats, streak, leaderboard, userRank, loading, error, refreshGamificationData, refreshStreak } =
     useGamification();
   const [activeTab, setActiveTab] = useState<
     "overview" | "badges" | "streaks" | "leaderboard"
   >("overview");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   if (!isAuthenticated) {
     navigate("/signin");
@@ -29,16 +30,39 @@ const GamificationPage: React.FC = () => {
     { id: "leaderboard", label: "Leaderboard", icon: Award },
   ];
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await refreshGamificationData();
+      console.log('✅ Dashboard refreshed');
+    } catch (err) {
+      console.error('Error refreshing dashboard:', err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950 to-gray-950 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Award className="w-8 h-8 text-purple-400" />
-            <h1 className="text-4xl font-bold text-white">
-              Gamification Dashboard
-            </h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Award className="w-8 h-8 text-purple-400" />
+              <h1 className="text-4xl font-bold text-white">
+                Gamification Dashboard
+              </h1>
+            </div>
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing || loading}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-900/50 text-white rounded-lg transition-all"
+              title="Refresh gamification data"
+            >
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
           </div>
           <p className="text-purple-200">
             Track your progress, earn badges, and compete on the leaderboard
