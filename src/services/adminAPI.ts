@@ -175,9 +175,9 @@ export const adminAPI = {
   },
 
   // Analytics
-  getAnalytics: async () => {
+  getAnalytics: async (days = 30) => {
     try {
-      const response = await api.get("/admin/analytics");
+      const response = await api.get(`/admin/analytics?days=${days}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching analytics:", error);
@@ -191,6 +191,53 @@ export const adminAPI = {
       return response.data;
     } catch (error) {
       console.error("Error fetching recent activity:", error);
+      throw error;
+    }
+  },
+
+  // Content version history
+  getContentVersions: async (
+    contentType: "tutorial" | "course" | "lesson",
+    contentId: string
+  ) => {
+    try {
+      const response = await api.get(
+        `/admin/versions/${contentType}/${contentId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching content versions:", error);
+      throw error;
+    }
+  },
+
+  restoreContentVersion: async (versionId: string) => {
+    try {
+      const response = await api.post(`/admin/versions/${versionId}/restore`);
+      return response.data;
+    } catch (error) {
+      console.error("Error restoring content version:", error);
+      throw error;
+    }
+  },
+
+  // Platform settings
+  getPlatformSettings: async () => {
+    try {
+      const response = await api.get("/admin/settings");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching platform settings:", error);
+      throw error;
+    }
+  },
+
+  updatePlatformSettings: async (settings: Record<string, unknown>) => {
+    try {
+      const response = await api.put("/admin/settings", settings);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating platform settings:", error);
       throw error;
     }
   },
