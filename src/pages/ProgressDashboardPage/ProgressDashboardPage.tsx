@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import progressAPI from "../../services/progressAPI";
+import RecommendationsWidget from "../../components/RecommendationsWidget/RecommendationsWidget";
 import {
   BarChart3, Clock, BookOpen, Trophy, Award, Flame, Target,
   TrendingUp, TrendingDown, Download, RefreshCw,
@@ -128,6 +129,11 @@ const ProgressDashboardPage: React.FC = () => {
             <p className="text-red-200">{error}</p>
           </div>
         )}
+
+        {/* Personalized Recommendations */}
+        <div className="mb-8">
+          <RecommendationsWidget />
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
