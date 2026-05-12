@@ -39,9 +39,12 @@ function AiAssistantPanel({
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -294,7 +297,7 @@ function AiAssistantPanel({
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0a0e27]">
+      <div ref={messagesContainerRef} className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0a0e27]">
         {messages.map((message) => (
           <div
             key={message.id}
