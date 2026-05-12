@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, BookOpen, FileText, ChevronRight, RefreshCw, PlayCircle } from "lucide-react";
-import recommendationAPI, { Recommendations } from "../../services/recommendationAPI";
+import recommendationAPI from "../../services/recommendationAPI";
+import type { Recommendations } from "../../services/recommendationAPI";
 
 const LANG_COLORS: Record<string, string> = {
   python: "bg-blue-500/20 text-blue-400 border-blue-500/30",
