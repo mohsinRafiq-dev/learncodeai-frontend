@@ -1,5 +1,28 @@
 // Contact form related functions
+import emailjs from '@emailjs/browser';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+const sendViaEmailJS = async (formData: ContactFormData): Promise<void> => {
+  if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+    return;
+  }
+  await emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    {
+      fullName: formData.fullName,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+    },
+    { publicKey: EMAILJS_PUBLIC_KEY }
+  );
+};
 
 // Types
 export interface ContactFormData {
@@ -109,26 +132,43 @@ export const submitContactForm = async (formData: ContactFormData): Promise<Cont
       };
     }
 
-    const response = await fetch(`${API_BASE_URL}/contact`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(formData),
-    });
+    const [backendResult, emailResult] = await Promise.allSettled([
+      fetch(`${API_BASE_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(formData),
+      }).then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) {
+          throw Object.assign(new Error(data.message || 'Failed'), { data });
+        }
+        return data;
+      }),
+      sendViaEmailJS(formData),
+    ]);
 
-    const data = await response.json();
+    if (emailResult.status === 'rejected') {
+      console.error('EmailJS send failed:', emailResult.reason);
+    }
 
-    if (!response.ok) {
+    if (backendResult.status === 'fulfilled') {
+      return backendResult.value;
+    }
+
+    if (emailResult.status === 'fulfilled' && EMAILJS_SERVICE_ID) {
       return {
-        status: 'error',
-        message: data.message || 'Failed to submit contact form',
-        errors: data.errors || [],
+        status: 'success',
+        message: "Message sent successfully! We'll get back to you soon.",
       };
     }
 
-    return data;
+    const err = backendResult.reason as { message?: string; data?: { errors?: string[] } };
+    return {
+      status: 'error',
+      message: err?.message || 'Failed to submit contact form',
+      errors: err?.data?.errors || [],
+    };
   } catch (error) {
     console.error('Error submitting contact form:', error);
     return {
