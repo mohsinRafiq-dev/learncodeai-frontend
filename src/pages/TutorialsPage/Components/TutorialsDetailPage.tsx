@@ -51,6 +51,27 @@ const TutorialsDetailPage: React.FC = () => {
   const [isAiResizing, setIsAiResizing] = useState(false);
   const [isAiMinimized, setIsAiMinimized] = useState(false);
 
+  // Mobile responsive state — drawers for the two sidebars
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window === "undefined" ? true : window.innerWidth >= 1024
+  );
+  const [mobileLeftOpen, setMobileLeftOpen] = useState(false);
+  const [mobileAiOpen, setMobileAiOpen] = useState(false);
+
+  React.useEffect(() => {
+    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Close any open drawer when switching to desktop
+  React.useEffect(() => {
+    if (isDesktop) {
+      setMobileLeftOpen(false);
+      setMobileAiOpen(false);
+    }
+  }, [isDesktop]);
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
@@ -182,6 +203,8 @@ const TutorialsDetailPage: React.FC = () => {
   };
 
   const handleTutorialSelect = async (tutorial: Tutorial) => {
+    // Auto-close the mobile sidebar on selection
+    setMobileLeftOpen(false);
     try {
       setTutorialLoading(true);
 
@@ -595,12 +618,46 @@ const TutorialsDetailPage: React.FC = () => {
 
       <div
         ref={containerRef}
-        className="flex h-screen bg-[#0a0e27] overflow-hidden overflow-x-hidden"
+        className="relative flex h-screen bg-[#0a0e27] overflow-hidden overflow-x-hidden"
       >
-        {/* AI Panel Toggle Button */}
+        {/* Mobile-only top bar with drawer toggles */}
+        <div className="lg:hidden absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-3 py-2 bg-[#0d1230] border-b border-[#1a1f3e]">
+          <button
+            onClick={() => setMobileLeftOpen((v) => !v)}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[#1a1f3e] text-gray-200 rounded-md border border-[#2a3050]"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            Tutorials
+          </button>
+          <span className="text-xs text-gray-400 truncate mx-2">{selectedTutorial?.title || ""}</span>
+          <button
+            onClick={() => setMobileAiOpen((v) => !v)}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-purple-900/30 text-purple-300 rounded-md border border-purple-500/40"
+          >
+            AI
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile drawer backdrop */}
+        {!isDesktop && (mobileLeftOpen || mobileAiOpen) && (
+          <div
+            className="lg:hidden absolute inset-0 bg-black/60 z-20"
+            onClick={() => {
+              setMobileLeftOpen(false);
+              setMobileAiOpen(false);
+            }}
+          />
+        )}
+
+        {/* AI Panel Toggle Button — desktop only */}
         <button
           onClick={toggleAiPanel}
-          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-l-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
+          className="hidden lg:flex absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-l-lg items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
           style={{
             right: isAiMinimized ? "12px" : `${aiPanelWidth + 4}px`,
             top: "50vh",
@@ -639,10 +696,10 @@ const TutorialsDetailPage: React.FC = () => {
           )}
         </button>
 
-        {/* Left Sidebar Toggle Button */}
+        {/* Left Sidebar Toggle Button — desktop only */}
         <button
           onClick={toggleLeftSidebar}
-          className="absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-r-lg flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
+          className="hidden lg:flex absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-r-lg items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
           style={{
             left: isLeftMinimized ? "12px" : `${leftSidebarWidth + 4}px`,
             top: "50vh",
@@ -681,14 +738,24 @@ const TutorialsDetailPage: React.FC = () => {
           )}
         </button>
 
-        {/* Left Sidebar */}
+        {/* Left Sidebar — fixed drawer on mobile, in-flow on desktop */}
         <div
-          className="bg-[#0d1230] border-r border-[#1a1f3e] overflow-hidden flex flex-col transition-all duration-300"
-          style={{
-            width: isLeftMinimized ? "48px" : `${leftSidebarWidth}px`,
-            minWidth: isLeftMinimized ? "48px" : "250px",
-            maxWidth: isLeftMinimized ? "48px" : "600px",
-          }}
+          className={`bg-[#0d1230] border-r border-[#1a1f3e] overflow-hidden flex flex-col transition-transform lg:transition-all duration-300 ${
+            isDesktop
+              ? ""
+              : `fixed inset-y-0 left-0 z-30 w-[85vw] max-w-[360px] ${
+                  mobileLeftOpen ? "translate-x-0" : "-translate-x-full"
+                }`
+          }`}
+          style={
+            isDesktop
+              ? {
+                  width: isLeftMinimized ? "48px" : `${leftSidebarWidth}px`,
+                  minWidth: isLeftMinimized ? "48px" : "250px",
+                  maxWidth: isLeftMinimized ? "48px" : "600px",
+                }
+              : undefined
+          }
         >
           {!isLeftMinimized && (
             <>
@@ -854,8 +921,8 @@ const TutorialsDetailPage: React.FC = () => {
           </div>
         )}
 
-        {/* Main Content Area */}
-        <div className="flex-1 flex overflow-hidden min-w-0">
+        {/* Main Content Area — push down on mobile to clear the top bar */}
+        <div className="flex-1 flex overflow-hidden min-w-0 pt-12 lg:pt-0">
           {/* Tutorial Content */}
           <div className="flex-1 overflow-y-auto hide-scrollbar overflow-x-hidden min-w-0">
             {selectedTutorial ? (
@@ -1432,11 +1499,11 @@ const TutorialsDetailPage: React.FC = () => {
             )}
           </div>
 
-          {/* AI Resize Handle */}
-          {!isAiMinimized && (
+          {/* AI Resize Handle — desktop only */}
+          {!isAiMinimized && isDesktop && (
             <div
               onMouseDown={handleAiMouseDown}
-              className="w-1 bg-[#1a1f3e] hover:bg-purple-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
+              className="hidden lg:block w-1 bg-[#1a1f3e] hover:bg-purple-500 cursor-col-resize flex-shrink-0 transition-colors duration-150 relative group"
             >
               <div className="absolute inset-y-0 -left-1 -right-1 flex items-center justify-center">
                 <div className="w-1 h-8 bg-purple-400 rounded opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -1444,14 +1511,24 @@ const TutorialsDetailPage: React.FC = () => {
             </div>
           )}
 
-          {/* AI Assistant Panel */}
+          {/* AI Assistant Panel — fixed drawer on mobile, in-flow on desktop */}
           <div
-            className="bg-[#0d1230] flex-shrink-0 transition-all duration-300 overflow-hidden relative"
-            style={{
-              width: isAiMinimized ? "48px" : `${aiPanelWidth}px`,
-              minWidth: isAiMinimized ? "48px" : "250px",
-              maxWidth: isAiMinimized ? "48px" : "600px",
-            }}
+            className={`bg-[#0d1230] transition-transform lg:transition-all duration-300 overflow-hidden relative ${
+              isDesktop
+                ? "flex-shrink-0"
+                : `fixed inset-y-0 right-0 z-30 w-[85vw] max-w-[400px] ${
+                    mobileAiOpen ? "translate-x-0" : "translate-x-full"
+                  }`
+            }`}
+            style={
+              isDesktop
+                ? {
+                    width: isAiMinimized ? "48px" : `${aiPanelWidth}px`,
+                    minWidth: isAiMinimized ? "48px" : "250px",
+                    maxWidth: isAiMinimized ? "48px" : "600px",
+                  }
+                : undefined
+            }
           >
             {!isAiMinimized && (
               <AIChatAssistant
