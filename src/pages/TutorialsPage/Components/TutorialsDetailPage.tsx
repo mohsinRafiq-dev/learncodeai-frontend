@@ -72,6 +72,15 @@ const TutorialsDetailPage: React.FC = () => {
     }
   }, [isDesktop]);
 
+  // On mobile, auto-open the tutorial list when nothing is selected so the user
+  // doesn't see a mostly-blank screen on first load.
+  React.useEffect(() => {
+    if (!isDesktop && !selectedTutorial && tutorials.length > 0) {
+      setMobileLeftOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop, tutorials.length]);
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
@@ -621,20 +630,22 @@ const TutorialsDetailPage: React.FC = () => {
         className="relative flex h-screen bg-[#0a0e27] overflow-hidden overflow-x-hidden"
       >
         {/* Mobile-only top bar with drawer toggles */}
-        <div className="lg:hidden absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-3 py-2 bg-[#0d1230] border-b border-[#1a1f3e]">
+        <div className="lg:hidden absolute top-0 left-0 right-0 z-30 flex items-center gap-2 px-3 py-2 bg-[#0d1230] border-b border-[#1a1f3e]">
           <button
             onClick={() => setMobileLeftOpen((v) => !v)}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[#1a1f3e] text-gray-200 rounded-md border border-[#2a3050]"
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm bg-[#1a1f3e] text-gray-200 rounded-md border border-[#2a3050]"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
             Tutorials
           </button>
-          <span className="text-xs text-gray-400 truncate mx-2">{selectedTutorial?.title || ""}</span>
+          <span className="flex-1 min-w-0 text-xs text-gray-400 truncate text-center">
+            {selectedTutorial?.title || "Select a tutorial"}
+          </span>
           <button
             onClick={() => setMobileAiOpen((v) => !v)}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-purple-900/30 text-purple-300 rounded-md border border-purple-500/40"
+            className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm bg-purple-900/30 text-purple-300 rounded-md border border-purple-500/40"
           >
             AI
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
