@@ -32,6 +32,9 @@ const TutorialsDetailPage: React.FC = () => {
   const [savingTutorial, setSavingTutorial] = useState(false);
   const [completingTutorial, setCompletingTutorial] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState<
+    "all" | "beginner" | "intermediate" | "advanced"
+  >("all");
   const [showAIModal, setShowAIModal] = useState(false);
   const [aiTopicInput, setAiTopicInput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -315,13 +318,52 @@ const TutorialsDetailPage: React.FC = () => {
     navigate("/tutorials");
   };
 
-  // Filter tutorials based on search input
-  const filteredTutorials = tutorials.filter(
-    (tutorial) =>
-      tutorial.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      tutorial.concept?.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      tutorial.difficulty?.toLowerCase().includes(searchFilter.toLowerCase())
+  // Filter tutorials by search + difficulty, then sort by (module, order)
+  const filteredTutorials = tutorials
+    .filter((tutorial) => {
+      if (
+        difficultyFilter !== "all" &&
+        tutorial.difficulty?.toLowerCase() !== difficultyFilter
+      ) {
+        return false;
+      }
+      if (!searchFilter) return true;
+      const q = searchFilter.toLowerCase();
+      return (
+        tutorial.title.toLowerCase().includes(q) ||
+        tutorial.concept?.toLowerCase().includes(q) ||
+        tutorial.difficulty?.toLowerCase().includes(q) ||
+        tutorial.module?.toLowerCase().includes(q)
+      );
+    })
+    .sort((a, b) => {
+      const moduleA = a.module || "zzz_Other";
+      const moduleB = b.module || "zzz_Other";
+      if (moduleA !== moduleB) return moduleA.localeCompare(moduleB);
+      return (a.order ?? 999) - (b.order ?? 999);
+    });
+
+  // Group filtered tutorials by module for sidebar rendering
+  const groupedTutorials = filteredTutorials.reduce<
+    Record<string, typeof filteredTutorials>
+  >((acc, t) => {
+    const key = t.module || "Other";
+    (acc[key] = acc[key] || []).push(t);
+    return acc;
+  }, {});
+
+  // Build a flat ordered list (same order as the sidebar) for prev/next nav
+  const orderedFlat = Object.entries(groupedTutorials).flatMap(
+    ([, items]) => items
   );
+  const currentIndex = selectedTutorial
+    ? orderedFlat.findIndex((t) => t._id === selectedTutorial._id)
+    : -1;
+  const prevTutorial = currentIndex > 0 ? orderedFlat[currentIndex - 1] : null;
+  const nextTutorial =
+    currentIndex >= 0 && currentIndex < orderedFlat.length - 1
+      ? orderedFlat[currentIndex + 1]
+      : null;
 
   const handleGenerateAITutorial = () => {
     if (!isAuthenticated) {
@@ -413,25 +455,15 @@ const TutorialsDetailPage: React.FC = () => {
   };
 
   const handleNextTutorial = () => {
-    if (!selectedTutorial || tutorials.length === 0) return;
-
-    const currentIndex = tutorials.findIndex(
-      (t) => t._id === selectedTutorial._id
-    );
-    if (currentIndex < tutorials.length - 1) {
-      handleTutorialSelect(tutorials[currentIndex + 1]);
+    if (nextTutorial) {
+      handleTutorialSelect(nextTutorial);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handlePreviousTutorial = () => {
-    if (!selectedTutorial || tutorials.length === 0) return;
-
-    const currentIndex = tutorials.findIndex(
-      (t) => t._id === selectedTutorial._id
-    );
-    if (currentIndex > 0) {
-      handleTutorialSelect(tutorials[currentIndex - 1]);
+    if (prevTutorial) {
+      handleTutorialSelect(prevTutorial);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -665,7 +697,7 @@ const TutorialsDetailPage: React.FC = () => {
         >
           {!isLeftMinimized && (
             <>
-              <div className="p-4 border-b border-[#1a1f3e]">
+              <div className="p-4 border-b border-[#1a1f3e] space-y-3">
                 <input
                   type="text"
                   placeholder="Filter tutorials"
@@ -673,36 +705,91 @@ const TutorialsDetailPage: React.FC = () => {
                   onChange={(e) => setSearchFilter(e.target.value)}
                   className="w-full px-3 py-2 text-sm bg-[#1a1f3e] border border-[#2a3050] text-gray-200 placeholder-gray-500 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                 />
+                <div className="flex gap-1.5 flex-wrap">
+                  {(
+                    ["all", "beginner", "intermediate", "advanced"] as const
+                  ).map((level) => {
+                    const active = difficultyFilter === level;
+                    const color =
+                      level === "beginner"
+                        ? "emerald"
+                        : level === "intermediate"
+                        ? "amber"
+                        : level === "advanced"
+                        ? "rose"
+                        : "purple";
+                    return (
+                      <button
+                        key={level}
+                        onClick={() => setDifficultyFilter(level)}
+                        className={`text-xs px-2.5 py-1 rounded-full font-medium transition-all border ${
+                          active
+                            ? `bg-${color}-500/20 border-${color}-500/60 text-${color}-300`
+                            : "bg-[#1a1f3e] border-[#2a3050] text-gray-400 hover:text-gray-200"
+                        }`}
+                      >
+                        {level === "all" ? "All" : level.charAt(0).toUpperCase() + level.slice(1)}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="flex-1 overflow-y-auto p-4 hide-scrollbar">
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {filteredTutorials.length > 0 ? (
-                    filteredTutorials.map((tutorial) => {
-                      const isPersonal =
-                        tutorial.tags?.includes("personal") ||
-                        tutorial.tags?.includes("AI-generated");
-                      return (
-                        <div
-                          key={tutorial._id}
-                          onClick={() => handleTutorialSelect(tutorial)}
-                          className={`p-3 rounded-lg cursor-pointer transition-all text-sm ${
-                            selectedTutorial?._id === tutorial._id
-                              ? "bg-purple-900/30 border border-purple-500/50 text-purple-300"
-                              : "hover:bg-[#1a1f3e] text-gray-300"
-                          }`}
-                        >
-                          <div className="font-medium mb-1 flex items-center gap-2">
-                            <span>• {tutorial.title}</span>
-                            {isPersonal && (
-                              <span className="text-xs bg-purple-900/50 text-purple-400 px-2 py-0.5 rounded-full font-semibold">
-                                My
-                              </span>
-                            )}
-                          </div>
+                    Object.entries(groupedTutorials).map(([moduleName, items]) => (
+                      <div key={moduleName}>
+                        <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-2 px-1 font-semibold">
+                          {moduleName}
                         </div>
-                      );
-                    })
+                        <div className="space-y-1.5">
+                          {items.map((tutorial) => {
+                            const isPersonal =
+                              tutorial.tags?.includes("personal") ||
+                              tutorial.tags?.includes("AI-generated");
+                            const diffColor =
+                              tutorial.difficulty === "beginner"
+                                ? "text-emerald-400"
+                                : tutorial.difficulty === "intermediate"
+                                ? "text-amber-400"
+                                : tutorial.difficulty === "advanced"
+                                ? "text-rose-400"
+                                : "text-gray-500";
+                            return (
+                              <div
+                                key={tutorial._id}
+                                onClick={() => handleTutorialSelect(tutorial)}
+                                className={`p-3 rounded-lg cursor-pointer transition-all text-sm ${
+                                  selectedTutorial?._id === tutorial._id
+                                    ? "bg-purple-900/30 border border-purple-500/50 text-purple-300"
+                                    : "hover:bg-[#1a1f3e] text-gray-300 border border-transparent"
+                                }`}
+                              >
+                                <div className="flex items-start gap-2">
+                                  <span className={`mt-1 ${diffColor}`}>●</span>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-medium leading-snug">
+                                      {tutorial.title}
+                                    </div>
+                                    {(tutorial.estimatedMinutes || isPersonal) && (
+                                      <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500">
+                                        {tutorial.estimatedMinutes ? (
+                                          <span>{tutorial.estimatedMinutes} min</span>
+                                        ) : null}
+                                        {isPersonal && (
+                                          <span className="text-purple-400 font-semibold">My</span>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))
                   ) : (
                     <div className="text-center py-8 text-gray-500 text-sm">
                       <svg
@@ -1301,33 +1388,34 @@ const TutorialsDetailPage: React.FC = () => {
                           </div>
                         )}
                       {/* Navigation Buttons */}
-                      <div className="flex items-center justify-between border-t border-[#1a1f3e] pt-6">
+                      <div className="flex items-center justify-between gap-3 border-t border-[#1a1f3e] pt-6">
                         <button
                           onClick={handlePreviousTutorial}
-                          disabled={
-                            !selectedTutorial ||
-                            tutorials.findIndex(
-                              (t) => t._id === selectedTutorial._id
-                            ) === 0
-                          }
-                          className="flex items-center space-x-2 px-4 py-2 text-gray-400 hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                          disabled={!prevTutorial}
+                          className="flex items-start gap-2 px-4 py-2 text-gray-400 hover:text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-left min-w-0"
+                          title={prevTutorial?.title}
                         >
-                          <span>←</span>
-                          <span>Previous</span>
+                          <span className="mt-0.5">←</span>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs text-gray-500">Previous</span>
+                            <span className="truncate text-sm">
+                              {prevTutorial?.title || "—"}
+                            </span>
+                          </div>
                         </button>
                         <button
                           onClick={handleNextTutorial}
-                          disabled={
-                            !selectedTutorial ||
-                            tutorials.findIndex(
-                              (t) => t._id === selectedTutorial._id
-                            ) ===
-                              tutorials.length - 1
-                          }
-                          className="flex items-center space-x-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                          disabled={!nextTutorial}
+                          title={nextTutorial?.title}
+                          className="flex items-start gap-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-left min-w-0"
                         >
-                          <span>Next</span>
-                          <span>→</span>
+                          <div className="flex flex-col min-w-0 items-end">
+                            <span className="text-xs opacity-80">Next</span>
+                            <span className="truncate text-sm">
+                              {nextTutorial?.title || "—"}
+                            </span>
+                          </div>
+                          <span className="mt-0.5">→</span>
                         </button>
                       </div>
                     </>

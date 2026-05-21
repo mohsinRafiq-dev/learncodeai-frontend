@@ -12,8 +12,12 @@ export interface Tutorial {
   description: string;
   language: string;
   concept: string;
-  mainConcept: boolean;
+  mainConcept?: boolean;
   difficulty: string;
+  module?: string | null;
+  order?: number;
+  estimatedMinutes?: number;
+  prerequisites?: string[];
   content: string;
   notes: string[];
   tips: string[];
