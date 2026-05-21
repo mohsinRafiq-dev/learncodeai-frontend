@@ -336,12 +336,7 @@ const TutorialsDetailPage: React.FC = () => {
         tutorial.module?.toLowerCase().includes(q)
       );
     })
-    .sort((a, b) => {
-      const moduleA = a.module || "zzz_Other";
-      const moduleB = b.module || "zzz_Other";
-      if (moduleA !== moduleB) return moduleA.localeCompare(moduleB);
-      return (a.order ?? 999) - (b.order ?? 999);
-    });
+    .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
   // Group filtered tutorials by module for sidebar rendering
   const groupedTutorials = filteredTutorials.reduce<
