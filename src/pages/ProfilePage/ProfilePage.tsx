@@ -41,7 +41,9 @@ import {
   Terminal,
   Sparkles,
   Trash2,
+  Crown,
 } from "lucide-react";
+import BillingPanel from "./BillingPanel";
 
 const ProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -68,13 +70,13 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "courses" | "tutorials" | "certificates" | "settings"
+    "overview" | "courses" | "tutorials" | "certificates" | "billing" | "settings"
   >(() => {
     // Try to load from localStorage first
     const stored = localStorage.getItem("profileActiveTab");
     if (
       stored &&
-      ["overview", "courses", "tutorials", "certificates", "settings"].includes(
+      ["overview", "courses", "tutorials", "certificates", "billing", "settings"].includes(
         stored
       )
     ) {
@@ -442,6 +444,12 @@ const ProfilePage: React.FC = () => {
               label: "certificates()",
               icon: Award,
               color: "yellow",
+            },
+            {
+              key: "billing",
+              label: "billing()",
+              icon: Crown,
+              color: "purple",
             },
             {
               key: "settings",
@@ -1001,6 +1009,9 @@ const ProfilePage: React.FC = () => {
             <UserCertificates />
           </div>
         )}
+
+        {/* Billing Tab */}
+        {activeTab === "billing" && <BillingPanel />}
 
         {/* Settings Tab */}
         {activeTab === "settings" && (

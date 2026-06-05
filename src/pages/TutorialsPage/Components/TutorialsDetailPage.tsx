@@ -10,6 +10,7 @@ import {
 } from "../../../functions/TutorialFunctions/tutorialFunctions";
 import { useAuth } from "../../../hooks/useAuth";
 import AIChatAssistant from "../../../components/AIChatAssistant/AIChatAssistant";
+import LockedContent from "../../../components/LockedContent/LockedContent";
 import { tutorialAPI } from "../../../services/tutorialAPI";
 import { useToast } from "../../../contexts/ToastContext";
 import { exportTutorialToPDF } from "../../../utils/pdfExport";
@@ -1099,8 +1100,16 @@ const TutorialsDetailPage: React.FC = () => {
                           </div>
                         </div>
                       </div>
+                      {/* Locked overlay (free user trying to view Pro content) */}
+                      {selectedTutorial.isLocked && (
+                        <LockedContent
+                          difficulty={selectedTutorial.difficulty}
+                          module={selectedTutorial.module || undefined}
+                        />
+                      )}
                       {/* Tutorial Content */}
-                      {selectedTutorial.content &&
+                      {!selectedTutorial.isLocked &&
+                        selectedTutorial.content &&
                         selectedTutorial.content.length > 0 && (
                           <div className="mb-8">
                             <h2 className="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-2">

@@ -52,6 +52,7 @@ export default function Header() {
     { to: "/quizzes", label: "Quizzes" },
     { to: "/discussions", label: "Forum" },
     { to: "/editor", label: "Code Editor" },
+    { to: "/pricing", label: "Pricing" },
     { to: "/contact", label: "Contact Us" },
   ];
 

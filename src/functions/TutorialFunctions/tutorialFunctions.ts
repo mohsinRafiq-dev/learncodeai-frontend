@@ -18,6 +18,8 @@ export interface Tutorial {
   order?: number;
   estimatedMinutes?: number;
   prerequisites?: string[];
+  isLocked?: boolean;
+  lockReason?: string;
   content: string;
   notes: string[];
   tips: string[];

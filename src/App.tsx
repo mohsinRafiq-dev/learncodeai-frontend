@@ -22,6 +22,8 @@ import QuizzesPage from "./pages/QuizzesPage/QuizzesPage";
 import DiscussionPage from "./pages/DiscussionPage/DiscussionPage";
 import GamificationPage from "./pages/GamificationPage/GamificationPage";
 import ProgressDashboardPage from "./pages/ProgressDashboardPage/ProgressDashboardPage";
+import PricingPage from "./pages/PricingPage/PricingPage";
+import BillingSuccessPage from "./pages/PricingPage/BillingSuccessPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/billing/success" element={<BillingSuccessPage />} />
             <Route
               path="/editor"
               element={
