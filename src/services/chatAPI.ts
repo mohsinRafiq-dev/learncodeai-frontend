@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+// Use the same VITE_API_URL as the rest of the codebase. We strip any
+// trailing /api because this file appends "/api/..." to the base.
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+).replace(/\/api\/?$/, "");
 
 export interface ChatMessage {
   message: string;

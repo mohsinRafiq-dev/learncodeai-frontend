@@ -311,8 +311,10 @@ const CourseLearningPage: React.FC = () => {
         ? Math.floor((new Date().getTime() - lessonStartTime.getTime()) / 60000)
         : 0;
 
+      const apiBase =
+        import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const response = await fetch(
-        `http://localhost:5000/api/courses/${courseId}/progress/lesson`,
+        `${apiBase}/courses/${courseId}/progress/lesson`,
         {
           method: "PUT",
           headers: {
