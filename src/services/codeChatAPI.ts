@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/api\/?$/, "");
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export interface CodeChatMessage {
   message: string;
@@ -40,7 +39,7 @@ export const sendCodeChatMessage = async (messageData: CodeChatMessage, messageT
     const token = localStorage.getItem("authToken");
     
     const response = await axios.post<CodeChatResponse>(
-      `${API_BASE_URL}/api/codechat/message`,
+      `${API_BASE_URL}/codechat/message`,
       { ...messageData, messageType },
       {
         headers: {
@@ -67,7 +66,7 @@ export const getCodeChatHistory = async (): Promise<CodeChatHistory[]> => {
     const token = localStorage.getItem("authToken");
     
     const response = await axios.get<{ success: boolean; data: CodeChatHistory[] }>(
-      `${API_BASE_URL}/api/codechat/history`,
+      `${API_BASE_URL}/codechat/history`,
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
@@ -93,7 +92,7 @@ export const clearCodeChats = async (): Promise<void> => {
     const token = localStorage.getItem("authToken");
     
     await axios.delete(
-      `${API_BASE_URL}/api/codechat/clear`,
+      `${API_BASE_URL}/codechat/clear`,
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",

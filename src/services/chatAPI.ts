@@ -1,10 +1,9 @@
 import axios from "axios";
 
-// Use the same VITE_API_URL as the rest of the codebase. We strip any
-// trailing /api because this file appends "/api/..." to the base.
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/api\/?$/, "");
+// Match the rest of the codebase: VITE_API_URL already includes `/api`.
+// All paths below append the endpoint without re-prefixing `/api`.
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export interface ChatMessage {
   message: string;
@@ -24,9 +23,9 @@ export interface ChatResponse {
 export const sendMessage = async (messageData: ChatMessage): Promise<string> => {
   try {
     const token = localStorage.getItem("authToken");
-    
+
     const response = await axios.post<ChatResponse>(
-      `${API_BASE_URL}/api/aichat/message`,
+      `${API_BASE_URL}/aichat/message`,
       messageData,
       {
         headers: {
@@ -50,16 +49,13 @@ export const sendMessage = async (messageData: ChatMessage): Promise<string> => 
 export const clearChats = async (): Promise<void> => {
   try {
     const token = localStorage.getItem("authToken");
-    
-    await axios.delete(
-      `${API_BASE_URL}/api/aichat/clear`,
-      {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+
+    await axios.delete(`${API_BASE_URL}/aichat/clear`, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -70,16 +66,21 @@ export const clearChats = async (): Promise<void> => {
   }
 };
 
-export const getChatHistory = async (context?: string, contextId?: string): Promise<any[]> => {
+export const getChatHistory = async (
+  context?: string,
+  contextId?: string
+): Promise<any[]> => {
   try {
     const token = localStorage.getItem("authToken");
-    
+
     const params = new URLSearchParams();
-    if (context) params.append('context', context);
-    if (contextId) params.append('contextId', contextId);
+    if (context) params.append("context", context);
+    if (contextId) params.append("contextId", contextId);
 
     const response = await axios.get<{ success: boolean; data: any[] }>(
-      `${API_BASE_URL}/api/aichat/history${params.toString() ? '?' + params.toString() : ''}`,
+      `${API_BASE_URL}/aichat/history${
+        params.toString() ? "?" + params.toString() : ""
+      }`,
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
@@ -98,4 +99,3 @@ export const getChatHistory = async (context?: string, contextId?: string): Prom
     throw error;
   }
 };
-

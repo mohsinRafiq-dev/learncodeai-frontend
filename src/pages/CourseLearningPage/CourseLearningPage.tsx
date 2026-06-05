@@ -55,6 +55,16 @@ const CourseLearningPage: React.FC = () => {
   const [isAiMinimized, setIsAiMinimized] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  // Used to scroll the actual lesson content area back to the top on Next/Prev.
+  const lessonScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLessonToTop = () => {
+    if (lessonScrollRef.current) {
+      lessonScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    // Also scroll the window in case the layout overflows the viewport (mobile).
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   // Load course data
   useEffect(() => {
@@ -375,7 +385,7 @@ const CourseLearningPage: React.FC = () => {
         handleLessonSelect(nextSection, nextSection.lessons[0]);
       }
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollLessonToTop();
   };
 
   const handlePreviousLesson = () => {
@@ -429,7 +439,7 @@ const CourseLearningPage: React.FC = () => {
         );
       }
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollLessonToTop();
   };
 
   const handleQuizComplete = async () => {
@@ -1156,7 +1166,7 @@ const CourseLearningPage: React.FC = () => {
         {/* Main Content Area */}
         <div className="flex-1 flex overflow-hidden min-w-0">
           {/* Lesson Content */}
-          <div className="flex-1 overflow-y-auto hide-scrollbar overflow-x-hidden">
+          <div ref={lessonScrollRef} className="flex-1 overflow-y-auto hide-scrollbar overflow-x-hidden">
             {viewMode === "lesson" && selectedLesson ? (
               <>
                 {/* Breadcrumb */}

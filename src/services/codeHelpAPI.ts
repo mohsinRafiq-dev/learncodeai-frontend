@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/api\/?$/, "");
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export interface CodeHelpRequest {
   error?: string;
@@ -28,7 +27,7 @@ export const getErrorExplanation = async (error: string, code?: string, language
     const token = localStorage.getItem("authToken");
     
     const response = await axios.post<CodeHelpResponse>(
-      `${API_BASE_URL}/api/codehelp/error-explanation`,
+      `${API_BASE_URL}/codehelp/error-explanation`,
       { error, code, language },
       {
         headers: {
@@ -54,7 +53,7 @@ export const getProblemHint = async (problem: string, code?: string, language?: 
     const token = localStorage.getItem("authToken");
     
     const response = await axios.post<CodeHelpResponse>(
-      `${API_BASE_URL}/api/codehelp/problem-hint`,
+      `${API_BASE_URL}/codehelp/problem-hint`,
       { problem, code, language, attempt },
       {
         headers: {
@@ -80,7 +79,7 @@ export const askCodeQuestion = async (question: string, code?: string, language?
     const token = localStorage.getItem("authToken");
     
     const response = await axios.post<CodeHelpResponse>(
-      `${API_BASE_URL}/api/codehelp/ask-question`,
+      `${API_BASE_URL}/codehelp/ask-question`,
       { question, code, language },
       {
         headers: {
@@ -106,7 +105,7 @@ export const getCodeOptimization = async (code: string, language?: string): Prom
     const token = localStorage.getItem("authToken");
     
     const response = await axios.post<CodeHelpResponse>(
-      `${API_BASE_URL}/api/codehelp/optimize`,
+      `${API_BASE_URL}/codehelp/optimize`,
       { code, language },
       {
         headers: {
