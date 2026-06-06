@@ -10,6 +10,8 @@ import CertificateApproval from "./Components/CertificateApproval";
 import QueriesManagement from "./Components/QueriesManagement";
 import SettingsPanel from "./Components/SettingsPanel";
 import ModerationPanel from "./Components/ModerationPanel";
+import ChallengeManagement from "./Components/ChallengeManagement";
+import VersionHistory from "./Components/VersionHistory";
 
 function AdminPortal() {
   const navigate = useNavigate();
@@ -281,6 +283,34 @@ function AdminPortal() {
 
           <button
             className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
+              activeTab === "challenges"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
+            }`}
+            onClick={() => setActiveTab("challenges")}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">Challenges</span>
+          </button>
+
+          <button
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
+              activeTab === "versions"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
+            }`}
+            onClick={() => setActiveTab("versions")}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">Versions</span>
+          </button>
+
+          <button
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "settings"
                 ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
                 : "text-gray-300 hover:bg-[#1a1f3e]"
@@ -397,6 +427,8 @@ function AdminPortal() {
           {activeTab === "certificates" && <CertificateApproval />}
           {activeTab === "queries" && <QueriesManagement />}
           {activeTab === "moderation" && <ModerationPanel />}
+          {activeTab === "challenges" && <ChallengeManagement />}
+          {activeTab === "versions" && <VersionHistory />}
           {activeTab === "settings" && <SettingsPanel />}
         </div>
       </main>

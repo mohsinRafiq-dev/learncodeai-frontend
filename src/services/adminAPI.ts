@@ -259,5 +259,37 @@ export const adminAPI = {
       throw error;
     }
   },
+
+  // ===================== Daily Coding Challenges =====================
+  listChallenges: async (params: Record<string, string | number> = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== "") q.append(k, String(v));
+    });
+    const res = await api.get(`/admin/challenges${q.toString() ? "?" + q : ""}`);
+    return res.data;
+  },
+  createChallenge: async (payload: Record<string, unknown>) => {
+    const res = await api.post("/admin/challenges", payload);
+    return res.data;
+  },
+  updateChallenge: async (id: string, payload: Record<string, unknown>) => {
+    const res = await api.put(`/admin/challenges/${id}`, payload);
+    return res.data;
+  },
+  deleteChallenge: async (id: string) => {
+    const res = await api.delete(`/admin/challenges/${id}`);
+    return res.data;
+  },
+
+  // ===================== Content Version History =====================
+  listVersions: async (contentType: string, contentId: string) => {
+    const res = await api.get(`/admin/versions/${contentType}/${contentId}`);
+    return res.data;
+  },
+  restoreVersion: async (versionId: string) => {
+    const res = await api.post(`/admin/versions/${versionId}/restore`);
+    return res.data;
+  },
 };
 
