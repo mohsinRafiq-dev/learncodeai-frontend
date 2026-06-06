@@ -5,6 +5,22 @@ import axios from "axios";
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+// Turn an axios error into a clear, user-facing message. Distinguishes the
+// common failure modes so the chat UI never just says "error".
+const aiErrorMessage = (error: unknown, fallback: string): string => {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+    if (status === 401)
+      return "Your session expired. Please sign out and sign in again.";
+    if (status === 429)
+      return "You're sending messages too fast. Wait a moment and try again.";
+    if (status && status >= 500)
+      return "The AI service is temporarily unavailable. Please try again shortly.";
+    return error.response?.data?.message || fallback;
+  }
+  return fallback;
+};
+
 export interface ChatMessage {
   message: string;
   context?: "course" | "tutorial";
@@ -37,12 +53,7 @@ export const sendMessage = async (messageData: ChatMessage): Promise<string> => 
 
     return response.data.data.response;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || "Failed to send message to AI chat"
-      );
-    }
-    throw error;
+    throw new Error(aiErrorMessage(error, "Failed to send message to AI chat"));
   }
 };
 
@@ -91,11 +102,9 @@ export const getChatHistory = async (
 
     return response.data.data || [];
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch chat history"
-      );
-    }
-    throw error;
+    // History is non-critical — failing to load it should NOT break the chat.
+    // Return empty so the assistant still works for new messages.
+    console.warn("getChatHistory failed:", aiErrorMessage(error, "history load failed"));
+    return [];
   }
 };
