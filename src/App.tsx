@@ -25,9 +25,11 @@ import ProgressDashboardPage from "./pages/ProgressDashboardPage/ProgressDashboa
 import PricingPage from "./pages/PricingPage/PricingPage";
 import BillingSuccessPage from "./pages/PricingPage/BillingSuccessPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
+import { PlatformSettingsProvider } from "./contexts/PlatformSettingsContext";
 
 function App() {
   return (
+    <PlatformSettingsProvider>
     <AuthProvider>
       <Router>
         <AITutorialSuccessNotification />
@@ -130,6 +132,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </PlatformSettingsProvider>
   );
 }
 

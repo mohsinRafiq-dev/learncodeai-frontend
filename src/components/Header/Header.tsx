@@ -3,9 +3,12 @@ import { useState, useRef, useEffect } from "react";
 
 import { useAuth } from "../../hooks/useAuth";
 import { getProfileImageUrl } from "../../utils/imageUtils";
+import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { settings } = useSettings();
+  const features = settings.features;
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -44,13 +47,16 @@ export default function Header() {
     };
   }, []);
 
+  // Build nav from feature flags so admins can hide modules platform-wide
   const navLinks = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
     { to: "/tutorials", label: "Tutorials" },
     { to: "/courses", label: "Courses" },
     { to: "/quizzes", label: "Quizzes" },
-    { to: "/discussions", label: "Forum" },
+    ...(features.discussionsEnabled
+      ? [{ to: "/discussions", label: "Forum" }]
+      : []),
     { to: "/editor", label: "Code Editor" },
     { to: "/pricing", label: "Pricing" },
     { to: "/contact", label: "Contact Us" },
@@ -63,7 +69,7 @@ export default function Header() {
         <Link to="/" className="flex items-center gap-2 group">
           <span className="text-2xl text-[#00b4d8]">&lt;/&gt;</span>
           <div className="font-bold text-xl md:text-2xl font-mono neon-text-cyan group-hover:neon-text-green transition-colors">
-            LearnCode<span className="text-[#8b5cf6]">_</span>AI
+            {settings.siteName}
           </div>
         </Link>
       </div>
