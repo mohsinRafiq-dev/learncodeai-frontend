@@ -44,10 +44,13 @@ import {
   Crown,
 } from "lucide-react";
 import BillingPanel from "./BillingPanel";
+import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 const ProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { settings } = useSettings();
+  const features = settings.features;
   const [searchParams] = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
@@ -439,12 +442,16 @@ const ProfilePage: React.FC = () => {
               color: "purple",
             },
             { key: "tutorials", label: "saved()", icon: Heart, color: "pink" },
-            {
-              key: "certificates",
-              label: "certificates()",
-              icon: Award,
-              color: "yellow",
-            },
+            ...(features.certificatesEnabled
+              ? [
+                  {
+                    key: "certificates",
+                    label: "certificates()",
+                    icon: Award,
+                    color: "yellow",
+                  },
+                ]
+              : []),
             {
               key: "billing",
               label: "billing()",

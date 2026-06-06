@@ -5,6 +5,7 @@ import {
   getChatHistory,
 } from "../../services/chatAPI";
 import { formatMarkdownText } from "../../utils/markdownFormatterHTML";
+import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 interface Message {
   id: string;
@@ -21,7 +22,7 @@ interface AIChatAssistantProps {
   disabled?: boolean; // Disable chat during quiz
 }
 
-const AIChatAssistant: React.FC<AIChatAssistantProps> = ({
+const AIChatAssistantInner: React.FC<AIChatAssistantProps> = ({
   context = "learning",
   contextTitle,
   contextId,
@@ -387,6 +388,15 @@ const AIChatAssistant: React.FC<AIChatAssistantProps> = ({
       </div>
     </div>
   );
+};
+
+// Wrapper that respects the platform-wide AI Assistant toggle. When the admin
+// disables AI from Settings → Feature Toggles, every consumer of this
+// component renders nothing — no further changes needed at call sites.
+const AIChatAssistant: React.FC<AIChatAssistantProps> = (props) => {
+  const { settings } = useSettings();
+  if (!settings.features.aiAssistantEnabled) return null;
+  return <AIChatAssistantInner {...props} />;
 };
 
 export default AIChatAssistant;

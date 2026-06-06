@@ -7,6 +7,7 @@ import {
 } from "../../../services/codeChatAPI";
 import { getCodeOptimization } from "../../../services/codeHelpAPI";
 import { formatMarkdownText } from "../../../utils/markdownFormatterHTML";
+import { useSettings } from "../../../contexts/PlatformSettingsContext";
 
 interface Message {
   id: string;
@@ -28,7 +29,7 @@ interface AiAssistantPanelProps {
   }>;
 }
 
-function AiAssistantPanel({
+function AiAssistantPanelInner({
   code,
   language = "python",
   error,
@@ -439,5 +440,14 @@ function AiAssistantPanel({
     </div>
   );
 }
+
+// Gate based on the platform-wide AI Assistant toggle. When admins flip it
+// off, the editor panel hides for every user automatically.
+type PanelProps = React.ComponentProps<typeof AiAssistantPanelInner>;
+const AiAssistantPanel: React.FC<PanelProps> = (props) => {
+  const { settings } = useSettings();
+  if (!settings.features.aiAssistantEnabled) return null;
+  return <AiAssistantPanelInner {...props} />;
+};
 
 export default AiAssistantPanel;

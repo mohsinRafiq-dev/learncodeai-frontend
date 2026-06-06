@@ -7,8 +7,32 @@ import SignupForm from "./components/SignupForm";
 import Modal from "../../Modals/Modal";
 import TermsContent from "./components/TermsContent";
 import PrivacyContent from "./components/PrivacyContent";
+import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 export default function SignupPage() {
+  const { settings } = useSettings();
+  const features = settings.features;
+  // Registration killswitch — when admin closes registration, show a notice
+  // instead of the form. Existing users can still sign in.
+  if (!features.registrationOpen) {
+    return (
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center p-4 font-mono">
+        <div className="terminal-window backdrop-blur-xl p-8 max-w-md w-full text-center">
+          <h1 className="text-2xl font-bold neon-text-purple mb-3">
+            Registration is currently closed
+          </h1>
+          <p className="text-[#6272a4] mb-6 text-sm">
+            New signups are temporarily disabled by the platform administrator.
+            Existing users can still{" "}
+            <Link to="/signin" className="text-[#00b4d8] underline">
+              sign in
+            </Link>
+            .
+          </p>
+        </div>
+      </div>
+    );
+  }
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -96,13 +120,23 @@ export default function SignupPage() {
             <span className="ml-2 text-[#6272a4] text-sm">auth.register()</span>
           </div>
 
-          {/* OAuth Buttons */}
-          <div className="mb-6">
-            <OAuthButtons
-              onGoogleClick={() => handleOAuthSignup("google")}
-              onGithubClick={() => handleOAuthSignup("github")}
-            />
-          </div>
+          {/* OAuth Buttons — gated by admin feature toggles */}
+          {(features.googleOAuth || features.githubOAuth) && (
+            <div className="mb-6">
+              <OAuthButtons
+                onGoogleClick={
+                  features.googleOAuth
+                    ? () => handleOAuthSignup("google")
+                    : undefined
+                }
+                onGithubClick={
+                  features.githubOAuth
+                    ? () => handleOAuthSignup("github")
+                    : undefined
+                }
+              />
+            </div>
+          )}
 
           {/* Divider */}
           <div className="relative my-6">

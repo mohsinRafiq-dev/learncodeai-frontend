@@ -67,7 +67,18 @@ export default function Header() {
       {/* Logo */}
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="text-2xl text-[#00b4d8]">&lt;/&gt;</span>
+          {settings.logoUrl ? (
+            <img
+              src={settings.logoUrl}
+              alt={settings.siteName}
+              className="h-8 md:h-10 w-auto object-contain"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <span className="text-2xl text-[#00b4d8]">&lt;/&gt;</span>
+          )}
           <div className="font-bold text-xl md:text-2xl font-mono neon-text-cyan group-hover:neon-text-green transition-colors">
             {settings.siteName}
           </div>
@@ -189,26 +200,28 @@ export default function Header() {
                     <span>My Profile</span>
                   </Link>
 
-                  <Link
-                    to="/gamification"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-purple-400 transition-colors"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  {features.gamificationEnabled && (
+                    <Link
+                      to="/gamification"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-purple-400 transition-colors"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                      />
-                    </svg>
-                    <span>Gamification</span>
-                  </Link>
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        />
+                      </svg>
+                      <span>Gamification</span>
+                    </Link>
+                  )}
 
                   <Link
                     to="/profile?tab=courses"

@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ROUTES } from "../../constants";
 import { handleSignin, handleOAuthLogin } from "../../functions";
 import SuspendedAccountModal from "../../components/SuspendedAccountModal/SuspendedAccountModal";
+import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
@@ -15,6 +16,8 @@ export default function SigninPage() {
   const { signin, setUserAndToken } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { settings } = useSettings();
+  const features = settings.features;
 
   // Sanitize redirect param on mount and check for suspension message
   useEffect(() => {
@@ -130,7 +133,9 @@ export default function SigninPage() {
           </div>
 
           {/* OAuth Buttons */}
+          {(features.googleOAuth || features.githubOAuth) && (
           <div className="space-y-3 mb-6">
+            {features.googleOAuth && (
             <button
               onClick={() => handleOAuthSignin("google")}
               className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-cyan group cursor-pointer"
@@ -157,7 +162,9 @@ export default function SigninPage() {
                 Continue with Google
               </span>
             </button>
+            )}
 
+            {features.githubOAuth && (
             <button
               onClick={() => handleOAuthSignin("github")}
               className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-purple group cursor-pointer"
@@ -173,7 +180,9 @@ export default function SigninPage() {
                 Continue with GitHub
               </span>
             </button>
+            )}
           </div>
+          )}
 
           {/* Divider */}
           <div className="relative my-6">
