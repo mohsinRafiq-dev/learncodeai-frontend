@@ -33,11 +33,12 @@ const CourseLearningPage: React.FC = () => {
     "lesson"
   );
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Only the setter is used; the sidebar's open state is driven by CSS.
+  const [, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
   const [lessonLoading, setLessonLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showAIChat, setShowAIChat] = useState(true);
+  const [, setShowAIChat] = useState(true);
   const [searchFilter, setSearchFilter] = useState("");
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [lessonStartTime, setLessonStartTime] = useState<Date | null>(null);

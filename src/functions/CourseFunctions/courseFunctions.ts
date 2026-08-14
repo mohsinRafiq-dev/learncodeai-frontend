@@ -114,7 +114,8 @@ export interface CourseEnrollment {
   status: 'active' | 'completed' | 'dropped' | 'on-hold';
   completionDate?: string;
   certificateIssued: boolean;
-  certificate?: string;
+  // Raw id on list endpoints, populated document on detail endpoints.
+  certificate?: string | { _id: string };
   sectionProgress?: Array<{
     section: string;
     isCompleted: boolean;

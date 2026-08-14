@@ -5,7 +5,7 @@ const BadgesShowcase: React.FC<{
   badges: any[];
   achievements?: any[];
   loading?: boolean;
-}> = ({ badges = [], achievements = [], loading = false }) => {
+}> = ({ badges = [], loading = false }) => {
   if (loading) {
     return (
       <div className="bg-gradient-to-br from-amber-900/50 to-orange-900/50 rounded-lg p-6 animate-pulse">

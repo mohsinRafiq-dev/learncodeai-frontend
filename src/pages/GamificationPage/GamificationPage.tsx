@@ -9,9 +9,9 @@ import Leaderboard from "../../components/Gamification/Leaderboard";
 import { Award, Trophy, Flame, BarChart3, RefreshCw } from "lucide-react";
 
 const GamificationPage: React.FC = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { stats, streak, leaderboard, userRank, loading, error, refreshGamificationData, refreshStreak } =
+  const { stats, streak, leaderboard, userRank, loading, error, refreshGamificationData } =
     useGamification();
   const [activeTab, setActiveTab] = useState<
     "overview" | "badges" | "streaks" | "leaderboard"

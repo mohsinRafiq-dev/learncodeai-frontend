@@ -11,11 +11,9 @@ import {
   Code,
   CheckCircle2,
   XCircle,
-  AlertTriangle,
   ChevronRight,
   Timer,
   Target,
-  Zap,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../contexts/ToastContext";

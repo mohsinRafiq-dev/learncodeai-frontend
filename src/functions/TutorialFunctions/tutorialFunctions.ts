@@ -329,6 +329,16 @@ export const getSavedTutorials = async (filters?: {
     _id: string;
     savedAt: string;
     tutorial: Tutorial;
+    // Present on the backend UserSavedTutorial model; callers read
+    // progress.isCompleted to show the completion state.
+    progress?: {
+      isCompleted: boolean;
+      completedAt?: string;
+      completedCodeExamples?: Array<{ exampleId: string; completedAt: string }>;
+      lastAccessedAt?: string;
+      rating?: number | null;
+      notes?: string;
+    };
   }>;
 }> => {
   try {

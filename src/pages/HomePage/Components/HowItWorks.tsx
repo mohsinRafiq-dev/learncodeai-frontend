@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 export default function HowItWorks() {
-  const [activeStep, setActiveStep] = useState<number | null>(null);
+  // Only the setter is used — hover state drives styling via CSS.
+  const [, setActiveStep] = useState<number | null>(null);
 
   const steps = [
     {

@@ -38,13 +38,23 @@ import {
   ExternalLink,
   Bell,
   LogOut,
-  Terminal,
   Sparkles,
   Trash2,
   Crown,
 } from "lucide-react";
 import BillingPanel from "./BillingPanel";
 import { useSettings } from "../../contexts/PlatformSettingsContext";
+
+const PROFILE_TABS = [
+  "overview",
+  "courses",
+  "tutorials",
+  "certificates",
+  "billing",
+  "settings",
+] as const;
+
+type ProfileTab = (typeof PROFILE_TABS)[number];
 
 const ProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -72,18 +82,13 @@ const ProfilePage: React.FC = () => {
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "courses" | "tutorials" | "certificates" | "billing" | "settings"
-  >(() => {
+  // Named so the lazy initializer can refer to the union without referencing
+  // `activeTab` itself, which made the type circular and inferred as `any`.
+  const [activeTab, setActiveTab] = useState<ProfileTab>(() => {
     // Try to load from localStorage first
     const stored = localStorage.getItem("profileActiveTab");
-    if (
-      stored &&
-      ["overview", "courses", "tutorials", "certificates", "billing", "settings"].includes(
-        stored
-      )
-    ) {
-      return stored as typeof activeTab;
+    if (stored && (PROFILE_TABS as readonly string[]).includes(stored)) {
+      return stored as ProfileTab;
     }
     return "overview";
   });

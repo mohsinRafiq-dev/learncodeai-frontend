@@ -9,6 +9,9 @@ import { STORAGE_KEYS } from "../../../constants";
 interface Certificate {
   _id: string;
   status: string;
+  // Present on the backend Certificate model but previously missing here, so
+  // the approval gating below did not typecheck.
+  approvalStatus?: "pending" | "approved" | "rejected";
   studentName?: string;
   issuedDate?: string;
   certificateId?: string;

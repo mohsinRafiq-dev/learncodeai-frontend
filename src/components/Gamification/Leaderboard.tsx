@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Award, Trophy, Medal } from "lucide-react";
+import React, { useState } from "react";
+import { Trophy, Medal } from "lucide-react";
 
 const Leaderboard: React.FC<{
   leaderboard: any[];
-  userRank?: number;
+  // null is the "loaded but unranked" state the hook reports; undefined is
+  // "not loaded yet". Both render the same, but the prop must accept each.
+  userRank?: number | null;
   loading?: boolean;
 }> = ({ leaderboard = [], userRank, loading = false }) => {
   const [displayLimit, setDisplayLimit] = useState(10);
@@ -18,19 +20,6 @@ const Leaderboard: React.FC<{
 
   const topThree = leaderboard.slice(0, 3);
   const remaining = leaderboard.slice(3);
-
-  const getMedalIcon = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <Medal className="w-6 h-6 text-yellow-400" />;
-      case 2:
-        return <Medal className="w-6 h-6 text-gray-300" />;
-      case 3:
-        return <Medal className="w-6 h-6 text-orange-400" />;
-      default:
-        return <span className="text-lg font-bold text-indigo-300">#{rank}</span>;
-    }
-  };
 
   return (
     <div className="space-y-6">

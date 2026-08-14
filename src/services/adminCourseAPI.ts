@@ -36,7 +36,9 @@ export interface CourseSection {
   description: string;
   order: number;
   lessons: string[];
-  sectionQuiz?: string;
+  // The API returns a raw id on list endpoints and a populated document on
+  // detail endpoints. Callers already branch on typeof; the type now says so.
+  sectionQuiz?: string | Quiz;
   estimatedHours: number;
   isLocked: boolean;
   unlockCondition?: string;

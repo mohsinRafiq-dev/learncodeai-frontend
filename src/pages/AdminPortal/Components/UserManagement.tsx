@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   Trash2,
@@ -9,7 +9,6 @@ import {
   CheckCircle,
   X,
   Eye,
-  User,
   Calendar,
   Award,
 } from "lucide-react";

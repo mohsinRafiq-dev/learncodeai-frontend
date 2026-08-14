@@ -15,7 +15,9 @@ export interface BillingStatus {
   hasActiveSubscription: boolean;
 }
 
-const authHeaders = () => {
+// Returns a Record rather than a union of two object literals, so spreading it
+// into a fetch `headers` field stays assignable to HeadersInit.
+const authHeaders = (): Record<string, string> => {
   const token = localStorage.getItem('authToken');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };

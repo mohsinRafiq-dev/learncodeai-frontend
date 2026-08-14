@@ -11,11 +11,10 @@ interface CourseLessonViewerProps {
   onPrevious: () => void;
 }
 
-const CourseLessonViewer: React.FC<CourseLessonViewerProps> = ({
-  lesson,
-  onNext,
-  onPrevious,
-}) => {
+// onNext/onPrevious stay on the props interface — callers pass them and the
+// navigation may move back into this component — but they are not read here,
+// so they are left out of the destructuring.
+const CourseLessonViewer: React.FC<CourseLessonViewerProps> = ({ lesson }) => {
   const navigate = useNavigate();
 
   const getDifficultyColor = (difficulty?: string) => {

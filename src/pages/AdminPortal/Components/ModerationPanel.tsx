@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AlertTriangle, Eye, EyeOff, Lock, Unlock, Trash2, RefreshCw, MessageSquare, Flag } from "lucide-react";
+import { AlertTriangle, Eye, EyeOff, Lock, Trash2, RefreshCw, MessageSquare, Flag } from "lucide-react";
 import discussionAPI from "../../../services/discussionAPI";
 
 interface ReportItem {

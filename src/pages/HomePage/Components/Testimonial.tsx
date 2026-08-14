@@ -1,8 +1,4 @@
-import { useState } from "react";
-
 export default function Testimonial() {
-  const [activeTab, setActiveTab] = useState("readme");
-
   const testimonials = [
     {
       name: "Muhammad_Saad",

@@ -1,24 +1,36 @@
-import React, { useState, useEffect } from "react";
-import {
-  Search,
-  Mail,
-  Eye,
-  Calendar,
-  User,
-  Users,
-  MessageSquare,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Mail, Eye, Calendar, Users, MessageSquare } from "lucide-react";
 import { adminAPI } from "../../../services/adminAPI";
 import { useToast } from "../../../contexts/ToastContext";
-import { contactAPI } from "../../../services/contactAPI";
+import { contactAPI, type Contact } from "../../../services/contactAPI";
+
+// Mirrors backend NewsletterSubscription
+// (learncodeai-backend/src/models/NewsletterSubscription.js).
+interface NewsletterSubscription {
+  _id: string;
+  email: string;
+  subscribedAt: string;
+  isActive: boolean;
+  ipAddress: string | null;
+  userAgent: string | null;
+  unsubscribedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function QueriesManagement() {
-  const [activeTab, setActiveTab] = useState("contacts");
-  const [contacts, setContacts] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [activeTab, setActiveTab] = useState<"contacts" | "subscriptions">(
+    "contacts"
+  );
+  // Without the explicit parameter these infer never[], which made every
+  // property access on an element an error.
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [subscriptions, setSubscriptions] = useState<NewsletterSubscription[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [replyForm, setReplyForm] = useState({

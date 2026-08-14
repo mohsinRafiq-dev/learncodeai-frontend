@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Award, TrendingUp, Zap, Target } from "lucide-react";
 
 const GamificationStats: React.FC<{

@@ -449,7 +449,7 @@ export default function CourseManagement({
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => onTogglePublish(course._id)}
+                          onClick={() => handleTogglePublish(course._id)}
                           className="p-1.5 hover:bg-[#1a1f3e] rounded text-gray-400"
                           title={course.isPublished ? "Unpublish" : "Publish"}
                         >

@@ -41,8 +41,8 @@ const AIChatAssistantInner: React.FC<AIChatAssistantProps> = ({
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
+  const [, setLoading] = useState(true);
 
   // Load chat history on mount or when context changes
   useEffect(() => {

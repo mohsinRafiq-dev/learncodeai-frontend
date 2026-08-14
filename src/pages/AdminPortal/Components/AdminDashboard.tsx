@@ -141,7 +141,10 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     loadDashboardStats();
   }, []);
 
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  // Fetched for its error handling and to keep the request warm; the only
+  // reader was a language-breakdown array that was computed but never
+  // rendered, so the value itself is unused.
+  const [, setAnalytics] = useState<AnalyticsData | null>(null);
   const [latestTutorials, setLatestTutorials] = useState<Tutorial[]>([]);
   const [latestCourses, setLatestCourses] = useState<Course[]>([]);
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>(
@@ -251,13 +254,6 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     rust: "#f97316",
     haskell: "#3b82f6",
   };
-
-  const contentData: ContentDataItem[] =
-    analytics?.languageStats.map((lang: { _id: string; count: number }) => ({
-      name: lang._id.charAt(0).toUpperCase() + lang._id.slice(1),
-      value: lang.count,
-      color: languageColors[lang._id.toLowerCase()] || "#6b7280",
-    })) || [];
 
   const getActivityIcon = (type: string) => {
     switch (type) {

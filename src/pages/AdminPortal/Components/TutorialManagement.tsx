@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Search, Plus, Trash2, Edit, X } from "lucide-react";
 import { adminTutorialAPI } from "../../../services/adminTutorialAPI";
 import { useToast } from "../../../contexts/ToastContext";
@@ -15,7 +15,7 @@ export default function TutorialManagement({
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTutorial, setEditingTutorial] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("all");
+  const [selectedLanguage] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
   const [tutorials, setTutorials] = useState<any[]>([]);

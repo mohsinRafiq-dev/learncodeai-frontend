@@ -24,7 +24,7 @@ export const checkPythonSyntax = (code: string): ValidationError[] => {
   let openParens = 0;
   let openBrackets = 0;
   let openBraces = 0;
-  const indentStack: number[] = [0];
+  
 
   lines.forEach((line, index) => {
     const lineNum = index + 1;

@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { adminAPI } from "../../../services/adminAPI";
+import { adminCourseAPI } from "../../../services/adminCourseAPI";
 
 type ContentType = "tutorial" | "course" | "lesson";
 
@@ -57,7 +58,9 @@ const VersionHistory: React.FC = () => {
     try {
       setLoadingItems(true);
       if (type === "tutorial") {
-        const res = await adminAPI.getAllTutorials({ limit: 200 });
+        // getAllTutorials takes positional args (page, limit, language,
+        // search) — passing an object sent page=[object Object].
+        const res = await adminAPI.getAllTutorials(1, 200);
         setItems(
           (res?.data || res?.tutorials || []).map((t: any) => ({
             _id: t._id,
@@ -68,7 +71,9 @@ const VersionHistory: React.FC = () => {
           }))
         );
       } else if (type === "course") {
-        const res = await adminAPI.getAllCourses({ limit: 200 });
+        // Courses live on adminCourseAPI; adminAPI has no getAllCourses, so
+        // this threw a TypeError as soon as the course tab was opened.
+        const res = await adminCourseAPI.getAllCourses({ limit: 200 });
         setItems(
           (res?.data || res?.courses || []).map((c: any) => ({
             _id: c._id,

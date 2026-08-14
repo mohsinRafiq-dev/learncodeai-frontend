@@ -15,7 +15,7 @@ import VersionHistory from "./Components/VersionHistory";
 
 function AdminPortal() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [highlightedItem, setHighlightedItem] = useState<{
     type: string;

@@ -1,6 +1,8 @@
+// Optional: the signup screen passes undefined for a provider that admins have
+// disabled via the feature toggles, and the corresponding button is hidden.
 interface OAuthButtonsProps {
-  onGoogleClick: () => void;
-  onGithubClick: () => void;
+  onGoogleClick?: () => void;
+  onGithubClick?: () => void;
 }
 
 export default function OAuthButtons({
@@ -9,6 +11,7 @@ export default function OAuthButtons({
 }: OAuthButtonsProps) {
   return (
     <div className="space-y-3">
+      {onGoogleClick && (
       <button
         onClick={onGoogleClick}
         className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-cyan group cursor-pointer"
@@ -35,7 +38,9 @@ export default function OAuthButtons({
           Continue with Google
         </span>
       </button>
+      )}
 
+      {onGithubClick && (
       <button
         onClick={onGithubClick}
         className="w-full flex items-center justify-center gap-3 bg-[#1a1f3a] hover:bg-[#252b4a] text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 neon-border-purple group cursor-pointer"
@@ -51,6 +56,7 @@ export default function OAuthButtons({
           Continue with GitHub
         </span>
       </button>
+      )}
     </div>
   );
 }

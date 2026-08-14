@@ -243,7 +243,9 @@ export const adminAPI = {
   },
 
   // Newsletter subscriptions
-  getNewsletterSubscriptions: async (filters = {}) => {
+  getNewsletterSubscriptions: async (
+    filters: { search?: string; page?: number; limit?: number } = {}
+  ) => {
     try {
       const params = new URLSearchParams();
       if (filters.search) params.append("search", filters.search);

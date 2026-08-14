@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
 import gamificationAPI from '../services/gamificationAPI';
+import type {
+  GamificationStats,
+  Streak,
+  LeaderboardEntry,
+} from '../types/gamification';
 
-const useGamification = (userId?: string) => {
-  const [stats, setStats] = useState(null);
-  const [streak, setStreak] = useState(null);
-  const [leaderboard, setLeaderboard] = useState([]);
-  const [userRank, setUserRank] = useState(null);
+const useGamification = () => {
+  // Explicit parameters: useState(null) infers `null` and useState([]) infers
+  // `never[]`, which made every downstream property access an error.
+  const [stats, setStats] = useState<GamificationStats | null>(null);
+  const [streak, setStreak] = useState<Streak | null>(null);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [userRank, setUserRank] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchStats = async () => {
     try {
