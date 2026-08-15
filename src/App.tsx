@@ -24,6 +24,7 @@ import GamificationPage from "./pages/GamificationPage/GamificationPage";
 import ProgressDashboardPage from "./pages/ProgressDashboardPage/ProgressDashboardPage";
 import PricingPage from "./pages/PricingPage/PricingPage";
 import BillingSuccessPage from "./pages/PricingPage/BillingSuccessPage";
+import CreatorStudio from "./pages/CreatorStudio/CreatorStudio";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 import { PlatformSettingsProvider } from "./contexts/PlatformSettingsContext";
 
@@ -110,6 +111,24 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProgressDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            {/* Creator Studio. Any signed-in user can reach it — the page
+                itself shows the application form until they're approved. */}
+            <Route
+              path="/creator"
+              element={
+                <ProtectedRoute>
+                  <CreatorStudio />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/creator/payouts"
+              element={
+                <ProtectedRoute>
+                  <CreatorStudio />
                 </ProtectedRoute>
               }
             />
