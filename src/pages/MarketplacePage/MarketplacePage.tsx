@@ -71,6 +71,16 @@ export default function MarketplacePage() {
   }, [searchInput]);
 
   const buy = async (course: MarketplaceCourse) => {
+    // A free course has nothing to check out; send them to the course instead
+    // of Stripe. The server would reject it anyway ("this course is free").
+    if (course.access.isFree) {
+      navigate(
+        isAuthenticated
+          ? `/courses/${course._id}`
+          : `/signin?redirect=/marketplace/${course._id}`
+      );
+      return;
+    }
     if (!isAuthenticated) {
       navigate(`/signin?redirect=/marketplace/${course._id}`);
       return;
@@ -291,14 +301,20 @@ function CourseCard({
             <button
               onClick={onBuy}
               disabled={buying}
-              className="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-sm font-medium px-3.5 py-1.5 rounded-lg transition-colors"
+              className={`flex items-center gap-1.5 disabled:opacity-50 text-white text-sm font-medium px-3.5 py-1.5 rounded-lg transition-colors ${
+                access.isFree
+                  ? "bg-green-600 hover:bg-green-500"
+                  : "bg-cyan-600 hover:bg-cyan-500"
+              }`}
             >
               {buying ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : access.isFree ? (
+                <Check className="w-3.5 h-3.5" />
               ) : (
                 <ShoppingCart className="w-3.5 h-3.5" />
               )}
-              Buy
+              {access.isFree ? "Start" : "Buy"}
             </button>
           )}
         </div>

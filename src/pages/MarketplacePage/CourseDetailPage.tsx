@@ -279,6 +279,27 @@ export default function CourseDetailPage() {
                       Start learning
                     </button>
                   </>
+                ) : isFree ? (
+                  // Nothing to sell. A signed-out visitor looking at a $0
+                  // course was being offered a checkout, which is nonsense —
+                  // they just need an account.
+                  <>
+                    <button
+                      onClick={() =>
+                        navigate(
+                          isAuthenticated
+                            ? `/courses/${course._id}`
+                            : `/signin?redirect=/marketplace/${course._id}`
+                        )
+                      }
+                      className="w-full mt-4 bg-green-600 hover:bg-green-500 text-white font-medium py-3 rounded-lg transition-colors"
+                    >
+                      {isAuthenticated ? "Start learning" : "Sign in to start"}
+                    </button>
+                    <p className="text-xs text-gray-500 mt-3 text-center">
+                      Free · no card required
+                    </p>
+                  </>
                 ) : (
                   <>
                     <button
