@@ -25,6 +25,7 @@ import ProgressDashboardPage from "./pages/ProgressDashboardPage/ProgressDashboa
 import PricingPage from "./pages/PricingPage/PricingPage";
 import BillingSuccessPage from "./pages/PricingPage/BillingSuccessPage";
 import CreatorStudio from "./pages/CreatorStudio/CreatorStudio";
+import MarketplacePage from "./pages/MarketplacePage/MarketplacePage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 import { PlatformSettingsProvider } from "./contexts/PlatformSettingsContext";
 
@@ -40,6 +41,8 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/pricing" element={<PricingPage />} />
+            {/* Public: a catalogue nobody can see without an account sells nothing. */}
+            <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/billing/success" element={<BillingSuccessPage />} />
             <Route
               path="/editor"
