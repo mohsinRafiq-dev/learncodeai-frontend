@@ -294,12 +294,14 @@ const Hero = () => {
                 ))}
               </div>
               <span className="text-[#00e676]">{"]"}</span>
-              <span className="ml-2">Active Community</span>
+              <span className="ml-2">Sandboxed Execution</span>
             </div>
+            {/* Was a hard-coded 4.9/5 rating. No ratings exist yet, and an
+                invented one is trivially disproved by an empty review list.
+                Replaced with something true and more relevant to the audience. */}
             <div className="flex items-center gap-2">
-              <span className="text-[#e91e63]">{"★".repeat(5)}</span>
-              <span className="ml-2 text-[#00b4d8]">4.9/5</span>
-              <span>Rating</span>
+              <span className="text-[#8b5cf6]">{"</>"}</span>
+              <span className="ml-1 text-[#00b4d8]">Python · JavaScript · C++</span>
             </div>
           </div>
         </div>
