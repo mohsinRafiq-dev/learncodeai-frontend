@@ -223,36 +223,39 @@ const Hero = () => {
               execution & instant feedback
             </p>
             <p className="text-[#6272a4] font-mono text-base sm:text-lg">
-              <span className="text-[#00b4d8]">//</span> Join{" "}
-              <span className="neon-text-green">10,000+</span> developers
-              worldwide
+              <span className="text-[#00b4d8]">//</span> Every AI code example{" "}
+              <span className="neon-text-green">runs in a sandbox</span> before
+              you see it
             </p>
           </div>
 
           {/* Stats with Glowing Effect */}
           <div className="flex flex-wrap justify-center gap-6 sm:gap-8 py-8">
+            {/* Counts reflect the actual catalogue. Inflated figures are the
+                easiest claim on a page to disprove, and they cast doubt on
+                everything beside them. */}
             <div className="terminal-window p-4 backdrop-blur-xl animate-pulse-glow">
               <div className="text-3xl sm:text-4xl font-bold neon-text-cyan font-mono">
-                10K+
+                72
               </div>
               <div className="text-[#6272a4] text-xs sm:text-sm font-mono mt-1">
-                {"<learners />"}
+                {"<tutorials />"}
               </div>
             </div>
             <div className="terminal-window p-4 backdrop-blur-xl animate-pulse-glow delay-300">
               <div className="text-3xl sm:text-4xl font-bold neon-text-purple font-mono">
-                500+
+                3
               </div>
               <div className="text-[#6272a4] text-xs sm:text-sm font-mono mt-1">
-                {"{ challenges }"}
+                {"{ languages }"}
               </div>
             </div>
             <div className="terminal-window p-4 backdrop-blur-xl animate-pulse-glow delay-500">
               <div className="text-3xl sm:text-4xl font-bold neon-text-green font-mono">
-                50+
+                16
               </div>
               <div className="text-[#6272a4] text-xs sm:text-sm font-mono mt-1">
-                ["courses"]
+                ["quizzes"]
               </div>
             </div>
           </div>

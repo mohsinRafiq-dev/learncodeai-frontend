@@ -10,15 +10,20 @@ export default function StartJourney() {
   const fullCommand = "$ npm install @learncode/skills";
 
   const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation(0.3);
-  const users = useCountUp(10000000, 2000);
-  const projects = useCountUp(500000, 2000);
-  const courses = useCountUp(50, 1500);
+
+  // Real figures from the platform's own catalogue, not invented ones. The
+  // previous values claimed 10M users and 500K projects against a real user
+  // count in the tens — the kind of thing anyone can check, and the fastest way
+  // to lose a visitor's trust in everything else on the page.
+  const tutorials = useCountUp(72, 2000);
+  const lessons = useCountUp(36, 2000);
+  const quizzes = useCountUp(16, 1500);
 
   useEffect(() => {
     if (statsVisible) {
-      users.startAnimation();
-      projects.startAnimation();
-      courses.startAnimation();
+      tutorials.startAnimation();
+      lessons.startAnimation();
+      quizzes.startAnimation();
     }
   }, [statsVisible]);
 
@@ -159,12 +164,10 @@ export default function StartJourney() {
         >
           <div className={statsVisible ? "fade-in-up" : ""}>
             <div className="text-2xl md:text-3xl font-bold neon-text-cyan font-mono">
-              {users.count >= 1000000
-                ? `${Math.floor(users.count / 1000000)}M+`
-                : `${users.count}+`}
+              {tutorials.count}
             </div>
             <div className="text-[#6272a4] font-mono text-xs md:text-sm">
-              active_users
+              tutorials
             </div>
           </div>
           <div
@@ -172,12 +175,10 @@ export default function StartJourney() {
             style={{ animationDelay: "0.2s" }}
           >
             <div className="text-2xl md:text-3xl font-bold neon-text-purple font-mono">
-              {projects.count >= 1000
-                ? `${Math.floor(projects.count / 1000)}K+`
-                : `${projects.count}+`}
+              {lessons.count}
             </div>
             <div className="text-[#6272a4] font-mono text-xs md:text-sm">
-              projects_built
+              course_lessons
             </div>
           </div>
           <div
@@ -185,9 +186,20 @@ export default function StartJourney() {
             style={{ animationDelay: "0.4s" }}
           >
             <div className="text-2xl md:text-3xl font-bold neon-text-green font-mono">
-              {courses.count}+
+              {quizzes.count}
             </div>
-            <div className="text-[#6272a4] font-mono text-sm">courses</div>
+            <div className="text-[#6272a4] font-mono text-sm">quizzes</div>
+          </div>
+          <div
+            className={statsVisible ? "fade-in-up" : ""}
+            style={{ animationDelay: "0.6s" }}
+          >
+            <div className="text-2xl md:text-3xl font-bold neon-text-cyan font-mono">
+              3
+            </div>
+            <div className="text-[#6272a4] font-mono text-xs md:text-sm">
+              sandboxed_languages
+            </div>
           </div>
         </div>
       </div>

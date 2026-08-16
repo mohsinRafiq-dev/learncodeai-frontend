@@ -1,9 +1,132 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
 import { useAuth } from "../../hooks/useAuth";
 import { getProfileImageUrl } from "../../utils/imageUtils";
 import { useSettings } from "../../contexts/PlatformSettingsContext";
+
+interface NavItem {
+  to: string;
+  label: string;
+  desc?: string;
+}
+
+/**
+ * Grouped nav menu, styled as a terminal block to match the rest of the site.
+ *
+ * Opens on hover for pointer users and on click for everyone else — hover alone
+ * is unusable on touch, and click alone feels sluggish on desktop. Escape and
+ * click-outside both close it, and the trigger stays highlighted while any
+ * child route is active so the user can see where they are.
+ */
+function NavDropdown({ label, items }: { label: string; items: NavItem[] }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  const hasActiveChild = items.some((i) => pathname.startsWith(i.to));
+
+  // Close when the route changes, otherwise the menu lingers over the new page.
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={`flex items-center gap-1.5 transition-all ${
+          hasActiveChild || open
+            ? "text-[#00b4d8] neon-text-cyan"
+            : "text-[#6272a4] hover:text-[#00b4d8]"
+        }`}
+      >
+        {label}
+        <svg
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+          <div className="w-64 rounded-lg border border-[#00b4d8]/30 bg-[#0d1226] shadow-[0_0_30px_rgba(0,180,216,0.15)] overflow-hidden">
+            {/* Terminal chrome, consistent with the panels elsewhere on the site */}
+            <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[#00b4d8]/15 bg-[#0a0e27]">
+              <span className="w-2 h-2 rounded-full bg-[#ff5555]" />
+              <span className="w-2 h-2 rounded-full bg-[#f1fa8c]" />
+              <span className="w-2 h-2 rounded-full bg-[#50fa7b]" />
+              <span className="ml-1.5 text-[10px] text-[#6272a4] font-mono">
+                {label}/
+              </span>
+            </div>
+
+            <div className="py-1">
+              {items.map((item) => {
+                const active = pathname.startsWith(item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`block px-3 py-2.5 transition-colors group ${
+                      active ? "bg-[#00b4d8]/10" : "hover:bg-[#1a1f3e]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#00e676] text-xs">$</span>
+                      <span
+                        className={`text-sm font-mono transition-colors ${
+                          active
+                            ? "text-[#00b4d8]"
+                            : "text-[#c9d1e6] group-hover:text-[#00b4d8]"
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
+                    {item.desc && (
+                      <p className="text-[11px] text-[#6272a4] mt-0.5 ml-4 font-mono">
+                        {item.desc}
+                      </p>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -47,22 +170,31 @@ export default function Header() {
     };
   }, []);
 
-  // Build nav from feature flags so admins can hide modules platform-wide
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/about", label: "About" },
-    { to: "/tutorials", label: "Tutorials" },
-    { to: "/courses", label: "Courses" },
-    { to: "/quizzes", label: "Quizzes" },
+  // Ten flat links overflowed the bar and collided with the auth buttons below
+  // ~1400px. Grouping the related ones into two dropdowns takes the top level
+  // from ten items to five, which fits comfortably and reads better.
+  //
+  // Feature flags still apply, so an admin hiding a module removes its entry
+  // (and the whole group if it empties).
+  const learnItems = [
+    { to: "/tutorials", label: "tutorials", desc: "72 guided lessons" },
+    { to: "/courses", label: "courses", desc: "Structured paths" },
+    { to: "/quizzes", label: "quizzes", desc: "Test yourself" },
+    { to: "/editor", label: "code_editor", desc: "Run code instantly" },
+  ];
+
+  const communityItems = [
     ...(features.discussionsEnabled
-      ? [{ to: "/discussions", label: "Forum" }]
+      ? [{ to: "/discussions", label: "forum", desc: "Ask and answer" }]
       : []),
-    { to: "/editor", label: "Code Editor" },
-    // The marketplace is the only route to a creator's paid course. Without it
-    // in the nav, a published course is unreachable except by direct link.
-    { to: "/marketplace", label: "Marketplace" },
-    { to: "/pricing", label: "Pricing" },
-    { to: "/contact", label: "Contact Us" },
+    { to: "/about", label: "about", desc: "What we're building" },
+    { to: "/contact", label: "contact_us", desc: "Get in touch" },
+  ];
+
+  // Top-level links that stand alone.
+  const directLinks = [
+    { to: "/marketplace", label: "marketplace" },
+    { to: "/pricing", label: "pricing" },
   ];
 
   return (
@@ -89,18 +221,29 @@ export default function Header() {
       </div>
 
       {/* Desktop Navigation Links */}
-      <div className="hidden lg:flex items-center gap-8 xl:gap-20 font-medium text-base xl:text-lg font-mono">
-        {navLinks.map((link) => (
+      <div className="hidden lg:flex items-center gap-6 xl:gap-8 font-medium text-sm xl:text-base font-mono">
+        <Link
+          to="/"
+          className="text-[#6272a4] hover:text-[#00b4d8] hover:neon-text-cyan transition-all"
+        >
+          home
+        </Link>
+
+        <NavDropdown label="learn" items={learnItems} />
+
+        {directLinks.map((link) => (
           <Link
             key={link.to}
             to={link.to}
-            className="text-[#6272a4] hover:text-[#00b4d8] transition-colors relative group"
+            className="text-[#6272a4] hover:text-[#00b4d8] hover:neon-text-cyan transition-all"
           >
-            <span className="group-hover:neon-text-cyan transition-all">
-              {link.label.toLowerCase().replace(/ /g, "_")}
-            </span>
+            {link.label}
           </Link>
         ))}
+
+        {communityItems.length > 0 && (
+          <NavDropdown label="community" items={communityItems} />
+        )}
       </div>
 
       {/* Desktop Auth Section */}
@@ -549,14 +692,56 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 bg-[#0a0e27] border-t border-[#00b4d8]/20 shadow-lg z-50 backdrop-blur-xl">
           <div className="flex flex-col p-4 space-y-2">
-            {navLinks.map((link) => (
+            {/* Mobile keeps everything flat with section headings rather than
+                nested dropdowns — a menu inside a menu on a small screen is
+                more taps for no benefit. */}
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-4 py-3 text-[#6272a4] hover:text-[#00b4d8] hover:bg-[#1a1f3a] rounded-lg transition-colors font-mono"
+            >
+              &gt; home
+            </Link>
+
+            <p className="px-4 pt-2 pb-1 text-[10px] uppercase tracking-widest text-[#3d4666] font-mono">
+              learn
+            </p>
+            {learnItems.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-3 text-[#6272a4] hover:text-[#00b4d8] hover:bg-[#1a1f3a] rounded-lg transition-colors font-mono"
               >
-                &gt; {link.label.toLowerCase().replace(/ /g, "_")}
+                &gt; {link.label}
+              </Link>
+            ))}
+
+            <p className="px-4 pt-2 pb-1 text-[10px] uppercase tracking-widest text-[#3d4666] font-mono">
+              explore
+            </p>
+            {directLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-3 text-[#6272a4] hover:text-[#00b4d8] hover:bg-[#1a1f3a] rounded-lg transition-colors font-mono"
+              >
+                &gt; {link.label}
+              </Link>
+            ))}
+
+            <p className="px-4 pt-2 pb-1 text-[10px] uppercase tracking-widest text-[#3d4666] font-mono">
+              community
+            </p>
+            {communityItems.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-3 text-[#6272a4] hover:text-[#00b4d8] hover:bg-[#1a1f3a] rounded-lg transition-colors font-mono"
+              >
+                &gt; {link.label}
               </Link>
             ))}
 
