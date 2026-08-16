@@ -12,8 +12,11 @@ export interface DashboardStats {
   suspendedUsers: number;
   totalAdmins: number;
   totalTutorials: number;
+  /** Excludes unpublished drafts. Optional so an older API response still types. */
+  publishedTutorials?: number;
   totalChats: number;
   totalCourses: number;
+  publishedCourses?: number;
   totalEnrollments: number;
   newUsersLast30Days: number;
   suspensionRate: string;

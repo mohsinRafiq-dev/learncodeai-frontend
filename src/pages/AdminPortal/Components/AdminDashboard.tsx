@@ -495,8 +495,13 @@ export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 positive: parseFloat(stats.enrollmentGrowthRate || "0") >= 0,
               },
               {
+                // Was fed totalTutorials, which includes unpublished drafts —
+                // the card read 78 while the public site showed 72. Falls back
+                // to the total only if the API predates the published count.
                 label: "Published Tutorials",
-                value: (stats.totalTutorials || 0).toLocaleString(),
+                value: (
+                  stats.publishedTutorials ?? stats.totalTutorials ?? 0
+                ).toLocaleString(),
                 change: `${stats.tutorialGrowthRate || "0.0"}%`,
                 positive: parseFloat(stats.tutorialGrowthRate || "0") >= 0,
               },

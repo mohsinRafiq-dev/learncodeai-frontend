@@ -1,5 +1,37 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { subscribeToNewsletter } from "../../services/subscriptionAPI";
+
+/** One footer column. Uses Link so navigation stays client-side. */
+function FooterColumn({
+  title,
+  titleClass,
+  hoverClass,
+  links,
+}: {
+  title: string;
+  titleClass: string;
+  hoverClass: string;
+  links: { to: string; label: string }[];
+}) {
+  return (
+    <div>
+      <h3 className={`text-lg font-bold mb-6 font-mono ${titleClass}`}>{title}</h3>
+      <ul className="space-y-3 font-mono text-sm">
+        {links.map((l) => (
+          <li key={l.to + l.label}>
+            <Link
+              to={l.to}
+              className={`text-[#6272a4] ${hoverClass} hover:translate-x-2 inline-block transition-all`}
+            >
+              &gt; {l.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -154,128 +186,45 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Company Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-6 font-mono neon-text-purple">
-              {"{ company }"}
-            </h3>
-            <ul className="space-y-3 font-mono text-sm">
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; contact_us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; about_us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00b4d8] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; get_started
-                </a>
-              </li>
-            </ul>
-          </div>
+          {/* Every link below was href="#" — the whole footer was inert. They
+              now point at real routes, and the courses column lists the three
+              languages the platform actually teaches rather than html_css,
+              react_js and node_js, none of which exist. */}
+          <FooterColumn
+            title="{ company }"
+            titleClass="neon-text-purple"
+            hoverClass="hover:text-[#00b4d8]"
+            links={[
+              { to: "/", label: "home" },
+              { to: "/about", label: "about_us" },
+              { to: "/contact", label: "contact_us" },
+              { to: "/pricing", label: "pricing" },
+            ]}
+          />
 
-          {/* Account Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-6 font-mono neon-text-green">
-              {"[ account ]"}
-            </h3>
-            <ul className="space-y-3 font-mono text-sm">
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; profile
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; my_account
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; preferences
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#00e676] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; certificates
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterColumn
+            title="[ account ]"
+            titleClass="neon-text-green"
+            hoverClass="hover:text-[#00e676]"
+            links={[
+              { to: "/profile", label: "profile" },
+              { to: "/progress", label: "progress" },
+              { to: "/gamification", label: "achievements" },
+              { to: "/profile?tab=certificates", label: "certificates" },
+            ]}
+          />
 
-          {/* Courses Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-6 font-mono text-[#e91e63]">
-              {"<courses />"}
-            </h3>
-            <ul className="space-y-3 font-mono text-sm">
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; html_css
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; javascript
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; react_js
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-[#6272a4] hover:text-[#e91e63] hover:translate-x-2 inline-block transition-all"
-                >
-                  &gt; node_js
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterColumn
+            title="<learn />"
+            titleClass="text-[#e91e63]"
+            hoverClass="hover:text-[#e91e63]"
+            links={[
+              { to: "/tutorials", label: "tutorials" },
+              { to: "/courses", label: "courses" },
+              { to: "/marketplace", label: "marketplace" },
+              { to: "/editor", label: "code_editor" },
+            ]}
+          />
         </div>
 
         {/* Bottom Bar */}
