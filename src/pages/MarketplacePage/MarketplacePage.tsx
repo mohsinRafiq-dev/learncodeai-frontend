@@ -72,7 +72,7 @@ export default function MarketplacePage() {
 
   const buy = async (course: MarketplaceCourse) => {
     if (!isAuthenticated) {
-      navigate(`/signin?redirect=/marketplace`);
+      navigate(`/signin?redirect=/marketplace/${course._id}`);
       return;
     }
     setBuying(course._id);
@@ -83,6 +83,12 @@ export default function MarketplacePage() {
       setBuying(null);
     }
   };
+
+  // Owners go straight to the learning view; everyone else to the sales page.
+  // Sending a non-owner to /courses/:id lands them in a view that has no notion
+  // of a paywall.
+  const openCourse = (course: MarketplaceCourse) =>
+    navigate(course.access.canOpen ? `/courses/${course._id}` : `/marketplace/${course._id}`);
 
   const set = (patch: Partial<BrowseFilters>) =>
     setFilters((f) => ({ ...f, ...patch, page: 1 }));
@@ -171,7 +177,8 @@ export default function MarketplacePage() {
                   key={c._id}
                   course={c}
                   buying={buying === c._id}
-                  onOpen={() => navigate(`/courses/${c._id}`)}
+                  onOpen={() => openCourse(c)}
+                  onDetails={() => navigate(`/marketplace/${c._id}`)}
                   onBuy={() => buy(c)}
                 />
               ))}
@@ -184,18 +191,22 @@ export default function MarketplacePage() {
 }
 
 function CourseCard({
-  course, buying, onOpen, onBuy,
+  course, buying, onOpen, onDetails, onBuy,
 }: {
   course: MarketplaceCourse;
   buying: boolean;
   onOpen: () => void;
+  onDetails: () => void;
   onBuy: () => void;
 }) {
   const { access } = course;
 
   return (
     <article className="rounded-xl border border-[#232a45] bg-[#0f1424] overflow-hidden flex flex-col hover:border-[#2c3454] transition-colors">
-      <div className="aspect-video bg-[#141a2e] relative overflow-hidden">
+      <button
+        onClick={onDetails}
+        className="aspect-video bg-[#141a2e] relative overflow-hidden text-left w-full"
+      >
         {course.thumbnail ? (
           <img
             src={course.thumbnail}
@@ -219,7 +230,7 @@ function CourseCard({
             <Sparkles className="w-3 h-3" /> In Pro
           </span>
         )}
-      </div>
+      </button>
 
       <div className="p-4 flex-1 flex flex-col">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-1.5">
@@ -228,7 +239,11 @@ function CourseCard({
           <span>{course.difficulty}</span>
         </div>
 
-        <h3 className="font-medium text-gray-100 line-clamp-2">{course.title}</h3>
+        <button onClick={onDetails} className="text-left">
+          <h3 className="font-medium text-gray-100 line-clamp-2 hover:text-cyan-400 transition-colors">
+            {course.title}
+          </h3>
+        </button>
 
         {course.shortDescription && (
           <p className="text-sm text-gray-400 mt-1.5 line-clamp-2 flex-1">

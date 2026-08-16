@@ -26,6 +26,7 @@ import PricingPage from "./pages/PricingPage/PricingPage";
 import BillingSuccessPage from "./pages/PricingPage/BillingSuccessPage";
 import CreatorStudio from "./pages/CreatorStudio/CreatorStudio";
 import MarketplacePage from "./pages/MarketplacePage/MarketplacePage";
+import CourseDetailPage from "./pages/MarketplacePage/CourseDetailPage";
 import AITutorialSuccessNotification from "./components/AITutorialSuccessNotification/AITutorialSuccessNotification";
 import { PlatformSettingsProvider } from "./contexts/PlatformSettingsContext";
 
@@ -43,6 +44,9 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             {/* Public: a catalogue nobody can see without an account sells nothing. */}
             <Route path="/marketplace" element={<MarketplacePage />} />
+            {/* Sales page. Kept apart from /courses/:id, which is the learning
+                view and assumes the viewer already has access. */}
+            <Route path="/marketplace/:courseId" element={<CourseDetailPage />} />
             <Route path="/billing/success" element={<BillingSuccessPage />} />
             <Route
               path="/editor"
