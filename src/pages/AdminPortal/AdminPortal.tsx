@@ -12,6 +12,8 @@ import SettingsPanel from "./Components/SettingsPanel";
 import ModerationPanel from "./Components/ModerationPanel";
 import ChallengeManagement from "./Components/ChallengeManagement";
 import VersionHistory from "./Components/VersionHistory";
+import CreatorApplications from "./Components/CreatorApplications";
+import CourseReview from "./Components/CourseReview";
 
 function AdminPortal() {
   const navigate = useNavigate();
@@ -267,6 +269,35 @@ function AdminPortal() {
             <span className="font-medium">Queries</span>
           </button>
 
+          {/* Marketplace: creator applications and course review */}
+          <button
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
+              activeTab === "creators"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
+            }`}
+            onClick={() => setActiveTab("creators")}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <span className="font-medium">Creators</span>
+          </button>
+
+          <button
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
+              activeTab === "course-review"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
+            }`}
+            onClick={() => setActiveTab("course-review")}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="font-medium">Course review</span>
+          </button>
+
           <button
             className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "moderation"
@@ -426,6 +457,8 @@ function AdminPortal() {
           )}
           {activeTab === "certificates" && <CertificateApproval />}
           {activeTab === "queries" && <QueriesManagement />}
+          {activeTab === "creators" && <CreatorApplications />}
+          {activeTab === "course-review" && <CourseReview />}
           {activeTab === "moderation" && <ModerationPanel />}
           {activeTab === "challenges" && <ChallengeManagement />}
           {activeTab === "versions" && <VersionHistory />}
