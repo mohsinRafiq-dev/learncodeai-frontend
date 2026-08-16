@@ -14,6 +14,7 @@ import ChallengeManagement from "./Components/ChallengeManagement";
 import VersionHistory from "./Components/VersionHistory";
 import CreatorApplications from "./Components/CreatorApplications";
 import CourseReview from "./Components/CourseReview";
+import PayoutApprovals from "./Components/PayoutApprovals";
 
 function AdminPortal() {
   const navigate = useNavigate();
@@ -300,6 +301,20 @@ function AdminPortal() {
 
           <button
             className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
+              activeTab === "payouts"
+                ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
+                : "text-gray-300 hover:bg-[#1a1f3e]"
+            }`}
+            onClick={() => setActiveTab("payouts")}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span className="font-medium">Payouts</span>
+          </button>
+
+          <button
+            className={`w-full flex items-center gap-3 px-4 py-2.5 mb-1 rounded-lg transition-colors text-left cursor-pointer ${
               activeTab === "moderation"
                 ? "bg-purple-900/30 text-purple-400 border border-purple-500/30"
                 : "text-gray-300 hover:bg-[#1a1f3e]"
@@ -459,6 +474,7 @@ function AdminPortal() {
           {activeTab === "queries" && <QueriesManagement />}
           {activeTab === "creators" && <CreatorApplications />}
           {activeTab === "course-review" && <CourseReview />}
+          {activeTab === "payouts" && <PayoutApprovals />}
           {activeTab === "moderation" && <ModerationPanel />}
           {activeTab === "challenges" && <ChallengeManagement />}
           {activeTab === "versions" && <VersionHistory />}
