@@ -139,6 +139,47 @@ export interface Readiness {
   problems: string[];
 }
 
+export interface CourseSection {
+  _id: string;
+  course: string;
+  title: string;
+  description?: string;
+  order: number;
+  lessons?: string[];
+  estimatedHours?: number;
+}
+
+export interface CodeExample {
+  title?: string;
+  description?: string;
+  code: string;
+  input?: string;
+  expectedOutput?: string;
+  order?: number;
+}
+
+export interface CourseLesson {
+  _id: string;
+  section: string;
+  title: string;
+  description?: string;
+  content?: string;
+  order: number;
+  duration?: number;
+  difficulty?: string;
+  videoUrl?: string;
+  codeExamples?: CodeExample[];
+}
+
+export interface LessonPayload {
+  title: string;
+  description?: string;
+  content?: string;
+  duration?: number;
+  difficulty?: string;
+  codeExamples?: CodeExample[];
+}
+
 export const creatorAPI = {
   // ---- Application ----
   apply: async (application: CreatorApplication) => {
@@ -221,6 +262,49 @@ export const creatorAPI = {
   getCourseSales: async (courseId: string) => {
     const res = await api.get(`/creator/courses/${courseId}/sales`);
     return res.data.data;
+  },
+
+  // ---- Content authoring ----
+  // Reuses the same handlers the admin portal calls; they enforce ownership
+  // themselves, so a creator can only ever touch their own course.
+  listSections: async (courseId: string) => {
+    const res = await api.get(`/creator/courses/${courseId}/sections`);
+    return (res.data.data ?? res.data) as CourseSection[];
+  },
+
+  addSection: async (courseId: string, payload: { title: string; description?: string }) => {
+    const res = await api.post(`/creator/courses/${courseId}/sections`, payload);
+    return res.data.data ?? res.data;
+  },
+
+  updateSection: async (sectionId: string, payload: { title?: string; description?: string }) => {
+    const res = await api.put(`/creator/courses/sections/${sectionId}`, payload);
+    return res.data.data ?? res.data;
+  },
+
+  deleteSection: async (sectionId: string) => {
+    const res = await api.delete(`/creator/courses/sections/${sectionId}`);
+    return res.data;
+  },
+
+  listLessons: async (sectionId: string) => {
+    const res = await api.get(`/creator/courses/sections/${sectionId}/lessons`);
+    return (res.data.data ?? res.data) as CourseLesson[];
+  },
+
+  addLesson: async (sectionId: string, payload: LessonPayload) => {
+    const res = await api.post(`/creator/courses/sections/${sectionId}/lessons`, payload);
+    return res.data.data ?? res.data;
+  },
+
+  updateLesson: async (lessonId: string, payload: Partial<LessonPayload>) => {
+    const res = await api.put(`/creator/courses/lessons/${lessonId}`, payload);
+    return res.data.data ?? res.data;
+  },
+
+  deleteLesson: async (lessonId: string) => {
+    const res = await api.delete(`/creator/courses/lessons/${lessonId}`);
+    return res.data;
   },
 
   // ---- Payouts ----

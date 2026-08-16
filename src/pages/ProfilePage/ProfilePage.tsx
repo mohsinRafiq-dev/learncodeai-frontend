@@ -43,6 +43,7 @@ import {
   Crown,
 } from "lucide-react";
 import BillingPanel from "./BillingPanel";
+import AiCreditMeter from "../../components/AiCreditMeter/AiCreditMeter";
 import { useSettings } from "../../contexts/PlatformSettingsContext";
 
 const PROFILE_TABS = [
@@ -516,6 +517,11 @@ const ProfilePage: React.FC = () => {
         {/* Overview Tab */}
         {activeTab === "overview" && (
           <div className="space-y-6">
+            {/* AI credits. Surfaced here rather than only failing at the point
+                of use — running out mid-task with no warning is the worst way
+                to discover the limit exists. */}
+            <AiCreditMeter />
+
             {/* Stats Grid */}
             <div className="grid grid-cols-4 gap-6">
               {[

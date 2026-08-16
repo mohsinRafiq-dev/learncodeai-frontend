@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import {
-  Loader2, Plus, Send, Eye, EyeOff, Undo2, Trash2, AlertCircle, DollarSign,
+  Loader2, Plus, Send, Eye, EyeOff, Undo2, Trash2, AlertCircle, DollarSign, FileEdit,
 } from "lucide-react";
+import CourseEditor from "./CourseEditor";
 import {
   creatorAPI, money,
   type CreatorCourse, type CreatorProfile, type CourseAction,
@@ -38,6 +39,7 @@ export default function CreatorCourses({ profile }: { profile: CreatorProfile })
   const [busyId, setBusyId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [pricingFor, setPricingFor] = useState<CreatorCourse | null>(null);
+  const [editing, setEditing] = useState<CreatorCourse | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -96,6 +98,19 @@ export default function CreatorCourses({ profile }: { profile: CreatorProfile })
       <div className="py-16 flex justify-center">
         <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />
       </div>
+    );
+  }
+
+  // The editor replaces the list rather than opening a modal: authoring is the
+  // long task, and a modal over a list encourages losing work by dismissing it.
+  if (editing) {
+    const fresh = courses.find((c) => c._id === editing._id) ?? editing;
+    return (
+      <CourseEditor
+        course={fresh}
+        onBack={() => setEditing(null)}
+        onChanged={load}
+      />
     );
   }
 
@@ -176,6 +191,14 @@ export default function CreatorCourses({ profile }: { profile: CreatorProfile })
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap shrink-0">
+                  <button
+                    onClick={() => setEditing(c)}
+                    className="flex items-center gap-1.5 border border-[#2c3454] hover:bg-[#141a2e] text-gray-300 text-sm px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    <FileEdit className="w-3.5 h-3.5" />
+                    Content
+                  </button>
+
                   <button
                     onClick={() => setPricingFor(c)}
                     className="flex items-center gap-1.5 border border-[#2c3454] hover:bg-[#141a2e] text-gray-300 text-sm px-3 py-1.5 rounded-lg transition-colors"
