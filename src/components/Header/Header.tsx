@@ -58,6 +58,9 @@ export default function Header() {
       ? [{ to: "/discussions", label: "Forum" }]
       : []),
     { to: "/editor", label: "Code Editor" },
+    // The marketplace is the only route to a creator's paid course. Without it
+    // in the nav, a published course is unreachable except by direct link.
+    { to: "/marketplace", label: "Marketplace" },
     { to: "/pricing", label: "Pricing" },
     { to: "/contact", label: "Contact Us" },
   ];
@@ -263,6 +266,21 @@ export default function Header() {
                       />
                     </svg>
                     <span>Progress Dashboard</span>
+                  </Link>
+
+                  {/* Open to everyone: the Studio itself shows the application
+                      form until a user is approved, so gating the link on the
+                      creator role would hide the way in from the people who
+                      need it most. */}
+                  <Link
+                    to="/creator"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-[#1a1f3e] hover:text-[#00b4d8] transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    <span>Creator Studio</span>
                   </Link>
 
                   {user?.role === "admin" && (
