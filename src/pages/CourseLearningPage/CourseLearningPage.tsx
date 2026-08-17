@@ -1375,6 +1375,7 @@ const CourseLearningPage: React.FC = () => {
                 contextTitle={selectedSection?.title || course.title}
                 contextId={selectedSection?._id || courseId}
                 contentScope={selectedLesson?.content}
+                language={course.language}
                 disabled={viewMode === "quiz"}
               />
             )}

@@ -1556,6 +1556,7 @@ const TutorialsDetailPage: React.FC = () => {
                 contextTitle={selectedTutorial?.title}
                 contextId={selectedTutorial?._id}
                 contentScope={selectedTutorial?.content}
+                language={selectedTutorial?.language}
               />
             )}
           </div>

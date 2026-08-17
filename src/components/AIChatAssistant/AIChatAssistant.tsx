@@ -19,7 +19,44 @@ interface AIChatAssistantProps {
   contextTitle?: string; // The course/tutorial title
   contextId?: string; // The course/tutorial ID
   contentScope?: string; // The actual content of the current section/tutorial
+  language?: string; // Language of the tutorial/course, drives the prompts
   disabled?: boolean; // Disable chat during quiz
+}
+
+/**
+ * Opening prompts for the current topic.
+ *
+ * These used to be two hardcoded JavaScript questions, so a Python or C++
+ * tutorial invited the reader to ask about `let` vs `const`. The language
+ * is used when the caller knows it, and is otherwise recovered from the
+ * title ("Functions - Python Tutorial"); anything unrecognised falls back
+ * to prompts that read correctly for any topic.
+ */
+function suggestedQuestionsFor(language?: string, title?: string): string[] {
+  const hay = `${language ?? ""} ${title ?? ""}`.toLowerCase();
+  const is = (...keys: string[]) => keys.some((k) => hay.includes(k));
+
+  if (is("python", "py"))
+    return [
+      "What's the difference between a list and a tuple?",
+      'Explain "scope" with an example.',
+    ];
+  if (is("javascript", "typescript", "js", "ts"))
+    return [
+      "What's the difference between 'let' and 'const'?",
+      'Explain "scope" with an example.',
+    ];
+  if (is("c++", "cpp"))
+    return [
+      "What's the difference between a pointer and a reference?",
+      'Explain "scope" with an example.',
+    ];
+
+  const topic = title ? `"${title}"` : "this topic";
+  return [
+    `Explain ${topic} in simpler terms.`,
+    "Show me a worked example.",
+  ];
 }
 
 const AIChatAssistantInner: React.FC<AIChatAssistantProps> = ({
@@ -27,13 +64,16 @@ const AIChatAssistantInner: React.FC<AIChatAssistantProps> = ({
   contextTitle,
   contextId,
   contentScope,
+  language,
   disabled = false,
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
+      // Untitled context used to greet the reader with "JavaScript variables"
+      // no matter what they had open.
       text: `Hi! I'm your AI assistant. Ask me anything about ${
-        contextTitle || "JavaScript variables"
+        contextTitle || "what you're learning"
       }.`,
       isUser: false,
       timestamp: new Date(),
@@ -298,24 +338,15 @@ const AIChatAssistantInner: React.FC<AIChatAssistantProps> = ({
         {/* Suggested Questions - Show only initially */}
         {messages.length === 1 && !isTyping && (
           <div className="space-y-2 mt-4">
-            <button
-              onClick={() =>
-                handleSuggestedQuestion(
-                  "What's the difference between 'let' and 'const'?"
-                )
-              }
-              className="w-full text-left text-sm text-cyan-400 bg-[#1a1f3e] hover:bg-[#2a3050] border border-cyan-500/50 rounded-full px-4 py-2 transition-colors cursor-pointer"
-            >
-              What's the difference between 'let' and 'const'?
-            </button>
-            <button
-              onClick={() =>
-                handleSuggestedQuestion('Explain "scope" with an example.')
-              }
-              className="w-full text-left text-sm text-cyan-400 bg-[#1a1f3e] hover:bg-[#2a3050] border border-cyan-500/50 rounded-full px-4 py-2 transition-colors cursor-pointer"
-            >
-              Explain "scope" with an example.
-            </button>
+            {suggestedQuestionsFor(language, contextTitle).map((q) => (
+              <button
+                key={q}
+                onClick={() => handleSuggestedQuestion(q)}
+                className="w-full text-left text-sm text-cyan-400 bg-[#1a1f3e] hover:bg-[#2a3050] border border-cyan-500/50 rounded-full px-4 py-2 transition-colors cursor-pointer"
+              >
+                {q}
+              </button>
+            ))}
           </div>
         )}
 
