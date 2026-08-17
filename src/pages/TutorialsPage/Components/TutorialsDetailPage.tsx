@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { AlertTriangle } from "lucide-react";
 import {
@@ -53,7 +53,7 @@ const TutorialsDetailPage: React.FC = () => {
   const [isAiResizing, setIsAiResizing] = useState(false);
   const [isAiMinimized, setIsAiMinimized] = useState(false);
 
-  // Mobile responsive state â€” drawers for the two sidebars
+  // Mobile responsive state — drawers for the two sidebars
   const [isDesktop, setIsDesktop] = useState(
     typeof window === "undefined" ? true : window.innerWidth >= 1024
   );
@@ -667,7 +667,7 @@ const TutorialsDetailPage: React.FC = () => {
           />
         )}
 
-        {/* AI Panel Toggle Button â€” desktop only */}
+        {/* AI Panel Toggle Button — desktop only */}
         <button
           onClick={toggleAiPanel}
           className="hidden lg:flex absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-l-lg items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
@@ -709,7 +709,7 @@ const TutorialsDetailPage: React.FC = () => {
           )}
         </button>
 
-        {/* Left Sidebar Toggle Button â€” desktop only */}
+        {/* Left Sidebar Toggle Button — desktop only */}
         <button
           onClick={toggleLeftSidebar}
           className="hidden lg:flex absolute z-10 w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-r-lg items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl cursor-pointer"
@@ -751,7 +751,7 @@ const TutorialsDetailPage: React.FC = () => {
           )}
         </button>
 
-        {/* Left Sidebar â€” fixed drawer on mobile, in-flow on desktop */}
+        {/* Left Sidebar — fixed drawer on mobile, in-flow on desktop */}
         <div
           className={`bg-[#0d1230] border-r border-[#1a1f3e] overflow-hidden flex flex-col transition-transform lg:transition-all duration-300 ${
             isDesktop
@@ -842,7 +842,7 @@ const TutorialsDetailPage: React.FC = () => {
                                 }`}
                               >
                                 <div className="flex items-start gap-2">
-                                  <span className={`mt-1 ${diffColor}`}>â—</span>
+                                  <span className={`mt-1 ${diffColor}`}>●</span>
                                   <div className="flex-1 min-w-0">
                                     <div className="font-medium leading-snug">
                                       {tutorial.title}
@@ -934,7 +934,7 @@ const TutorialsDetailPage: React.FC = () => {
           </div>
         )}
 
-        {/* Main Content Area â€” push down on mobile to clear the top bar */}
+        {/* Main Content Area — push down on mobile to clear the top bar */}
         <div className="flex-1 flex overflow-hidden min-w-0 pt-12 lg:pt-0">
           {/* Tutorial Content */}
           <div className="flex-1 overflow-y-auto hide-scrollbar overflow-x-hidden min-w-0">
@@ -1294,7 +1294,7 @@ const TutorialsDetailPage: React.FC = () => {
                                   className="flex items-start bg-[#0d1230] rounded-lg p-3 shadow-sm border border-[#2a3050]"
                                 >
                                   <span className="text-cyan-400 mr-3 text-lg font-bold">
-                                    âœ“
+                                    ✓
                                   </span>
                                   <span className="text-gray-300 font-medium">
                                     {note}
@@ -1381,11 +1381,11 @@ const TutorialsDetailPage: React.FC = () => {
                           className="flex items-start gap-2 px-4 py-2 text-gray-400 hover:text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer text-left min-w-0"
                           title={prevTutorial?.title}
                         >
-                          <span className="mt-0.5">â†</span>
+                          <span className="mt-0.5">←</span>
                           <div className="flex flex-col min-w-0">
                             <span className="text-xs text-gray-500">Previous</span>
                             <span className="truncate text-sm">
-                              {prevTutorial?.title || "â€”"}
+                              {prevTutorial?.title || "—"}
                             </span>
                           </div>
                         </button>
@@ -1398,10 +1398,10 @@ const TutorialsDetailPage: React.FC = () => {
                           <div className="flex flex-col min-w-0 items-end">
                             <span className="text-xs opacity-80">Next</span>
                             <span className="truncate text-sm">
-                              {nextTutorial?.title || "â€”"}
+                              {nextTutorial?.title || "—"}
                             </span>
                           </div>
-                          <span className="mt-0.5">â†’</span>
+                          <span className="mt-0.5">→</span>
                         </button>
                       </div>
                     </>
@@ -1411,7 +1411,7 @@ const TutorialsDetailPage: React.FC = () => {
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <div className="text-6xl mb-4">ðŸ‘†</div>
+                  <div className="text-6xl mb-4">👆</div>
                   <h2 className="text-xl font-semibold text-gray-200 mb-2">
                     Select a Tutorial
                   </h2>
@@ -1423,7 +1423,7 @@ const TutorialsDetailPage: React.FC = () => {
             )}
           </div>
 
-          {/* AI Resize Handle â€” desktop only */}
+          {/* AI Resize Handle — desktop only */}
           {!isAiMinimized && isDesktop && (
             <div
               onMouseDown={handleAiMouseDown}
@@ -1435,7 +1435,7 @@ const TutorialsDetailPage: React.FC = () => {
             </div>
           )}
 
-          {/* AI Assistant Panel â€” fixed drawer on mobile, in-flow on desktop */}
+          {/* AI Assistant Panel — fixed drawer on mobile, in-flow on desktop */}
           <div
             className={`bg-[#0d1230] transition-transform lg:transition-all duration-300 overflow-hidden relative ${
               isDesktop
@@ -1592,7 +1592,7 @@ const TutorialsDetailPage: React.FC = () => {
 
               <div className="mt-4 p-3 bg-purple-900/30 rounded-lg border border-purple-500/30">
                 <p className="text-xs text-purple-300">
-                  <span className="font-semibold">ðŸ’¡ Tip:</span> The AI will
+                  <span className="font-semibold">💡 Tip:</span> The AI will
                   generate a personal tutorial with examples and code snippets.
                   This tutorial will be saved to your account and you can edit
                   it anytime.
